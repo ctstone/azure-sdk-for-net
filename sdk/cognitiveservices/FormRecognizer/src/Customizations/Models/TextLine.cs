@@ -39,10 +39,10 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <param name="language">The detected language of this line, if
         /// different from the overall page language. Possible values include:
         /// 'en', 'es'</param>
-        public TextLine(string text, IList<double> boundingBox, IList<TextWord> words, string language = default(string))
+        public TextLine(string text, BoundingBox boundingBox, IList<TextWord> words, string language = default(string))
         {
             Text = text;
-            BoundingBox = boundingBox;
+            BoundingBoxes = boundingBox;
             Language = language;
             Words = words;
             CustomInit();
@@ -63,7 +63,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// Gets or sets bounding box of an extracted line.
         /// </summary>
         [JsonProperty(PropertyName = "boundingBox")]
-        public IList<double> BoundingBox { get; set; }
+        public BoundingBox BoundingBoxes { get; set; }
 
         /// <summary>
         /// Gets or sets the detected language of this line, if different from
@@ -71,6 +71,10 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// </summary>
         [JsonProperty(PropertyName = "language")]
         public string Language { get; set; }
+        public bool ShouldSerializeLanguage()
+        {
+            return (Language != null);
+        }
 
         /// <summary>
         /// Gets or sets list of words in the text line.
@@ -90,7 +94,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "Text");
             }
-            if (BoundingBox == null)
+            if (BoundingBoxes == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "BoundingBox");
             }

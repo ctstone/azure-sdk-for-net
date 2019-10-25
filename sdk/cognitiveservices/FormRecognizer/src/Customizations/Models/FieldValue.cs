@@ -12,9 +12,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
     using Microsoft.Rest;
     using Newtonsoft.Json;
-    using System.Collections;
+    using Newtonsoft.Json.Serialization;
+    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// Recognized field value.
@@ -52,24 +52,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// field.</param>
         /// <param name="page">The 1-based page number in the input
         /// document.</param>
-        public FieldValue(FieldValueType type, string valueString = default(string), System.DateTime valueDate = default(System.DateTime), System.DateTime valueTime = default(System.DateTime), string valuePhoneNumber = default(string), double valueNumber = default(double), int valueInteger = default(int), IList<FieldValue> valueArray = default(IList<FieldValue>), IDictionary<string, FieldValue> valueObject = default(IDictionary<string, FieldValue>), string text = default(string), IList<double> boundingBox = default(IList<double>), double? confidence = default(double?), IList<string> elements = default(IList<string>), int page = default(int))
-        {
-            Type = type;
-            ValueString = valueString;
-            ValueDate = valueDate;
-            ValueTime = valueTime;
-            ValuePhoneNumber = valuePhoneNumber;
-            ValueNumber = valueNumber;
-            ValueInteger = valueInteger;
-            ValueArray = valueArray;
-            ValueObject = valueObject;
-            Text = text;
-            BoundingBox = boundingBox;
-            Confidence = confidence;
-            Elements = elements;
-            Page = page;
-            CustomInit();
-        }
 
         /// <summary>
         /// An initialization method that performs custom operations like setting defaults
@@ -89,78 +71,128 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// </summary>
         [JsonProperty(PropertyName = "valueString")]
         public string ValueString { get; set; }
+        public bool ShouldSerializeValueString()
+        {
+            return (Type == FieldValueType.String);
+        }
+
 
         /// <summary>
         /// Gets or sets date value.
         /// </summary>
         [JsonProperty(PropertyName = "valueDate")]
-        public System.DateTime ValueDate { get; set; }
+        public string ValueDate { get; set; }
+        public bool ShouldSerializeValueDate()
+        {
+            return (Type == FieldValueType.Date);
+        }
 
         /// <summary>
         /// Gets or sets time value.
         /// </summary>
         [JsonProperty(PropertyName = "valueTime")]
-        public System.DateTime ValueTime { get; set; }
+        public string ValueTime { get; set; }
+        public bool ShouldSerializeValueTime()
+        {
+            return (Type == FieldValueType.Time);
+        }
 
         /// <summary>
         /// Gets or sets phone number value.
         /// </summary>
         [JsonProperty(PropertyName = "valuePhoneNumber")]
         public string ValuePhoneNumber { get; set; }
+        public bool ShouldSerializeValuePhoneNumber()
+        {
+            return (Type == FieldValueType.PhoneNumber);
+        }
 
         /// <summary>
         /// Gets or sets floating point value.
         /// </summary>
         [JsonProperty(PropertyName = "valueNumber")]
         public double ValueNumber { get; set; }
+        public bool ShouldSerializeValueNumber()
+        {
+            return (Type == FieldValueType.Number);
+        }
 
         /// <summary>
         /// Gets or sets integer value.
         /// </summary>
         [JsonProperty(PropertyName = "valueInteger")]
         public int ValueInteger { get; set; }
+        public bool ShouldSerializeValueInteger()
+        {
+            return (Type == FieldValueType.Integer);
+        }
 
         /// <summary>
         /// Gets or sets array of field values.
         /// </summary>
         [JsonProperty(PropertyName = "valueArray")]
         public IList<FieldValue> ValueArray { get; set; }
+        public bool ShouldSerializeValueArray()
+        {
+            return (Type == FieldValueType.Array);
+        }
 
         /// <summary>
         /// Gets or sets dictionary of named field values.
         /// </summary>
         [JsonProperty(PropertyName = "valueObject")]
         public IDictionary<string, FieldValue> ValueObject { get; set; }
+        public bool ShouldSerializeValueObject()
+        {
+            return (Type == FieldValueType.Object);
+        }
 
         /// <summary>
         /// Gets or sets text content of the extracted field.
         /// </summary>
         [JsonProperty(PropertyName = "text")]
         public string Text { get; set; }
+        public bool ShouldSerializeText()
+        {
+            return (Text != null);
+        }
 
         /// <summary>
         /// Gets or sets bounding box of the field value, if appropriate.
         /// </summary>
         [JsonProperty(PropertyName = "boundingBox")]
-        public IList<double> BoundingBox { get; set; }
+        public BoundingBox BoundingBoxes { get; set; }
+        public bool ShouldSerializeBoundingBoxes()
+        {
+            return (BoundingBoxes != null);
+        }
 
         /// <summary>
         /// Gets or sets confidence score.
         /// </summary>
         [JsonProperty(PropertyName = "confidence")]
         public double? Confidence { get; set; }
+        public bool ShouldSerializeConfidence()
+        {
+            return (Confidence != null);
+        }
+
 
         /// <summary>
         /// Gets or sets when includeTextDetails is set to true, a list of
         /// references to the text elements constituting this field.
         /// </summary>
         [JsonProperty(PropertyName = "elements")]
-        public IList<string> Elements { get; set; }
+        public IList<ElementReference> Elements { get; set; }
+        public bool ShouldSerializeElements()
+        {
+            return (Elements != null);
+        }
 
         /// <summary>
         /// Gets or sets the 1-based page number in the input document.
         /// </summary>
-        [JsonProperty(PropertyName = "page")]
+        [JsonProperty(PropertyName = "pageNumber")]
         public int Page { get; set; }
 
         /// <summary>
