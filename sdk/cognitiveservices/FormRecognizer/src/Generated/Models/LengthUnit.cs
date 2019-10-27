@@ -16,43 +16,43 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// Defines values for TextRecognitionResultDimensionUnit.
+    /// Defines values for LengthUnit.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum TextRecognitionResultDimensionUnit
+    public enum LengthUnit
     {
         [EnumMember(Value = "pixel")]
         Pixel,
         [EnumMember(Value = "inch")]
         Inch
     }
-    internal static class TextRecognitionResultDimensionUnitEnumExtension
+    internal static class LengthUnitEnumExtension
     {
-        internal static string ToSerializedValue(this TextRecognitionResultDimensionUnit? value)
+        internal static string ToSerializedValue(this LengthUnit? value)
         {
-            return value == null ? null : ((TextRecognitionResultDimensionUnit)value).ToSerializedValue();
+            return value == null ? null : ((LengthUnit)value).ToSerializedValue();
         }
 
-        internal static string ToSerializedValue(this TextRecognitionResultDimensionUnit value)
+        internal static string ToSerializedValue(this LengthUnit value)
         {
             switch( value )
             {
-                case TextRecognitionResultDimensionUnit.Pixel:
+                case LengthUnit.Pixel:
                     return "pixel";
-                case TextRecognitionResultDimensionUnit.Inch:
+                case LengthUnit.Inch:
                     return "inch";
             }
             return null;
         }
 
-        internal static TextRecognitionResultDimensionUnit? ParseTextRecognitionResultDimensionUnit(this string value)
+        internal static LengthUnit? ParseLengthUnit(this string value)
         {
             switch( value )
             {
                 case "pixel":
-                    return TextRecognitionResultDimensionUnit.Pixel;
+                    return LengthUnit.Pixel;
                 case "inch":
-                    return TextRecognitionResultDimensionUnit.Inch;
+                    return LengthUnit.Inch;
             }
             return null;
         }

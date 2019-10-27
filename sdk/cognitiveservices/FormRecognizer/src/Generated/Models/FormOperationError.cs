@@ -10,6 +10,7 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
@@ -29,11 +30,10 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <summary>
         /// Initializes a new instance of the FormOperationError class.
         /// </summary>
-        /// <param name="errorMessage">Message reported during the train
-        /// operation.</param>
-        public FormOperationError(string errorMessage = default(string))
+        /// <param name="message">Error message.</param>
+        public FormOperationError(string message)
         {
-            ErrorMessage = errorMessage;
+            Message = message;
             CustomInit();
         }
 
@@ -43,10 +43,23 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets message reported during the train operation.
+        /// Gets or sets error message.
         /// </summary>
-        [JsonProperty(PropertyName = "errorMessage")]
-        public string ErrorMessage { get; set; }
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Message == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Message");
+            }
+        }
     }
 }

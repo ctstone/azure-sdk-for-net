@@ -10,15 +10,15 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Base class representing a recognized field value.
+    /// Recognized field value.
     /// </summary>
-    [Newtonsoft.Json.JsonObject("fieldValue")]
     public partial class FieldValue
     {
         /// <summary>
@@ -32,14 +32,42 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <summary>
         /// Initializes a new instance of the FieldValue class.
         /// </summary>
-        /// <param name="text">OCR text content of the recognized
+        /// <param name="type">Type of field value. Possible values include:
+        /// 'string', 'date', 'time', 'phoneNumber', 'number', 'integer',
+        /// 'array', 'object'</param>
+        /// <param name="valueString">String value.</param>
+        /// <param name="valueDate">Date value.</param>
+        /// <param name="valueTime">Time value.</param>
+        /// <param name="valuePhoneNumber">Phone number value.</param>
+        /// <param name="valueNumber">Floating point value.</param>
+        /// <param name="valueInteger">Integer value.</param>
+        /// <param name="valueArray">Array of field values.</param>
+        /// <param name="valueObject">Dictionary of named field values.</param>
+        /// <param name="text">Text content of the extracted field.</param>
+        /// <param name="boundingBox">Bounding box of the field value, if
+        /// appropriate.</param>
+        /// <param name="confidence">Confidence score.</param>
+        /// <param name="elements">When includeTextDetails is set to true, a
+        /// list of references to the text elements constituting this
         /// field.</param>
-        /// <param name="elements">List of references to OCR words comprising
-        /// the recognized field value.</param>
-        public FieldValue(string text = default(string), IList<ElementReference> elements = default(IList<ElementReference>))
+        /// <param name="page">The 1-based page number in the input
+        /// document.</param>
+        public FieldValue(FieldValueType type, string valueString = default(string), System.DateTimeOffset valueDate = default(System.DateTimeOffset), System.DateTimeOffset valueTime = default(System.DateTimeOffset), string valuePhoneNumber = default(string), double valueNumber = default(double), int valueInteger = default(int), IList<FieldValue> valueArray = default(IList<FieldValue>), IDictionary<string, FieldValue> valueObject = default(IDictionary<string, FieldValue>), string text = default(string), IList<double> boundingBox = default(IList<double>), double? confidence = default(double?), IList<string> elements = default(IList<string>), int page = default(int))
         {
+            Type = type;
+            ValueString = valueString;
+            ValueDate = valueDate;
+            ValueTime = valueTime;
+            ValuePhoneNumber = valuePhoneNumber;
+            ValueNumber = valueNumber;
+            ValueInteger = valueInteger;
+            ValueArray = valueArray;
+            ValueObject = valueObject;
             Text = text;
+            BoundingBox = boundingBox;
+            Confidence = confidence;
             Elements = elements;
+            Page = page;
             CustomInit();
         }
 
@@ -49,17 +77,124 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets OCR text content of the recognized field.
+        /// Gets or sets type of field value. Possible values include:
+        /// 'string', 'date', 'time', 'phoneNumber', 'number', 'integer',
+        /// 'array', 'object'
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public FieldValueType Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets string value.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueString")]
+        public string ValueString { get; set; }
+
+        /// <summary>
+        /// Gets or sets date value.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueDate")]
+        public System.DateTimeOffset ValueDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets time value.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueTime")]
+        public System.DateTimeOffset ValueTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets phone number value.
+        /// </summary>
+        [JsonProperty(PropertyName = "valuePhoneNumber")]
+        public string ValuePhoneNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets floating point value.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueNumber")]
+        public double ValueNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets integer value.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueInteger")]
+        public int ValueInteger { get; set; }
+
+        /// <summary>
+        /// Gets or sets array of field values.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueArray")]
+        public IList<FieldValue> ValueArray { get; set; }
+
+        /// <summary>
+        /// Gets or sets dictionary of named field values.
+        /// </summary>
+        [JsonProperty(PropertyName = "valueObject")]
+        public IDictionary<string, FieldValue> ValueObject { get; set; }
+
+        /// <summary>
+        /// Gets or sets text content of the extracted field.
         /// </summary>
         [JsonProperty(PropertyName = "text")]
         public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets list of references to OCR words comprising the
-        /// recognized field value.
+        /// Gets or sets bounding box of the field value, if appropriate.
+        /// </summary>
+        [JsonProperty(PropertyName = "boundingBox")]
+        public IList<double> BoundingBox { get; set; }
+
+        /// <summary>
+        /// Gets or sets confidence score.
+        /// </summary>
+        [JsonProperty(PropertyName = "confidence")]
+        public double? Confidence { get; set; }
+
+        /// <summary>
+        /// Gets or sets when includeTextDetails is set to true, a list of
+        /// references to the text elements constituting this field.
         /// </summary>
         [JsonProperty(PropertyName = "elements")]
-        public IList<ElementReference> Elements { get; set; }
+        public IList<string> Elements { get; set; }
 
+        /// <summary>
+        /// Gets or sets the 1-based page number in the input document.
+        /// </summary>
+        [JsonProperty(PropertyName = "page")]
+        public int Page { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (ValueArray != null)
+            {
+                foreach (var element in ValueArray)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
+            if (ValueObject != null)
+            {
+                foreach (var valueElement in ValueObject.Values)
+                {
+                    if (valueElement != null)
+                    {
+                        valueElement.Validate();
+                    }
+                }
+            }
+            if (Page < 1)
+            {
+                throw new ValidationException(ValidationRules.InclusiveMinimum, "Page", 1);
+            }
+        }
     }
 }

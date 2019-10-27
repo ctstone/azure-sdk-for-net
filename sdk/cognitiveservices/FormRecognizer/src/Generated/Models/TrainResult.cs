@@ -10,13 +10,14 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Response of the Train API call.
+    /// Custom model training result.
     /// </summary>
     public partial class TrainResult
     {
@@ -31,16 +32,18 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <summary>
         /// Initializes a new instance of the TrainResult class.
         /// </summary>
-        /// <param name="modelId">Identifier of the model.</param>
-        /// <param name="trainingDocuments">List of documents used to train the
-        /// model and the
+        /// <param name="trainingDocuments">List of the documents used to train
+        /// the model and any errors reported in each document.</param>
+        /// <param name="fields">List of fields used to train the model and the
         /// train operation error reported by each.</param>
+        /// <param name="averageModelAccuracy">Average accuracy.</param>
         /// <param name="errors">Errors returned during the training
         /// operation.</param>
-        public TrainResult(System.Guid modelId = default(System.Guid), IList<FormDocumentReport> trainingDocuments = default(IList<FormDocumentReport>), IList<FormOperationError> errors = default(IList<FormOperationError>))
+        public TrainResult(IList<TrainingDocumentInfo> trainingDocuments, IList<FormFieldsReport> fields = default(IList<FormFieldsReport>), double averageModelAccuracy = default(double), IList<FormOperationError> errors = default(IList<FormOperationError>))
         {
-            ModelId = modelId;
             TrainingDocuments = trainingDocuments;
+            Fields = fields;
+            AverageModelAccuracy = averageModelAccuracy;
             Errors = errors;
             CustomInit();
         }
@@ -51,17 +54,24 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets identifier of the model.
-        /// </summary>
-        [JsonProperty(PropertyName = "modelId")]
-        public System.Guid ModelId { get; set; }
-
-        /// <summary>
-        /// Gets or sets list of documents used to train the model and the
-        /// train operation error reported by each.
+        /// Gets or sets list of the documents used to train the model and any
+        /// errors reported in each document.
         /// </summary>
         [JsonProperty(PropertyName = "trainingDocuments")]
-        public IList<FormDocumentReport> TrainingDocuments { get; set; }
+        public IList<TrainingDocumentInfo> TrainingDocuments { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of fields used to train the model and the train
+        /// operation error reported by each.
+        /// </summary>
+        [JsonProperty(PropertyName = "fields")]
+        public IList<FormFieldsReport> Fields { get; set; }
+
+        /// <summary>
+        /// Gets or sets average accuracy.
+        /// </summary>
+        [JsonProperty(PropertyName = "averageModelAccuracy")]
+        public double AverageModelAccuracy { get; set; }
 
         /// <summary>
         /// Gets or sets errors returned during the training operation.
@@ -69,5 +79,48 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         [JsonProperty(PropertyName = "errors")]
         public IList<FormOperationError> Errors { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (TrainingDocuments == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "TrainingDocuments");
+            }
+            if (TrainingDocuments != null)
+            {
+                foreach (var element in TrainingDocuments)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
+            if (Fields != null)
+            {
+                foreach (var element1 in Fields)
+                {
+                    if (element1 != null)
+                    {
+                        element1.Validate();
+                    }
+                }
+            }
+            if (Errors != null)
+            {
+                foreach (var element2 in Errors)
+                {
+                    if (element2 != null)
+                    {
+                        element2.Validate();
+                    }
+                }
+            }
+        }
     }
 }

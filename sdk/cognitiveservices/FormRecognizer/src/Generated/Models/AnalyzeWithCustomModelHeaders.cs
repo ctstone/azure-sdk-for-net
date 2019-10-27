@@ -14,24 +14,27 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Defines headers for BatchReadReceipt operation.
+    /// Defines headers for AnalyzeWithCustomModel operation.
     /// </summary>
-    public partial class BatchReadReceiptHeaders
+    public partial class AnalyzeWithCustomModelHeaders
     {
         /// <summary>
-        /// Initializes a new instance of the BatchReadReceiptHeaders class.
+        /// Initializes a new instance of the AnalyzeWithCustomModelHeaders
+        /// class.
         /// </summary>
-        public BatchReadReceiptHeaders()
+        public AnalyzeWithCustomModelHeaders()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the BatchReadReceiptHeaders class.
+        /// Initializes a new instance of the AnalyzeWithCustomModelHeaders
+        /// class.
         /// </summary>
-        /// <param name="operationLocation">URL to query for status of the
-        /// operation. The URL will expire in 48 hours. </param>
-        public BatchReadReceiptHeaders(string operationLocation = default(string))
+        /// <param name="operationLocation">URL containing the resultId used to
+        /// track the progress and obtain the result of the analyze
+        /// operation.</param>
+        public AnalyzeWithCustomModelHeaders(string operationLocation = default(string))
         {
             OperationLocation = operationLocation;
             CustomInit();
@@ -43,8 +46,8 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets URL to query for status of the operation. The URL will
-        /// expire in 48 hours.
+        /// Gets or sets URL containing the resultId used to track the progress
+        /// and obtain the result of the analyze operation.
         /// </summary>
         [JsonProperty(PropertyName = "Operation-Location")]
         public string OperationLocation { get; set; }

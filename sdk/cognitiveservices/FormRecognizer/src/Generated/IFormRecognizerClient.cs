@@ -15,11 +15,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
+    /// Extracts information from forms and images into structured data.
     /// </summary>
     public partial interface IFormRecognizerClient : System.IDisposable
     {
@@ -43,34 +43,27 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </summary>
         string Endpoint { get; set; }
 
-        /// <summary>
-        /// Subscription credentials which uniquely identify client
-        /// subscription.
-        /// </summary>
-        ServiceClientCredentials Credentials { get; }
-
 
         /// <summary>
-        /// Train Model
+        /// Train Custom Model
         /// </summary>
         /// <remarks>
-        /// Create and train a custom model. The train request must include a
-        /// source parameter that is either an externally accessible Azure
-        /// Storage blob container Uri (preferably a Shared Access Signature
-        /// Uri) or valid path to a data folder in a locally mounted drive.
-        /// When local paths are specified, they must follow the Linux/Unix
-        /// path format and be an absolute path rooted to the input mount
-        /// configuration
+        /// Create and train a custom model. The request must include a source
+        /// parameter that is either an externally accessible Azure storage
+        /// blob container Uri (preferably a Shared Access Signature Uri) or
+        /// valid path to a data folder in a locally mounted drive. When local
+        /// paths are specified, they must follow the Linux/Unix path format
+        /// and be an absolute path rooted to the input mount configuration
         /// setting value e.g., if '{Mounts:Input}' configuration setting value
         /// is '/input' then a valid source path would be
         /// '/input/contosodataset'. All data to be trained is expected to be
-        /// directly under the source folder. Subfolders are not supported.
-        /// Models are trained using documents that are of the following
-        /// content type - 'application/pdf', 'image/jpeg' and 'image/png'."
-        /// Other type of content is ignored.
+        /// under the source folder or sub folders under it. Models are trained
+        /// using documents that are of the following content type -
+        /// 'application/pdf', 'image/jpeg', 'image/png', 'image/tiff'. Other
+        /// type of content is ignored.
         /// </remarks>
         /// <param name='trainRequest'>
-        /// Request object for training.
+        /// Training request parameters.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -78,16 +71,54 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<TrainResult>> TrainCustomModelWithHttpMessagesAsync(TrainRequest trainRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<TrainCustomModelAsyncHeaders>> TrainCustomModelAsyncWithHttpMessagesAsync(TrainRequest trainRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Get Keys
+        /// List Custom Models
         /// </summary>
         /// <remarks>
-        /// Retrieve the keys that were
-        /// extracted during the training of the specified model.
+        /// Get information about all custom models
         /// </remarks>
-        /// <param name='id'>
+        /// <param name='op'>
+        /// Specify whether to return summary or full list of models. Possible
+        /// values include: 'full', 'summary'
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(string op = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Get Custom Model
+        /// </summary>
+        /// <remarks>
+        /// Get detailed information about a custom model.
+        /// </remarks>
+        /// <param name='modelId'>
+        /// Model identifier.
+        /// </param>
+        /// <param name='includeKeys'>
+        /// Include list of extracted keys in model information.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<Model>> GetCustomModelWithHttpMessagesAsync(System.Guid modelId, bool? includeKeys = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Delete Custom Model
+        /// </summary>
+        /// <remarks>
+        /// Mark model for deletion. Model artifacts will be permanently
+        /// removed within a predetermined period.
+        /// </remarks>
+        /// <param name='modelId'>
         /// Model identifier.
         /// </param>
         /// <param name='customHeaders'>
@@ -96,73 +127,26 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<KeysResult>> GetExtractedKeysWithHttpMessagesAsync(System.Guid id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Get Models
-        /// </summary>
-        /// <remarks>
-        /// Get information about all trained custom models
-        /// </remarks>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<ModelsResult>> GetCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Get Model
-        /// </summary>
-        /// <remarks>
-        /// Get information about a model.
-        /// </remarks>
-        /// <param name='id'>
-        /// Model identifier.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<ModelResult>> GetCustomModelWithHttpMessagesAsync(System.Guid id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Delete Model
-        /// </summary>
-        /// <remarks>
-        /// Delete model artifacts.
-        /// </remarks>
-        /// <param name='id'>
-        /// The identifier of the model to delete.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse> DeleteCustomModelWithHttpMessagesAsync(System.Guid id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteCustomModelWithHttpMessagesAsync(System.Guid modelId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Analyze Form
         /// </summary>
         /// <remarks>
-        /// Extract key-value pairs from a given document. The input document
-        /// must be of one of the supported content types - 'application/pdf',
-        /// 'image/jpeg' or 'image/png'. A success response is returned in
-        /// JSON.
+        /// Extract key-value pairs, tables, and semantic values from a given
+        /// document. The input document must be of one of the supported
+        /// content types - 'application/pdf', 'image/jpeg', 'image/png' or
+        /// 'image/tiff'. Alternatively, use 'application/json' type to specify
+        /// the location (Uri or local path) of the document to be analyzed.
         /// </remarks>
-        /// <param name='id'>
-        /// Model Identifier to analyze the document with.
+        /// <param name='modelId'>
+        /// Model identifier.
         /// </param>
-        /// <param name='formStream'>
-        /// A pdf document or image (jpg,png) file to analyze.
+        /// <param name='includeTextDetails'>
+        /// Include text lines and element references in the result.
         /// </param>
-        /// <param name='keys'>
-        /// An optional list of known keys to extract the values for.
+        /// <param name='fileStream'>
+        /// .json, .pdf, .jpg, .png or .tiff type file stream.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -170,15 +154,19 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<AnalyzeResult>> AnalyzeWithCustomModelWithHttpMessagesAsync(System.Guid id, Stream formStream, IList<string> keys = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<AnalyzeWithCustomModelHeaders>> AnalyzeWithCustomModelWithHttpMessagesAsync(System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Batch Read Receipt operation. The response contains a field called
-        /// 'Operation-Location', which contains the URL that you must use for
-        /// your 'Get Read Receipt Result' operation.
+        /// Get Analyze Form Result
         /// </summary>
-        /// <param name='url'>
-        /// Publicly reachable URL of an image.
+        /// <remarks>
+        /// Obtain current status and the result of the analyze form operation.
+        /// </remarks>
+        /// <param name='modelId'>
+        /// Model identifier.
+        /// </param>
+        /// <param name='resultId'>
+        /// Analyze operation result identifier.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -186,17 +174,20 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationHeaderResponse<BatchReadReceiptHeaders>> BatchReadReceiptWithHttpMessagesAsync(string url, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AnalyzeOperationResult>> GetAnalyzeFormResultWithHttpMessagesAsync(System.Guid modelId, System.Guid resultId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// This interface is used for getting the analysis results of a 'Batch
-        /// Read Receipt' operation. The URL to this interface should be
-        /// retrieved from the 'Operation-Location' field returned from the
-        /// 'Batch Read Receipt' operation.
+        /// Analyze Receipt
         /// </summary>
-        /// <param name='operationId'>
-        /// Id of read operation returned in the response of a 'Batch Read
-        /// Receipt' operation.
+        /// <remarks>
+        /// Extract field text and semantic values from a given receipt
+        /// document. The input document must be of one of the supported
+        /// content types - 'application/pdf', 'image/jpeg', 'image/png' or
+        /// 'image/tiff'. Alternatively, use 'application/json' type to specify
+        /// the location (Uri or local path) of the document to be analyzed.
+        /// </remarks>
+        /// <param name='fileStream'>
+        /// .json, .pdf, .jpg, .png or .tiff type file stream.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -204,16 +195,17 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ReadReceiptResult>> GetReadReceiptResultWithHttpMessagesAsync(string operationId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(object fileStream = default(object), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Read Receipt operation. When you use the 'Batch Read Receipt'
-        /// interface, the response contains a field called
-        /// 'Operation-Location'. The 'Operation-Location' field contains the
-        /// URL that you must use for your 'Get Read Receipt Result' operation.
+        /// Get Analyze Receipt Result
         /// </summary>
-        /// <param name='image'>
-        /// An image stream.
+        /// <remarks>
+        /// Track the progress and obtain the result of the analyze receipt
+        /// operation.
+        /// </remarks>
+        /// <param name='resultId'>
+        /// Analyze operation result identifier.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -221,7 +213,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationHeaderResponse<BatchReadReceiptInStreamHeaders>> BatchReadReceiptInStreamWithHttpMessagesAsync(Stream image, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AnalyzeOperationResult>> GetAnalyzeReceiptResultWithHttpMessagesAsync(System.Guid resultId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }

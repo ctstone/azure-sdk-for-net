@@ -10,31 +10,34 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class FormDocumentReport
+    /// <summary>
+    /// Report for a custom model training document.
+    /// </summary>
+    public partial class TrainingDocumentInfo
     {
         /// <summary>
-        /// Initializes a new instance of the FormDocumentReport class.
+        /// Initializes a new instance of the TrainingDocumentInfo class.
         /// </summary>
-        public FormDocumentReport()
+        public TrainingDocumentInfo()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the FormDocumentReport class.
+        /// Initializes a new instance of the TrainingDocumentInfo class.
         /// </summary>
-        /// <param name="documentName">Reference to the data that the report is
-        /// for.</param>
-        /// <param name="pages">Total number of pages trained on.</param>
-        /// <param name="errors">List of errors per page.</param>
+        /// <param name="documentName">Training document name.</param>
+        /// <param name="pages">Total number of pages trained.</param>
+        /// <param name="errors">List of errors.</param>
         /// <param name="status">Status of the training operation. Possible
-        /// values include: 'success', 'partialSuccess', 'failure'</param>
-        public FormDocumentReport(string documentName = default(string), int? pages = default(int?), IList<string> errors = default(IList<string>), string status = default(string))
+        /// values include: 'succeeded', 'partiallySucceeded', 'failed'</param>
+        public TrainingDocumentInfo(string documentName, int pages, IList<string> errors, TrainStatus status)
         {
             DocumentName = documentName;
             Pages = pages;
@@ -49,29 +52,46 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets reference to the data that the report is for.
+        /// Gets or sets training document name.
         /// </summary>
         [JsonProperty(PropertyName = "documentName")]
         public string DocumentName { get; set; }
 
         /// <summary>
-        /// Gets or sets total number of pages trained on.
+        /// Gets or sets total number of pages trained.
         /// </summary>
         [JsonProperty(PropertyName = "pages")]
-        public int? Pages { get; set; }
+        public int Pages { get; set; }
 
         /// <summary>
-        /// Gets or sets list of errors per page.
+        /// Gets or sets list of errors.
         /// </summary>
         [JsonProperty(PropertyName = "errors")]
         public IList<string> Errors { get; set; }
 
         /// <summary>
         /// Gets or sets status of the training operation. Possible values
-        /// include: 'success', 'partialSuccess', 'failure'
+        /// include: 'succeeded', 'partiallySucceeded', 'failed'
         /// </summary>
         [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
+        public TrainStatus Status { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (DocumentName == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "DocumentName");
+            }
+            if (Errors == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Errors");
+            }
+        }
     }
 }

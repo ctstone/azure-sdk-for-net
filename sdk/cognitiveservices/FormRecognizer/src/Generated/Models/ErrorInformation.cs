@@ -10,6 +10,7 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
@@ -26,10 +27,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <summary>
         /// Initializes a new instance of the ErrorInformation class.
         /// </summary>
-        public ErrorInformation(string code = default(string), InnerError innerError = default(InnerError), string message = default(string))
+        public ErrorInformation(string code, string message)
         {
             Code = code;
-            InnerError = innerError;
             Message = message;
             CustomInit();
         }
@@ -46,13 +46,25 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "innerError")]
-        public InnerError InnerError { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Code == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Code");
+            }
+            if (Message == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Message");
+            }
+        }
     }
 }

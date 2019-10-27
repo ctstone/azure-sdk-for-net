@@ -15,32 +15,25 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Request parameter to train a new custom model.
+    /// Uri or local path to source data.
     /// </summary>
-    public partial class TrainRequest
+    public partial class SourcePath
     {
         /// <summary>
-        /// Initializes a new instance of the TrainRequest class.
+        /// Initializes a new instance of the SourcePath class.
         /// </summary>
-        public TrainRequest()
+        public SourcePath()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TrainRequest class.
+        /// Initializes a new instance of the SourcePath class.
         /// </summary>
-        /// <param name="source">Source path containing the training
-        /// documents.</param>
-        /// <param name="sourceFilter">Filter to apply to the documents in the
-        /// source path for training.</param>
-        /// <param name="useLabelFile">Use label file for training a
-        /// model.</param>
-        public TrainRequest(string source, TrainSourceFilter sourceFilter = default(TrainSourceFilter), bool? useLabelFile = default(bool?))
+        /// <param name="source">File source path.</param>
+        public SourcePath(string source = default(string))
         {
             Source = source;
-            SourceFilter = sourceFilter;
-            UseLabelFile = useLabelFile;
             CustomInit();
         }
 
@@ -50,23 +43,10 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets source path containing the training documents.
+        /// Gets or sets file source path.
         /// </summary>
         [JsonProperty(PropertyName = "source")]
         public string Source { get; set; }
-
-        /// <summary>
-        /// Gets or sets filter to apply to the documents in the source path
-        /// for training.
-        /// </summary>
-        [JsonProperty(PropertyName = "sourceFilter")]
-        public TrainSourceFilter SourceFilter { get; set; }
-
-        /// <summary>
-        /// Gets or sets use label file for training a model.
-        /// </summary>
-        [JsonProperty(PropertyName = "useLabelFile")]
-        public bool? UseLabelFile { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -76,10 +56,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (Source == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Source");
-            }
             if (Source != null)
             {
                 if (Source.Length > 2048)
@@ -90,10 +66,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
                 {
                     throw new ValidationException(ValidationRules.MinLength, "Source", 0);
                 }
-            }
-            if (SourceFilter != null)
-            {
-                SourceFilter.Validate();
             }
         }
     }

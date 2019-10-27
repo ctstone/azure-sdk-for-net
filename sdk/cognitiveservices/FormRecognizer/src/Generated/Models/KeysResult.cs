@@ -10,14 +10,14 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Result of an operation to get
-    /// the keys extracted by a model.
+    /// Keys extracted by the custom model.
     /// </summary>
     public partial class KeysResult
     {
@@ -32,9 +32,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <summary>
         /// Initializes a new instance of the KeysResult class.
         /// </summary>
-        /// <param name="clusters">Object mapping ClusterIds to Key
-        /// lists.</param>
-        public KeysResult(IDictionary<string, IList<string>> clusters = default(IDictionary<string, IList<string>>))
+        /// <param name="clusters">Object mapping clusterIds to a list of
+        /// keys.</param>
+        public KeysResult(IDictionary<string, IList<string>> clusters)
         {
             Clusters = clusters;
             CustomInit();
@@ -46,10 +46,23 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets object mapping ClusterIds to Key lists.
+        /// Gets or sets object mapping clusterIds to a list of keys.
         /// </summary>
         [JsonProperty(PropertyName = "clusters")]
         public IDictionary<string, IList<string>> Clusters { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Clusters == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Clusters");
+            }
+        }
     }
 }

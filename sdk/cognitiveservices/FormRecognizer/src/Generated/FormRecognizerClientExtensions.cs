@@ -11,9 +11,6 @@
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 {
     using Models;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -23,224 +20,215 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     public static partial class FormRecognizerClientExtensions
     {
             /// <summary>
-            /// Train Model
+            /// Train Custom Model
             /// </summary>
             /// <remarks>
-            /// Create and train a custom model. The train request must include a source
-            /// parameter that is either an externally accessible Azure Storage blob
+            /// Create and train a custom model. The request must include a source
+            /// parameter that is either an externally accessible Azure storage blob
             /// container Uri (preferably a Shared Access Signature Uri) or valid path to a
             /// data folder in a locally mounted drive. When local paths are specified,
             /// they must follow the Linux/Unix path format and be an absolute path rooted
-            /// to the input mount configuration
-            /// setting value e.g., if '{Mounts:Input}' configuration setting value is
-            /// '/input' then a valid source path would be '/input/contosodataset'. All
-            /// data to be trained is expected to be directly under the source folder.
-            /// Subfolders are not supported. Models are trained using documents that are
-            /// of the following content type - 'application/pdf', 'image/jpeg' and
-            /// 'image/png'."
-            /// Other type of content is ignored.
+            /// to the input mount configuration setting value e.g., if '{Mounts:Input}'
+            /// configuration setting value is '/input' then a valid source path would be
+            /// '/input/contosodataset'. All data to be trained is expected to be under the
+            /// source folder or sub folders under it. Models are trained using documents
+            /// that are of the following content type - 'application/pdf', 'image/jpeg',
+            /// 'image/png', 'image/tiff'. Other type of content is ignored.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='trainRequest'>
-            /// Request object for training.
+            /// Training request parameters.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<TrainResult> TrainCustomModelAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<TrainCustomModelAsyncHeaders> TrainCustomModelAsyncAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.TrainCustomModelWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.TrainCustomModelAsyncWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Headers;
+                }
+            }
+
+            /// <summary>
+            /// List Custom Models
+            /// </summary>
+            /// <remarks>
+            /// Get information about all custom models
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='op'>
+            /// Specify whether to return summary or full list of models. Possible values
+            /// include: 'full', 'summary'
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<ModelsModel> GetCustomModelsAsync(this IFormRecognizerClient operations, string op = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetCustomModelsWithHttpMessagesAsync(op, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Get Keys
+            /// Get Custom Model
             /// </summary>
             /// <remarks>
-            /// Retrieve the keys that were
-            /// extracted during the training of the specified model.
+            /// Get detailed information about a custom model.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id'>
+            /// <param name='modelId'>
+            /// Model identifier.
+            /// </param>
+            /// <param name='includeKeys'>
+            /// Include list of extracted keys in model information.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<Model> GetCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeKeys = false, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetCustomModelWithHttpMessagesAsync(modelId, includeKeys, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Delete Custom Model
+            /// </summary>
+            /// <remarks>
+            /// Mark model for deletion. Model artifacts will be permanently removed within
+            /// a predetermined period.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='modelId'>
             /// Model identifier.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<KeysResult> GetExtractedKeysAsync(this IFormRecognizerClient operations, System.Guid id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetExtractedKeysWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Get Models
-            /// </summary>
-            /// <remarks>
-            /// Get information about all trained custom models
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ModelsResult> GetCustomModelsAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetCustomModelsWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Get Model
-            /// </summary>
-            /// <remarks>
-            /// Get information about a model.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Model identifier.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ModelResult> GetCustomModelAsync(this IFormRecognizerClient operations, System.Guid id, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetCustomModelWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Delete Model
-            /// </summary>
-            /// <remarks>
-            /// Delete model artifacts.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The identifier of the model to delete.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteCustomModelAsync(this IFormRecognizerClient operations, System.Guid id, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteCustomModelWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteCustomModelWithHttpMessagesAsync(modelId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
             /// Analyze Form
             /// </summary>
             /// <remarks>
-            /// Extract key-value pairs from a given document. The input document must be
-            /// of one of the supported content types - 'application/pdf', 'image/jpeg' or
-            /// 'image/png'. A success response is returned in JSON.
+            /// Extract key-value pairs, tables, and semantic values from a given document.
+            /// The input document must be of one of the supported content types -
+            /// 'application/pdf', 'image/jpeg', 'image/png' or 'image/tiff'.
+            /// Alternatively, use 'application/json' type to specify the location (Uri or
+            /// local path) of the document to be analyzed.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id'>
-            /// Model Identifier to analyze the document with.
+            /// <param name='modelId'>
+            /// Model identifier.
             /// </param>
-            /// <param name='formStream'>
-            /// A pdf document or image (jpg,png) file to analyze.
+            /// <param name='includeTextDetails'>
+            /// Include text lines and element references in the result.
             /// </param>
-            /// <param name='keys'>
-            /// An optional list of known keys to extract the values for.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<AnalyzeResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid id, Stream formStream, IList<string> keys = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(id, formStream, keys, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Batch Read Receipt operation. The response contains a field called
-            /// 'Operation-Location', which contains the URL that you must use for your
-            /// 'Get Read Receipt Result' operation.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='url'>
-            /// Publicly reachable URL of an image.
+            /// <param name='fileStream'>
+            /// .json, .pdf, .jpg, .png or .tiff type file stream.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<BatchReadReceiptHeaders> BatchReadReceiptAsync(this IFormRecognizerClient operations, string url, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AnalyzeWithCustomModelHeaders> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.BatchReadReceiptWithHttpMessagesAsync(url, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, includeTextDetails, fileStream, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Headers;
                 }
             }
 
             /// <summary>
-            /// This interface is used for getting the analysis results of a 'Batch Read
-            /// Receipt' operation. The URL to this interface should be retrieved from the
-            /// 'Operation-Location' field returned from the 'Batch Read Receipt'
-            /// operation.
+            /// Get Analyze Form Result
             /// </summary>
+            /// <remarks>
+            /// Obtain current status and the result of the analyze form operation.
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='operationId'>
-            /// Id of read operation returned in the response of a 'Batch Read Receipt'
-            /// operation.
+            /// <param name='modelId'>
+            /// Model identifier.
+            /// </param>
+            /// <param name='resultId'>
+            /// Analyze operation result identifier.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ReadReceiptResult> GetReadReceiptResultAsync(this IFormRecognizerClient operations, string operationId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AnalyzeOperationResult> GetAnalyzeFormResultAsync(this IFormRecognizerClient operations, System.Guid modelId, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetReadReceiptResultWithHttpMessagesAsync(operationId, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetAnalyzeFormResultWithHttpMessagesAsync(modelId, resultId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Read Receipt operation. When you use the 'Batch Read Receipt' interface,
-            /// the response contains a field called 'Operation-Location'. The
-            /// 'Operation-Location' field contains the URL that you must use for your 'Get
-            /// Read Receipt Result' operation.
+            /// Analyze Receipt
             /// </summary>
+            /// <remarks>
+            /// Extract field text and semantic values from a given receipt document. The
+            /// input document must be of one of the supported content types -
+            /// 'application/pdf', 'image/jpeg', 'image/png' or 'image/tiff'.
+            /// Alternatively, use 'application/json' type to specify the location (Uri or
+            /// local path) of the document to be analyzed.
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='image'>
-            /// An image stream.
+            /// <param name='fileStream'>
+            /// .json, .pdf, .jpg, .png or .tiff type file stream.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<BatchReadReceiptInStreamHeaders> BatchReadReceiptInStreamAsync(this IFormRecognizerClient operations, Stream image, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AnalyzeReceiptAsyncHeaders> AnalyzeReceiptAsyncAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.BatchReadReceiptInStreamWithHttpMessagesAsync(image, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Headers;
+                }
+            }
+
+            /// <summary>
+            /// Get Analyze Receipt Result
+            /// </summary>
+            /// <remarks>
+            /// Track the progress and obtain the result of the analyze receipt operation.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='resultId'>
+            /// Analyze operation result identifier.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<AnalyzeOperationResult> GetAnalyzeReceiptResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetAnalyzeReceiptResultWithHttpMessagesAsync(resultId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
                 }
             }
 

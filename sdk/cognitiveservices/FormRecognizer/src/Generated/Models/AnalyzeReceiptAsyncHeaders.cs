@@ -14,24 +14,27 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Reference to an OCR word.
+    /// Defines headers for AnalyzeReceiptAsync operation.
     /// </summary>
-    public partial class ElementReference
+    public partial class AnalyzeReceiptAsyncHeaders
     {
         /// <summary>
-        /// Initializes a new instance of the ElementReference class.
+        /// Initializes a new instance of the AnalyzeReceiptAsyncHeaders class.
         /// </summary>
-        public ElementReference()
+        public AnalyzeReceiptAsyncHeaders()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ElementReference class.
+        /// Initializes a new instance of the AnalyzeReceiptAsyncHeaders class.
         /// </summary>
-        public ElementReference(string refProperty = default(string))
+        /// <param name="operationLocation">URL containing the resultId used to
+        /// track the progress and obtain the result of the analyze
+        /// operation.</param>
+        public AnalyzeReceiptAsyncHeaders(string operationLocation = default(string))
         {
-            RefProperty = refProperty;
+            OperationLocation = operationLocation;
             CustomInit();
         }
 
@@ -41,9 +44,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets URL containing the resultId used to track the progress
+        /// and obtain the result of the analyze operation.
         /// </summary>
-        [JsonProperty(PropertyName = "$ref")]
-        public string RefProperty { get; set; }
+        [JsonProperty(PropertyName = "Operation-Location")]
+        public string OperationLocation { get; set; }
 
     }
 }
