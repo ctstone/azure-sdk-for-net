@@ -8,4 +8,5 @@ autorest \
     --license-header=MICROSOFT_MIT_NO_VERSION \
     --sync-methods=none \
     --use-datetimeoffset \
-    --clear-output-folder
+    --clear-output-folder \
+    --add-credentials

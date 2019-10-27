@@ -43,6 +43,12 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </summary>
         string Endpoint { get; set; }
 
+        /// <summary>
+        /// Subscription credentials which uniquely identify client
+        /// subscription.
+        /// </summary>
+        ServiceClientCredentials Credentials { get; }
+
 
         /// <summary>
         /// Train Custom Model

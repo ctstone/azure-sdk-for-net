@@ -16,7 +16,7 @@ namespace FormRecognizerSDK.Tests
 
         protected IFormRecognizerClient GetFormRecognizerClient(params DelegatingHandler[] handler)
         {
-            IFormRecognizerClient client = new FormRecognizerClient(new ApiKeyServiceClientCredentials(FormRecognizerSubscriptionKey), handlers: handler)
+            IFormRecognizerClient client = new FormRecognizerClient(new FormClientCredentials(FormRecognizerSubscriptionKey), handlers: handler)
             {
                 Endpoint = new System.Uri(@"https://westus.api.cognitive.microsoft.com").ToString()
             };
