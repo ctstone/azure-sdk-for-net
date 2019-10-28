@@ -10,6 +10,8 @@
 
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Azure;
     using Models;
     using System.Threading;
     using System.Threading.Tasks;
@@ -44,9 +46,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<TrainCustomModelAsyncHeaders> TrainCustomModelAsyncAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<TrainCustomModelHeaders> TrainCustomModelAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.TrainCustomModelAsyncWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.TrainCustomModelWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Headers;
                 }
@@ -68,7 +70,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ModelsModel> GetCustomModelsAsync(this IFormRecognizerClient operations, string op = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IPage<ModelInfo>> GetCustomModelsAsync(this IFormRecognizerClient operations, string op = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetCustomModelsWithHttpMessagesAsync(op, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -201,9 +203,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<AnalyzeReceiptAsyncHeaders> AnalyzeReceiptAsyncAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AnalyzeReceiptHeaders> AnalyzeReceiptAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.AnalyzeReceiptWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Headers;
                 }
@@ -227,6 +229,79 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             public static async Task<AnalyzeOperationResult> GetAnalyzeReceiptResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAnalyzeReceiptResultWithHttpMessagesAsync(resultId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Analyze Layout
+            /// </summary>
+            /// <remarks>
+            /// Extract text and layout information from a given document. The input
+            /// document must be of one of the supported content types - 'application/pdf',
+            /// 'image/jpeg', 'image/png' or 'image/tiff'. Alternatively, use
+            /// 'application/json' type to specify the location (Uri or local path) of the
+            /// document to be analyzed.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='fileStream'>
+            /// .json, .pdf, .jpg, .png or .tiff type file stream.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<AnalyzeLayoutHeaders> AnalyzeLayoutAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.AnalyzeLayoutWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Headers;
+                }
+            }
+
+            /// <summary>
+            /// Get Analyze Layout Result
+            /// </summary>
+            /// <remarks>
+            /// Track the progress and obtain the result of the analyze layout operation
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='resultId'>
+            /// Analyze operation result identifier.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<AnalyzeOperationResult> GetAnalyzeLayoutResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetAnalyzeLayoutResultWithHttpMessagesAsync(resultId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// List Custom Models
+            /// </summary>
+            /// <remarks>
+            /// Get information about all custom models
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='nextPageLink'>
+            /// The NextLink from the previous successful call to List operation.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IPage<ModelInfo>> GetCustomModelsNextAsync(this IFormRecognizerClient operations, string nextPageLink, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetCustomModelsNextWithHttpMessagesAsync(nextPageLink, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

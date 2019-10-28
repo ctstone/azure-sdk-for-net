@@ -14,27 +14,25 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Defines headers for TrainCustomModelAsync operation.
+    /// Defines headers for TrainCustomModel operation.
     /// </summary>
-    public partial class TrainCustomModelAsyncHeaders
+    public partial class TrainCustomModelHeaders
     {
         /// <summary>
-        /// Initializes a new instance of the TrainCustomModelAsyncHeaders
-        /// class.
+        /// Initializes a new instance of the TrainCustomModelHeaders class.
         /// </summary>
-        public TrainCustomModelAsyncHeaders()
+        public TrainCustomModelHeaders()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TrainCustomModelAsyncHeaders
-        /// class.
+        /// Initializes a new instance of the TrainCustomModelHeaders class.
         /// </summary>
         /// <param name="location">Location and ID of the model being trained.
         /// The status of model training is specified in the status property at
         /// the model location.</param>
-        public TrainCustomModelAsyncHeaders(string location = default(string))
+        public TrainCustomModelHeaders(string location = default(string))
         {
             Location = location;
             CustomInit();

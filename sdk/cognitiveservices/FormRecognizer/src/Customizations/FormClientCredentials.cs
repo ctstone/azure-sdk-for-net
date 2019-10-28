@@ -12,7 +12,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     public class FormClientCredentials : ServiceClientCredentials
     {
         private readonly string _subscriptionKey;
-        private const string ApiKeyHeader = "ocp-apim-subscription-key";
+        private const string ApiKeyHeader = "Ocp-Apim-Subscription-Key";
 
         /// <summary>
         /// Creates a new instance of the ApiKeyServiceClientCredentails class

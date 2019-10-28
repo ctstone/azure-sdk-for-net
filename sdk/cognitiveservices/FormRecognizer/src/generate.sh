@@ -9,4 +9,5 @@ autorest \
     --sync-methods=none \
     --use-datetimeoffset \
     --clear-output-folder \
+    --azure-arm \
     --add-credentials

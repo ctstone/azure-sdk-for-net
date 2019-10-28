@@ -14,25 +14,25 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Defines headers for AnalyzeReceiptAsync operation.
+    /// Defines headers for AnalyzeLayout operation.
     /// </summary>
-    public partial class AnalyzeReceiptAsyncHeaders
+    public partial class AnalyzeLayoutHeaders
     {
         /// <summary>
-        /// Initializes a new instance of the AnalyzeReceiptAsyncHeaders class.
+        /// Initializes a new instance of the AnalyzeLayoutHeaders class.
         /// </summary>
-        public AnalyzeReceiptAsyncHeaders()
+        public AnalyzeLayoutHeaders()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the AnalyzeReceiptAsyncHeaders class.
+        /// Initializes a new instance of the AnalyzeLayoutHeaders class.
         /// </summary>
         /// <param name="operationLocation">URL containing the resultId used to
         /// track the progress and obtain the result of the analyze
         /// operation.</param>
-        public AnalyzeReceiptAsyncHeaders(string operationLocation = default(string))
+        public AnalyzeLayoutHeaders(string operationLocation = default(string))
         {
             OperationLocation = operationLocation;
             CustomInit();
