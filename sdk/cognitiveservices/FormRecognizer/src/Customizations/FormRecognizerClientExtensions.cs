@@ -22,7 +22,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     /// </summary>
     public static partial class FormRecognizerClientExtensions
     {
-
         public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
         {            
             var header = await AnalyzeWithCustomModelAsyncAsync(operations, modelId, includeTextDetails, fileStream, cancellationToken);

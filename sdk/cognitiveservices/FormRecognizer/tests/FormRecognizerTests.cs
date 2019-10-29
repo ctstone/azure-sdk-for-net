@@ -3,21 +3,19 @@ using Microsoft.Azure.CognitiveServices.FormRecognizer.Models;
 using Microsoft.Azure.Test.HttpRecorder;
 using Microsoft.Rest.ClientRuntime.Azure.TestFramework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 using Xunit.Abstractions;
 using System;
 using System.IO;
-using Xunit.Sdk;
-using System.Net.Http;
-using Microsoft.Rest;
-using Microsoft.Rest.Serialization;
-using System.Collections.Generic;
+
 
 namespace FormRecognizerSDK.Tests
 {
     public class FormRecognizerTests : BaseTests
     {
-        ITestOutputHelper _output;
+        private ITestOutputHelper _output;
+
         public FormRecognizerTests(ITestOutputHelper output)
         {
             _output = output;
@@ -56,12 +54,14 @@ namespace FormRecognizerSDK.Tests
                 using (IFormRecognizerClient client = GetFormRecognizerClient(HttpMockServer.CreateInstance()))
                 using (FileStream stream = new FileStream(GetTestImagePath("Receipt_003_934.jpg"), FileMode.Open))
                 {
-
+                    // TODO - modify input parameter for AnalyzeReceiptAsync after overload SDK
                     StreamReader reader = new StreamReader(stream);
                     string text = reader.ReadToEnd();
                     var result = client.AnalyzeReceiptAsync(text).Result;
-                    _output.WriteLine(JsonConvert.SerializeObject(result));
-
+                    var expectedResultJson = JObject.Parse(File.ReadAllText(GetTestImagePath("Receipt_003_934.json")));
+                    var expectedResult = JsonConvert.DeserializeObject<AnalyzeResult>(expectedResultJson.ToString());
+                
+                    // TODO - check if result match expectation
                 }
             }
         }
