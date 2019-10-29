@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.CognitiveServices.FormRecognizer;
 using System.Net.Http;
+using System.IO;
 
 namespace FormRecognizerSDK.Tests
 {
@@ -18,10 +19,15 @@ namespace FormRecognizerSDK.Tests
         {
             IFormRecognizerClient client = new FormRecognizerClient(new ApiKeyServiceClientCredentials(FormRecognizerSubscriptionKey), handlers: handler)
             {
-                Endpoint = new System.Uri(@"https://westus.api.cognitive.microsoft.com").ToString()
+                //Endpoint = new System.Uri(@"https://westus.api.cognitive.microsoft.com").ToString()
+                Endpoint = @"https://westus.api.cognitive.microsoft.com"
             };
 
             return client;
+        }
+        protected string GetTestImagePath(string name)
+        {
+            return Path.Combine("TestImages", name);
         }
     }
 }

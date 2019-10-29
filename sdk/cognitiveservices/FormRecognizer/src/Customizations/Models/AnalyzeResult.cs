@@ -67,24 +67,45 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// </summary>
         [JsonProperty(PropertyName = "readResults")]
         public IList<ReadResult> ReadResults { get; set; }
+        public bool ShouldSerializeReadResults()
+        {
+            return (ReadResults != null);
+        }
 
         /// <summary>
         /// Gets or sets page-level information extracted from the input.
         /// </summary>
         [JsonProperty(PropertyName = "pageResults")]
         public IList<PageResult> PageResults { get; set; }
+        public bool ShouldSerializePageResults()
+        {
+            return (PageResults != null);
+        }
 
         /// <summary>
         /// Gets or sets document-level information extracted from the input.
         /// </summary>
         [JsonProperty(PropertyName = "documentResults")]
         public IList<DocumentResult> DocumentResults { get; set; }
+        public bool ShouldSerializeDocumentResults()
+        {
+            return (DocumentResults != null);
+        }
 
         /// <summary>
         /// Gets or sets list of errors reported during the analyze operation.
         /// </summary>
         [JsonProperty(PropertyName = "errors")]
         public IList<FormOperationError> Errors { get; set; }
+        public bool ShouldSerializeErrors()
+        {
+            return (Errors != null);
+        }
+
+        public IList<TextWord> GetElementWords(IList<ElementReference> elementReferences)
+        {
+            return elementReferences.Select(element => ReadResults[element.PageIndex].Lines[element.LineIndex].Words[element.WordIndex]).ToArray();
+        }
 
         /// <summary>
         /// Validate the object.
