@@ -23,34 +23,37 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     /// </summary>
     public static partial class FormRecognizerClientExtensions
     {
-        public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-        {            
-            var header = await AnalyzeWithCustomModelAsyncAsync(operations, modelId, includeTextDetails, fileStream, cancellationToken);
-            var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
-            if (match.Success)
-            {
-                int retryTimeframe = 1;
-                for (int retryCount = 5; retryCount > 0; retryCount--)
-                {
-                    var body = await GetAnalyzeFormResultAsync(operations, modelId, new Guid(match.Groups[2].ToString()), cancellationToken);
-                    if (body.Status.ToSerializedValue() == "succeeded ")
-                    {
-                        return body;
-                    }
-                    Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
-                    retryTimeframe *= 2;
-                }
-                throw new ErrorResponseException("Timeout.");
-            }
-            throw new ArgumentException("Invalid URL.");
-        }
+        public enum AnalyzeType { Layout, Receipt };
+
+        //public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
+        //{            
+        //    var header = await AnalyzeWithCustomModelAsyncAsync(operations, modelId, includeTextDetails, fileStream, cancellationToken);
+        //    var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
+        //    if (match.Success)
+        //    {
+        //        int retryTimeframe = 1;
+        //        for (int retryCount = 5; retryCount > 0; retryCount--)
+        //        {
+        //            var body = await GetAnalyzeFormResultAsync(operations, modelId, new Guid(match.Groups[2].ToString()), cancellationToken);
+        //            if (body.Status.ToSerializedValue() == "succeeded ")
+        //            {
+        //                return body;
+        //            }
+        //            Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
+        //            retryTimeframe *= 2;
+        //        }
+        //        throw new ErrorResponseException("Timeout.");
+        //    }
+        //    throw new ArgumentException("Invalid URL.");
+        //}
 
         public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, string uri, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(uri, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
-                return await operations.PollingGetReceiptAsync(header, retryTimes, cancellationToken);
+                var guid = GetGuid(header.OperationLocation);
+                return await operations.PollingResultAsync(guid, AnalyzeType.Receipt, retryTimes, cancellationToken);
             }
         }
 
@@ -59,7 +62,8 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
-                return await operations.PollingGetReceiptAsync(header, retryTimes, cancellationToken);
+                var guid = GetGuid(header.OperationLocation);
+                return await operations.PollingResultAsync(guid, AnalyzeType.Receipt, retryTimes, cancellationToken);
             }
         }
 
@@ -68,53 +72,79 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(byteArray, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
-                return await operations.PollingGetReceiptAsync(header, retryTimes, cancellationToken);
+                var guid = GetGuid(header.OperationLocation);
+                return await operations.PollingResultAsync(guid, AnalyzeType.Receipt, retryTimes, cancellationToken);
             }
         }
 
-        public static async Task<AnalyzeOperationResult> PollingGetReceiptAsync(this IFormRecognizerClient operations, AnalyzeReceiptAsyncHeaders header, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, string uri, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
+            using (var _result = await operations.AnalyzeLayoutAsyncWithHttpMessagesAsync(language, uri, null, cancellationToken).ConfigureAwait(false))
+            {
+                var header = _result.Headers;
+                var guid = GetGuid(header.OperationLocation);
+                return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
+            }
+        }
+
+        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Stream fileStream, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.AnalyzeLayoutAsyncWithHttpMessagesAsync(language, fileStream, null, cancellationToken).ConfigureAwait(false))
+            {
+                var header = _result.Headers;
+                var guid = GetGuid(header.OperationLocation);
+                return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
+            }
+        }
+
+        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, byte[] byteArray, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.AnalyzeLayoutAsyncWithHttpMessagesAsync(language, byteArray, null, cancellationToken).ConfigureAwait(false))
+            {
+                var header = _result.Headers;
+                var guid = GetGuid(header.OperationLocation);
+                return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
+            }
+        }
+        
+        public static Guid GetGuid(string uri, int order = 1)
+        {
+            var match = Regex.Match(uri, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
             if (match.Success)
             {
-                int retryTimeframe = 1;
-                for (int retryCount = retryTimes; retryCount > 0; retryCount--)
-                {
-                    var body = await GetAnalyzeReceiptResultAsync(operations, new Guid(match.Groups[1].ToString()), cancellationToken);
-                    if (body.Status.ToSerializedValue() == "succeeded")
-                    {
-                        return body;
-                    }
-                    Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
-                    retryTimeframe *= 2;
-                }
-                throw new ErrorResponseException("Timeout.");
+                return new Guid(match.Groups[order].ToString());
             }
             throw new ArgumentException("Invalid URL.");
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-        { 
-            var header = await AnalyzeLayoutAsyncAsync(operations, language, fileStream, cancellationToken);
-            var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
-            if (match.Success)
+        public static async Task<AnalyzeOperationResult> PollingResultAsync(this IFormRecognizerClient operations, Guid resultid, AnalyzeType type, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            int retryTimeframe = 1;
+            for (int retryCount = retryTimes; retryCount > 0; retryCount--)
             {
-                int retryTimeframe = 1;
-                for (int retryCount = 5; retryCount > 0; retryCount--)
+                AnalyzeOperationResult body;
+                switch (type)
                 {
-                    var body = await GetAnalyzeLayoutResultAsync(operations, new Guid(match.Groups[1].ToString()), cancellationToken);
-                    if (body.Status.ToSerializedValue() == "succeeded ")
-                    {
-                        return body;
-                    }
-                    Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
-                    retryTimeframe *= 2;
+                    case (AnalyzeType.Layout):
+                        body = await GetAnalyzeLayoutResultAsync(operations, resultid, cancellationToken);
+                        break;
+                    case (AnalyzeType.Receipt):
+                        body = await GetAnalyzeReceiptResultAsync(operations, resultid, cancellationToken);
+                        break;
+                    default:
+                        throw new ArgumentException("Not supported analyze type");
                 }
-                throw new ErrorResponseException("Timeout.");
+                if (body.Status.ToSerializedValue() == "succeeded")
+                {
+                    return body;
+                }
+                Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
+                retryTimeframe *= 2;
             }
-            throw new ArgumentException("Invalid URL.");
+            throw new ErrorResponseException($"Guid : {resultid.ToString()}, Timeout.");            
         }
-       
+
+
         /// <summary>
         /// Train Custom Model
         /// </summary>
@@ -294,45 +324,14 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        private static async Task<AnalyzeOperationResult> GetAnalyzeReceiptResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> GetAnalyzeReceiptResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.GetAnalyzeReceiptResultWithHttpMessagesAsync(resultId, null, cancellationToken).ConfigureAwait(false))
             {
                 return _result.Body;
             }
         }
-
-        /// <summary>
-        /// Analyze Layout
-        /// </summary>
-        /// <remarks>
-        /// Extract text and layout information from a given document. The input
-        /// document must be of one of the supported content types - 'application/pdf',
-        /// 'image/jpeg', 'image/png' or 'image/tiff'. Alternatively, use
-        /// 'application/json' type to specify the location (Uri or local path) of the
-        /// document to be analyzed.
-        /// </remarks>
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='language'>
-        /// The BCP-47 language code of the text to be detected in the image. Possible
-        /// values include: 'en', 'es'
-        /// </param>
-        /// <param name='fileStream'>
-        /// .json, .pdf, .jpg, .png or .tiff type file stream.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        private static async Task<AnalyzeLayoutAsyncHeaders> AnalyzeLayoutAsyncAsync(this IFormRecognizerClient operations, string language, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.AnalyzeLayoutAsyncWithHttpMessagesAsync(language, fileStream, null, cancellationToken).ConfigureAwait(false))
-            {
-                return _result.Headers;
-            }
-        }
-
+       
         /// <summary>
         /// Get Analyze Layout Result
         /// </summary>
@@ -348,7 +347,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        private static async Task<AnalyzeOperationResult> GetAnalyzeLayoutResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> GetAnalyzeLayoutResultAsync(this IFormRecognizerClient operations, System.Guid resultId, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.GetAnalyzeLayoutResultWithHttpMessagesAsync(resultId, null, cancellationToken).ConfigureAwait(false))
             {

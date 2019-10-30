@@ -39,7 +39,7 @@ namespace FormRecognizerSDK.Tests
                 using (IFormRecognizerClient client = GetFormRecognizerClient(HttpMockServer.CreateInstance()))
                 using (FileStream stream = new FileStream(GetTestImagePath("Receipt_003_934.jpg"), FileMode.Open))
                 {
-                    var result = client.AnalyzeWithCustomModelAsync(new Guid(), false, stream).Result;
+                    //var result = client.AnalyzeWithCustomModelAsync(new Guid(), false, stream).Result;
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace FormRecognizerSDK.Tests
             using (MockContext context = MockContext.Start(this.GetType()))
             {
                 HttpMockServer.Initialize(this.GetType(), "FormRecognizerSDK_AnalyzeReceiptAsync");
-
+                
                 using (IFormRecognizerClient client = GetFormRecognizerClient(HttpMockServer.CreateInstance()))
                 {
                     using (FileStream stream = new FileStream(GetTestImagePath("Receipt_003_934.jpg"), FileMode.Open))
@@ -62,13 +62,13 @@ namespace FormRecognizerSDK.Tests
 
                         using (var streamReader = new MemoryStream())
                         {
-                            stream.CopyTo(streamReader);
-                            var byteArray = streamReader.ToArray();
-                            var byteResult = client.AnalyzeReceiptAsync(byteArray).Result;
+                            // stream.CopyTo(streamReader);
+                            // var byteArray = streamReader.ToArray();
+                            // var byteResult = client.AnalyzeReceiptAsync(byteArray).Result;
                             // TODO - check if result match expectation
                         }
                     }
-                    var uriResult = client.AnalyzeReceiptAsync("test1").Result;
+                    //var uriResult = client.AnalyzeReceiptAsync("test1").Result;
                     // TODO - check if result match expectation
                 }
             }

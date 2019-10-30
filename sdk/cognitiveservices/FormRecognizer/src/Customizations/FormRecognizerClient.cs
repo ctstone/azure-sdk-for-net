@@ -1540,7 +1540,19 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(string language, object fileStream = default(object), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(string language, string uri, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType.URI, language, uri, null, null, customHeaders, cancellationToken);
+        }
+        public async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(string language, Stream fileStream, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType.Stream, language, null, fileStream, null, customHeaders, cancellationToken);
+        }
+        public async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(string language, byte[] byteArray, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType.ByteArray, language, null, null, byteArray, customHeaders, cancellationToken);
+        }
+        private async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType contentType, string language, string uri = null, Stream fileStream = null, byte[] byteArray = null, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (Endpoint == null)
             {
@@ -1597,11 +1609,29 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
             // Serialize Request
             string _requestContent = null;
-            if(fileStream != null)
+            if (fileStream != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(fileStream, SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                switch (contentType)
+                {
+                    case (ContentType.URI):
+                        _requestContent = uri;
+                        _httpRequest.Content = new StringContent(uri, System.Text.Encoding.UTF8);
+                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                        break;
+                    case (ContentType.Stream):
+                        var streamReader = new StreamReader(fileStream);
+                        _requestContent = streamReader.ReadToEnd();
+                        _httpRequest.Content = new StreamContent(fileStream);
+                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
+
+                        break;
+                    case (ContentType.ByteArray):
+                        _httpRequest.Content = new ByteArrayContent(byteArray);
+                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
+                        break;
+                    default:
+                        throw new System.ArgumentException("Unsupported content type.");
+                }
             }
             // Set Credentials
             if (Credentials != null)
