@@ -16,6 +16,8 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -26,6 +28,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     /// </summary>
     public partial class FormRecognizerClient : ServiceClient<FormRecognizerClient>, IFormRecognizerClient
     {
+
+        public enum ContentType {URI, Stream, ByteArray};
+
         /// <summary>
         /// The base URI of the service.
         /// </summary>
@@ -88,6 +93,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         protected FormRecognizerClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
+        }
+
+        public FormRecognizerClient(string apiKey, string endpoint) : this(new FormClientCredentials(apiKey))
+        {
+            Endpoint = endpoint;
         }
 
         /// <summary>
@@ -1191,7 +1201,19 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(object fileStream = default(object), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(string uri, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await AnalyzeReceiptAsyncWithHttpMessagesAsync(ContentType.URI, uri, null, null, customHeaders, cancellationToken);
+        }
+        public async Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(Stream fileStream, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await AnalyzeReceiptAsyncWithHttpMessagesAsync(ContentType.Stream, null, fileStream, null, customHeaders, cancellationToken);
+        }
+        public async Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(byte[] byteArray, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await AnalyzeReceiptAsyncWithHttpMessagesAsync(ContentType.ByteArray, null, null, byteArray, customHeaders, cancellationToken);
+        }
+        private async Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(ContentType contentType, string uri = null, Stream fileStream = null, byte[] byteArray = null, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (Endpoint == null)
             {
@@ -1236,9 +1258,27 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             string _requestContent = null;
             if(fileStream != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(fileStream, SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                switch (contentType)
+                {
+                    case (ContentType.URI):
+                        _requestContent = uri;
+                        _httpRequest.Content = new StringContent(uri, System.Text.Encoding.UTF8);
+                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                        break;
+                    case (ContentType.Stream):
+                        var streamReader = new StreamReader(fileStream);
+                        _requestContent = streamReader.ReadToEnd();
+                        _httpRequest.Content = new StreamContent(fileStream);
+                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
+
+                        break;
+                    case (ContentType.ByteArray):                        
+                        _httpRequest.Content = new ByteArrayContent(byteArray);
+                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
+                        break;
+                    default:
+                        throw new System.ArgumentException("Unsupported content type.");                    
+                }
             }
             // Set Credentials
             if (Credentials != null)

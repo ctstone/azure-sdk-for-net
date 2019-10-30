@@ -16,6 +16,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     using System.Threading.Tasks;
     using System.Text.RegularExpressions;
     using System;
+    using System.IO;
 
     /// <summary>
     /// Extension methods for FormRecognizerClient.
@@ -44,14 +45,40 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             throw new ArgumentException("Invalid URL.");
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, string uri, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var header = await AnalyzeReceiptAsyncAsync(operations, fileStream, cancellationToken);
+            using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(uri, null, cancellationToken).ConfigureAwait(false))
+            {
+                var header = _result.Headers;
+                return await operations.PollingGetReceiptAsync(header, retryTimes, cancellationToken);
+            }
+        }
+
+        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, Stream fileStream, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
+            {
+                var header = _result.Headers;
+                return await operations.PollingGetReceiptAsync(header, retryTimes, cancellationToken);
+            }
+        }
+
+        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, byte[] byteArray, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(byteArray, null, cancellationToken).ConfigureAwait(false))
+            {
+                var header = _result.Headers;
+                return await operations.PollingGetReceiptAsync(header, retryTimes, cancellationToken);
+            }
+        }
+
+        public static async Task<AnalyzeOperationResult> PollingGetReceiptAsync(this IFormRecognizerClient operations, AnalyzeReceiptAsyncHeaders header, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        {
             var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
             if (match.Success)
             {
                 int retryTimeframe = 1;
-                for (int retryCount = 5; retryCount > 0; retryCount--)
+                for (int retryCount = retryTimes; retryCount > 0; retryCount--)
                 {
                     var body = await GetAnalyzeReceiptResultAsync(operations, new Guid(match.Groups[1].ToString()), cancellationToken);
                     if (body.Status.ToSerializedValue() == "succeeded")
@@ -113,7 +140,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-
 
         public static async Task<TrainCustomModelAsyncHeaders> TrainCustomModelAsyncAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -250,33 +276,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             using (var _result = await operations.GetAnalyzeFormResultWithHttpMessagesAsync(modelId, resultId, null, cancellationToken).ConfigureAwait(false))
             {
                 return _result.Body;
-            }
-        }
-
-        /// <summary>
-        /// Analyze Receipt
-        /// </summary>
-        /// <remarks>
-        /// Extract field text and semantic values from a given receipt document. The
-        /// input document must be of one of the supported content types -
-        /// 'application/pdf', 'image/jpeg', 'image/png' or 'image/tiff'.
-        /// Alternatively, use 'application/json' type to specify the location (Uri or
-        /// local path) of the document to be analyzed.
-        /// </remarks>
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='fileStream'>
-        /// .json, .pdf, .jpg, .png or .tiff type file stream.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<AnalyzeReceiptAsyncHeaders> AnalyzeReceiptAsyncAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
-            {
-                return _result.Headers;
             }
         }
 

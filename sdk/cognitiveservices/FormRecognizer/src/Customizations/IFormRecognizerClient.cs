@@ -13,6 +13,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     using Microsoft.Rest;
     using Models;
     using Newtonsoft.Json;
+    using System.IO;
     using System.Collections;
     using System.Collections.Generic;
     using System.Threading;
@@ -200,8 +201,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
-        /// </param>
-        Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(object fileStream = default(object), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// </param>        
+        Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(string uri, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(Stream fileStream, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptAsyncWithHttpMessagesAsync(byte[] byteArray, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
 
         /// <summary>
         /// Get Analyze Receipt Result
