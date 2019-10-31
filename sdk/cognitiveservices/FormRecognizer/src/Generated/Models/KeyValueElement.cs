@@ -17,30 +17,31 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// An object representing a word.
+    /// Information about the extracted key or value in a key-value pair.
     /// </summary>
-    public partial class TextWord
+    public partial class KeyValueElement
     {
         /// <summary>
-        /// Initializes a new instance of the TextWord class.
+        /// Initializes a new instance of the KeyValueElement class.
         /// </summary>
-        public TextWord()
+        public KeyValueElement()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TextWord class.
+        /// Initializes a new instance of the KeyValueElement class.
         /// </summary>
-        /// <param name="text">The text content of the word.</param>
-        /// <param name="boundingBox">Bounding box of an extracted
-        /// word.</param>
-        /// <param name="confidence">Confidence value.</param>
-        public TextWord(string text, BoundingBox boundingBox, double confidence)
+        /// <param name="text">The text content of the key or value.</param>
+        /// <param name="boundingBox">Bounding box of the key or value.</param>
+        /// <param name="elements">When includeTextDetails is set to true, a
+        /// list of references to the text elements constituting this key or
+        /// value.</param>
+        public KeyValueElement(string text, IList<double> boundingBox = default(IList<double>), IList<string> elements = default(IList<string>))
         {
             Text = text;
-            BoundingBoxes = boundingBox;
-            Confidence = confidence;
+            BoundingBox = boundingBox;
+            Elements = elements;
             CustomInit();
         }
 
@@ -50,22 +51,23 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the text content of the word.
+        /// Gets or sets the text content of the key or value.
         /// </summary>
         [JsonProperty(PropertyName = "text")]
         public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets bounding box of an extracted word.
+        /// Gets or sets bounding box of the key or value.
         /// </summary>
         [JsonProperty(PropertyName = "boundingBox")]
-        public BoundingBox BoundingBoxes { get; set; }
+        public IList<double> BoundingBox { get; set; }
 
         /// <summary>
-        /// Gets or sets confidence value.
+        /// Gets or sets when includeTextDetails is set to true, a list of
+        /// references to the text elements constituting this key or value.
         /// </summary>
-        [JsonProperty(PropertyName = "confidence")]
-        public double Confidence { get; set; }
+        [JsonProperty(PropertyName = "elements")]
+        public IList<string> Elements { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -78,10 +80,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
             if (Text == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "Text");
-            }
-            if (BoundingBoxes == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "BoundingBox");
             }
         }
     }

@@ -19,6 +19,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     /// <summary>
     /// Recognized field value.
     /// </summary>
+    //[JsonConverter(typeof(FieldValueConverter))]
     public partial class FieldValue
     {
         /// <summary>
@@ -69,125 +70,77 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// <summary>
         /// Gets or sets string value.
         /// </summary>
-        [JsonProperty(PropertyName = "valueString")]
+        [JsonProperty(PropertyName = "valueString", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string ValueString { get; set; }
-        public bool ShouldSerializeValueString()
-        {
-            return (Type == FieldValueType.String);
-        }
 
 
         /// <summary>
         /// Gets or sets date value.
         /// </summary>
-        [JsonProperty(PropertyName = "valueDate")]
+        [JsonProperty(PropertyName = "valueDate", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string ValueDate { get; set; }
-        public bool ShouldSerializeValueDate()
-        {
-            return (Type == FieldValueType.Date);
-        }
 
         /// <summary>
         /// Gets or sets time value.
         /// </summary>
-        [JsonProperty(PropertyName = "valueTime")]
+        [JsonProperty(PropertyName = "valueTime", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string ValueTime { get; set; }
-        public bool ShouldSerializeValueTime()
-        {
-            return (Type == FieldValueType.Time);
-        }
 
         /// <summary>
         /// Gets or sets phone number value.
         /// </summary>
-        [JsonProperty(PropertyName = "valuePhoneNumber")]
+        [JsonProperty(PropertyName = "valuePhoneNumber", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string ValuePhoneNumber { get; set; }
-        public bool ShouldSerializeValuePhoneNumber()
-        {
-            return (Type == FieldValueType.PhoneNumber);
-        }
 
         /// <summary>
         /// Gets or sets floating point value.
         /// </summary>
-        [JsonProperty(PropertyName = "valueNumber")]
+        [JsonProperty(PropertyName = "valueNumber", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public double ValueNumber { get; set; }
-        public bool ShouldSerializeValueNumber()
-        {
-            return (Type == FieldValueType.Number);
-        }
 
         /// <summary>
         /// Gets or sets integer value.
         /// </summary>
-        [JsonProperty(PropertyName = "valueInteger")]
+        [JsonProperty(PropertyName = "valueInteger", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int ValueInteger { get; set; }
-        public bool ShouldSerializeValueInteger()
-        {
-            return (Type == FieldValueType.Integer);
-        }
 
         /// <summary>
         /// Gets or sets array of field values.
         /// </summary>
-        [JsonProperty(PropertyName = "valueArray")]
+        [JsonProperty(PropertyName = "valueArray", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IList<FieldValue> ValueArray { get; set; }
-        public bool ShouldSerializeValueArray()
-        {
-            return (Type == FieldValueType.Array);
-        }
 
         /// <summary>
         /// Gets or sets dictionary of named field values.
         /// </summary>
-        [JsonProperty(PropertyName = "valueObject")]
+        [JsonProperty(PropertyName = "valueObject", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IDictionary<string, FieldValue> ValueObject { get; set; }
-        public bool ShouldSerializeValueObject()
-        {
-            return (Type == FieldValueType.Object);
-        }
 
         /// <summary>
         /// Gets or sets text content of the extracted field.
         /// </summary>
-        [JsonProperty(PropertyName = "text")]
+        [JsonProperty(PropertyName = "text", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Text { get; set; }
-        public bool ShouldSerializeText()
-        {
-            return (Text != null);
-        }
 
         /// <summary>
         /// Gets or sets bounding box of the field value, if appropriate.
         /// </summary>
-        [JsonProperty(PropertyName = "boundingBox")]
-        public BoundingBox BoundingBoxes { get; set; }
-        public bool ShouldSerializeBoundingBoxes()
-        {
-            return (BoundingBoxes != null);
-        }
+        [JsonProperty(PropertyName = "boundingBox", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public BoundingBox boundingBox { get; set; }
 
         /// <summary>
         /// Gets or sets confidence score.
         /// </summary>
-        [JsonProperty(PropertyName = "confidence")]
+        [JsonProperty(PropertyName = "confidence", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public double? Confidence { get; set; }
-        public bool ShouldSerializeConfidence()
-        {
-            return (Confidence != null);
-        }
 
 
         /// <summary>
         /// Gets or sets when includeTextDetails is set to true, a list of
         /// references to the text elements constituting this field.
         /// </summary>
-        [JsonProperty(PropertyName = "elements")]
+        [JsonProperty(PropertyName = "elements", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IList<ElementReference> Elements { get; set; }
-        public bool ShouldSerializeElements()
-        {
-            return (Elements != null);
-        }
 
         /// <summary>
         /// Gets or sets the 1-based page number in the input document.
@@ -227,6 +180,32 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
             {
                 throw new ValidationException(ValidationRules.InclusiveMinimum, "Page", 1);
             }
+        }
+    }
+
+    public class FieldValueConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            //writer.WriteNull();
+            //writer.WritePropertyName("");
+            //writer.WriteValue(123);
+            //writer.WriteValue((value as ElementReference).RefProperty);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            throw new NotImplementedException("Unnecessary because CanRead is false. The type will skip the converter.");
+        }
+
+        public override bool CanRead
+        {
+            get { return false; }
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(FieldValue);
         }
     }
 }

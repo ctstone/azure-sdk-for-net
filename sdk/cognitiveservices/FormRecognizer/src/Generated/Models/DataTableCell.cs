@@ -45,14 +45,14 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// cell.</param>
         /// <param name="isHeader">Is the current cell a header cell?</param>
         /// <param name="isFooter">Is the current cell a footer cell?</param>
-        public DataTableCell(int rowIndex, int columnIndex, string text, BoundingBox boundingBox, double confidence, int rowSpan = default(int), int columnSpan = default(int), IList<string> elements = default(IList<string>), bool isHeader = default(bool), bool isFooter = default(bool))
+        public DataTableCell(int rowIndex, int columnIndex, string text, IList<double> boundingBox, double confidence, int rowSpan = default(int), int columnSpan = default(int), IList<string> elements = default(IList<string>), bool isHeader = default(bool), bool isFooter = default(bool))
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
             RowSpan = rowSpan;
             ColumnSpan = columnSpan;
             Text = text;
-            BoundingBoxes = boundingBox;
+            BoundingBox = boundingBox;
             Confidence = confidence;
             Elements = elements;
             IsHeader = isHeader;
@@ -99,7 +99,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// Gets or sets bounding box of the cell.
         /// </summary>
         [JsonProperty(PropertyName = "boundingBox")]
-        public BoundingBox BoundingBoxes { get; set; }
+        public IList<double> BoundingBox { get; set; }
 
         /// <summary>
         /// Gets or sets confidence value.
@@ -138,7 +138,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "Text");
             }
-            if (BoundingBoxes == null)
+            if (BoundingBox == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "BoundingBox");
             }
