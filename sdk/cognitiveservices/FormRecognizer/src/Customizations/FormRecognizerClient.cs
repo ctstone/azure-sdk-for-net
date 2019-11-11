@@ -95,9 +95,14 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             Initialize();
         }
 
-        public FormRecognizerClient(string apiKey, string endpoint) : this(new FormClientCredentials(apiKey))
+        public FormRecognizerClient(string apiKey, string endpoint)
         {
+            if (apiKey != null)
+            {
+                Credentials = new FormClientCredentials(apiKey);
+            }
             Endpoint = endpoint;
+            Initialize();
         }
 
         /// <summary>
@@ -1256,21 +1261,21 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
             // Serialize Request
             string _requestContent = null;
-            if(fileStream != null)
+            if(!(fileStream == null && uri == null && byteArray == null))
             {
                 switch (contentType)
                 {
                     case (ContentType.URI):
-                        _requestContent = uri;
-                        _httpRequest.Content = new StringContent(uri, System.Text.Encoding.UTF8);
-                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                        var uriJson = JsonConvert.SerializeObject(new Dictionary<string, string> { { "url", uri } });
+                        _requestContent = uriJson;
+                        _httpRequest.Content = new StringContent(uriJson, System.Text.Encoding.UTF8, "application/json");
                         break;
                     case (ContentType.Stream):
                         var streamReader = new StreamReader(fileStream);
                         _requestContent = streamReader.ReadToEnd();
+                        fileStream.Position = 0;
                         _httpRequest.Content = new StreamContent(fileStream);
                         _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
-
                         break;
                     case (ContentType.ByteArray):                        
                         _httpRequest.Content = new ByteArrayContent(byteArray);
@@ -1550,7 +1555,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
         public async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(string language, byte[] byteArray, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType.ByteArray, language, null, null, byteArray, customHeaders, cancellationToken);
+            return await AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType.ByteArray, language,  null, null, byteArray, customHeaders, cancellationToken);
         }
         private async Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutAsyncWithHttpMessagesAsync(ContentType contentType, string language, string uri = null, Stream fileStream = null, byte[] byteArray = null, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -1609,21 +1614,21 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
             // Serialize Request
             string _requestContent = null;
-            if (fileStream != null)
+            if (!(fileStream == null && uri == null && byteArray == null))
             {
                 switch (contentType)
                 {
                     case (ContentType.URI):
-                        _requestContent = uri;
-                        _httpRequest.Content = new StringContent(uri, System.Text.Encoding.UTF8);
-                        _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                        var uriJson = JsonConvert.SerializeObject(new Dictionary<string, string> { { "url", uri } });
+                        _requestContent = uriJson;
+                        _httpRequest.Content = new StringContent(uriJson, System.Text.Encoding.UTF8, "application/json");
                         break;
                     case (ContentType.Stream):
                         var streamReader = new StreamReader(fileStream);
                         _requestContent = streamReader.ReadToEnd();
+                        fileStream.Position = 0;
                         _httpRequest.Content = new StreamContent(fileStream);
                         _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
-
                         break;
                     case (ContentType.ByteArray):
                         _httpRequest.Content = new ByteArrayContent(byteArray);

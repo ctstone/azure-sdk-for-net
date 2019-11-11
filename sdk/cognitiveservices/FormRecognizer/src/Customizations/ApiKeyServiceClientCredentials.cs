@@ -31,9 +31,7 @@
         {
             if (request == null)
                 throw new ArgumentNullException("request");
-
             request.Headers.Add("Ocp-Apim-Subscription-Key", this.subscriptionKey);
-
             return Task.FromResult<object>(null);
         }
     }
