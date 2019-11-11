@@ -13,28 +13,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     /// </summary>
     public static partial class FormRecognizerClientExtensions
     {
-        //public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    var header = await AnalyzeWithCustomModelAsyncAsync(operations, modelId, includeTextDetails, fileStream, cancellationToken);
-        //    var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
-        //    if (match.Success)
-        //    {
-        //        int retryTimeframe = 1;
-        //        for (int retryCount = 5; retryCount > 0; retryCount--)
-        //        {
-        //            var body = await GetAnalyzeFormResultAsync(operations, modelId, new Guid(match.Groups[2].ToString()), cancellationToken);
-        //            if (body.Status.ToSerializedValue() == "succeeded ")
-        //            {
-        //                return body;
-        //            }
-        //            Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
-        //            retryTimeframe *= 2;
-        //        }
-        //        throw new ErrorResponseException("Timeout.");
-        //    }
-        //    throw new ArgumentException("Invalid URL.");
-        //}
-
         /// <summary>
         /// Train Custom Model
         /// </summary>
@@ -86,7 +64,31 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </param>
         public static async Task<ModelsModel> GetCustomModelsAsync(this IFormRecognizerClient operations, string op = default(string), CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var _result = await operations.GetCustomModelsWithHttpMessagesAsync(op, null, cancellationToken).ConfigureAwait(false))
+            using (var _result = await operations.GetCustomModelsWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+            {
+                return _result.Body;
+            }
+        }
+
+        /// <summary>
+        /// List Custom Models
+        /// </summary>
+        /// <remarks>
+        /// Get information about all custom models
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='op'>
+        /// Specify whether to return summary or full list of models. Possible values
+        /// include: 'full', 'summary'
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<ModelsModel> GetCustomModelsSummaryAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetCustomModelsSummaryWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
             {
                 return _result.Body;
             }
