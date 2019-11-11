@@ -3,13 +3,7 @@
 namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 {
     using Microsoft.Rest;
-    using Models;
     using Newtonsoft.Json;
-    using System.IO;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Extracts information from forms and images into structured data.

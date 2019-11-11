@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Azure.CognitiveServices.FormRecognizer
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+
+namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 {
     using System;
     using System.Net.Http;
