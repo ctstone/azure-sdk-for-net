@@ -221,6 +221,24 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             return GetCustomModelsWithHttpMessagesAsync(null, customHeaders, cancellationToken);
         }
 
+        public async Task<IEnumerable<ModelInfo>> ListCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var models = new List<ModelInfo>();
+            string nextLinkToken = null;
+            do
+            {
+                var qp = new List<(string, string)> { ("nextLink", nextLinkToken) };
+                var resp = await GetCustomModelsWithHttpMessagesAsync(qp, customHeaders, cancellationToken);
+                models.AddRange(resp.Body.ModelList);
+                if (!string.IsNullOrEmpty(resp.Body.NextLink))
+                {
+                    nextLinkToken = GetNextLinkToken(resp.Body.NextLink);
+                }
+            }
+            while (!string.IsNullOrEmpty(nextLinkToken));
+            return models;
+        }
+
         /// <summary>
         /// List Custom Models
         /// </summary>
@@ -250,7 +268,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </return>
         public Task<HttpOperationResponse<ModelsModel>> GetCustomModelsSummaryWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return GetCustomModelsWithHttpMessagesAsync("summary", customHeaders, cancellationToken);
+            var queryParameters = new List<(string, string)>
+            {
+                ("op", "summary")
+            };
+            return GetCustomModelsWithHttpMessagesAsync(queryParameters, customHeaders, cancellationToken);
         }
 
         /// <summary>
@@ -789,7 +811,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 cancellationToken);
         }
 
-        private async Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(string op = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(List<(string, string)> queryParameters = null, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (Endpoint == null)
             {
@@ -802,7 +824,13 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("op", op);
+                if (queryParameters != null)
+                {
+                    foreach (var (key, value) in queryParameters)
+                    {
+                        tracingParameters.Add(key, value);
+                    }
+                }
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetCustomModels", tracingParameters);
             }
@@ -811,9 +839,12 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             var _url = _baseUrl + (_baseUrl.EndsWith("/") ? "" : "/") + "custom/models";
             _url = _url.Replace("{endpoint}", Endpoint);
             List<string> _queryParameters = new List<string>();
-            if (op != null)
+            if (queryParameters != null)
             {
-                _queryParameters.Add(string.Format("op={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(op, SerializationSettings).Trim('"'))));
+                foreach (var (key, value) in queryParameters)
+                {
+                    _queryParameters.Add(string.Format("{0}={1}", key, System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(value, SerializationSettings).Trim('"'))));
+                }
             }
             if (_queryParameters.Count > 0)
             {
@@ -917,6 +948,12 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 ServiceClientTracing.Exit(_invocationId, _result);
             }
             return _result;
+        }
+
+        private static string GetNextLinkToken(string nextLink)
+        {
+            var parts = nextLink.Split(new[] { "nextLink=" }, StringSplitOptions.None);
+            return parts.Length == 2 ? parts[1] : null;
         }
     }
 }
