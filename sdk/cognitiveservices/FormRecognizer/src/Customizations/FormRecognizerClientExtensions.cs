@@ -26,7 +26,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         public enum AnalyzeType { Layout, Receipt };
 
         //public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-        //{            
+        //{
         //    var header = await AnalyzeWithCustomModelAsyncAsync(operations, modelId, includeTextDetails, fileStream, cancellationToken);
         //    var match = Regex.Match(header.OperationLocation, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
         //    if (match.Success)
@@ -106,7 +106,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
             }
         }
-        
+
         public static Guid GetGuid(string uri, int order = 1)
         {
             var match = Regex.Match(uri, @"([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})");
@@ -138,10 +138,10 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 {
                     return body;
                 }
-                Thread.Sleep(TimeSpan.FromSeconds(retryTimeframe));
+                await Task.Delay(TimeSpan.FromSeconds(retryTimeframe));
                 retryTimeframe *= 2;
             }
-            throw new ErrorResponseException($"Guid : {resultid.ToString()}, Timeout.");            
+            throw new ErrorResponseException($"Guid : {resultid.ToString()}, Timeout.");
         }
 
 
@@ -184,7 +184,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </summary>
         /// <remarks>
         /// Get information about all custom models
-        /// </remarks>  
+        /// </remarks>
         /// <param name='operations'>
         /// The operations group for this extension method.
         /// </param>
@@ -331,7 +331,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 return _result.Body;
             }
         }
-       
+
         /// <summary>
         /// Get Analyze Layout Result
         /// </summary>
