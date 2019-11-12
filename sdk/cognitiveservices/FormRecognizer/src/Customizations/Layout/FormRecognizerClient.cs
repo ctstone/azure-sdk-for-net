@@ -66,13 +66,13 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 uri,
                 null,
                 null,
-                DefaultContentType,
+                null,
                 queryParameters,
                 customHeaders,
                 cancellationToken);
         }
 
-        public Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutWithHttpMessagesAsync(string language, Stream fileStream, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutWithHttpMessagesAsync(string language, Stream fileStream, AnalysisContentType contentTyep, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var queryParameters = new List<(string, string)>
             {
@@ -85,13 +85,13 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 null,
                 fileStream,
                 null,
-                DefaultContentType,
+                contentTyep.ToString(),
                 queryParameters,
                 customHeaders,
                 cancellationToken);
         }
 
-        public Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutWithHttpMessagesAsync(string language, byte[] byteArray, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HttpOperationHeaderResponse<AnalyzeLayoutAsyncHeaders>> AnalyzeLayoutWithHttpMessagesAsync(string language, byte[] byteArray, AnalysisContentType contentTyep, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var queryParameters = new List<(string, string)>
             {
@@ -104,7 +104,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 null,
                 null,
                 byteArray,
-                DefaultContentType,
+                contentTyep.ToString(),
                 queryParameters,
                 customHeaders,
                 cancellationToken);

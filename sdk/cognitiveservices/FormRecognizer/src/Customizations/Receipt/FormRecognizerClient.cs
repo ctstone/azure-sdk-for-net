@@ -58,12 +58,12 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 uri,
                 null,
                 null,
-                DefaultContentType,
+                null,
                 null,
                 customHeaders,
                 cancellationToken);
         }
-        public Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptWithHttpMessagesAsync(Stream fileStream, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptWithHttpMessagesAsync(Stream fileStream, AnalysisContentType contentTyep, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return AnalyzeWithHttpMessagesAsync<AnalyzeReceiptAsyncHeaders>(
                 Trace_AnalyzeReceipt,
@@ -72,12 +72,12 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 null,
                 fileStream,
                 null,
-                DefaultContentType,
+                contentTyep.ToString(),
                 null,
                 customHeaders,
                 cancellationToken);
         }
-        public Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptWithHttpMessagesAsync(byte[] byteArray, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HttpOperationHeaderResponse<AnalyzeReceiptAsyncHeaders>> AnalyzeReceiptWithHttpMessagesAsync(byte[] byteArray, AnalysisContentType contentTyep, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return AnalyzeWithHttpMessagesAsync<AnalyzeReceiptAsyncHeaders>(
                 Trace_AnalyzeReceipt,
@@ -86,7 +86,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 null,
                 null,
                 byteArray,
-                DefaultContentType,
+                contentTyep.ToString(),
                 null,
                 customHeaders,
                 cancellationToken);
