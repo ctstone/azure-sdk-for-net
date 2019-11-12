@@ -59,5 +59,29 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
             return result;
         }
+
+        private static async Task<Model> WaitForTraining(this IFormRecognizerClient operations, Func<CancellationToken, Task<Model>> resultFunc, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Model result = null;
+            do
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                result = await resultFunc(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
+                if (result.ModelInfo.Status == ModelStatus.Creating)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
+                }
+            }
+            while (result.ModelInfo.Status == ModelStatus.Creating);
+
+            if (result == null || result.ModelInfo.Status != ModelStatus.Ready)
+            {
+                var status = result == null ? "Unknown Error" : result.ModelInfo.Status.ToString();
+                throw new ErrorResponseException(status);
+            }
+
+            return result;
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     public static partial class FormRecognizerClientExtensions
     {
         /// <summary>
-        /// Train Custom Model
+        /// Start asynchronous training of a custom model
         /// </summary>
         /// <remarks>
         /// Create and train a custom model. The request must include a source
@@ -39,11 +39,48 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<TrainCustomModelAsyncHeaders> TrainCustomModelAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<Guid> StartTrainCustomModelAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.TrainCustomModelWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
             {
-                return _result.Headers;
+                return GetOperationId(_result.Headers.Location);
+            }
+        }
+
+        /// <summary>
+        /// Train a custom model and wait for completion.
+        /// </summary>
+        /// <remarks>
+        /// Create and train a custom model. The request must include a source
+        /// parameter that is either an externally accessible Azure storage blob
+        /// container Uri (preferably a Shared Access Signature Uri) or valid path to a
+        /// data folder in a locally mounted drive. When local paths are specified,
+        /// they must follow the Linux/Unix path format and be an absolute path rooted
+        /// to the input mount configuration setting value e.g., if '{Mounts:Input}'
+        /// configuration setting value is '/input' then a valid source path would be
+        /// '/input/contosodataset'. All data to be trained is expected to be under the
+        /// source folder or sub folders under it. Models are trained using documents
+        /// that are of the following content type - 'application/pdf', 'image/jpeg',
+        /// 'image/png', 'image/tiff'. Other type of content is ignored.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='trainRequest'>
+        /// Training request parameters.
+        /// </param>
+        /// <param name='includeKeys'>
+        /// Include list of extracted keys in model information. This does not affect training.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Model> TrainCustomModelAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, bool? includeKeys = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.TrainCustomModelWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
+            {
+                var modelId = GetOperationId(_result.Headers.Location);
+                return await operations.WaitForTraining((ct) => operations.GetCustomModelAsync(modelId, includeKeys, ct), cancellationToken);
             }
         }
 
@@ -55,10 +92,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </remarks>
         /// <param name='operations'>
         /// The operations group for this extension method.
-        /// </param>
-        /// <param name='op'>
-        /// Specify whether to return summary or full list of models. Possible values
-        /// include: 'full', 'summary'
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
@@ -171,11 +204,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<AnalyzeWithCustomModelHeaders> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, Uri uri, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<Guid> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, Uri uri, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, uri, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
             {
-                return _result.Headers;
+                return GetOperationId(_result.Headers.OperationLocation);
             }
         }
 
@@ -207,11 +240,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<AnalyzeWithCustomModelHeaders> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, Stream fileStream, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<Guid> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, Stream fileStream, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, fileStream, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
             {
-                return _result.Headers;
+                return GetOperationId(_result.Headers.OperationLocation);
             }
         }
 
@@ -243,11 +276,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<AnalyzeWithCustomModelHeaders> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, byte[] byteArray, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<Guid> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, byte[] byteArray, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, byteArray, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
             {
-                return _result.Headers;
+                return GetOperationId(_result.Headers.OperationLocation);
             }
         }
 
