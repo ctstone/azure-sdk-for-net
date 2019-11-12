@@ -83,7 +83,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<IEnumerable<ModelInfo>> ListCustomModels(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<IEnumerable<ModelInfo>> ListCustomModelsAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
         {
             var models = new List<ModelInfo>();
             string nextLink = null;
