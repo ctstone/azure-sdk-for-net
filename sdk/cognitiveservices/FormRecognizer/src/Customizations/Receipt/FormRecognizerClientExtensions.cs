@@ -21,17 +21,17 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             }
         }
 
-        public static async Task<AnalyzeReceiptAsyncHeaders> StartAnalyzeReceiptAsync(this IFormRecognizerClient operations, Stream fileStream, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeReceiptAsyncHeaders> StartAnalyzeReceiptAsync(this IFormRecognizerClient operations, Stream fileStream, AnalysisContentType contentType, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var resp = await operations.AnalyzeReceiptWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
+            using (var resp = await operations.AnalyzeReceiptWithHttpMessagesAsync(fileStream, contentType, null, cancellationToken).ConfigureAwait(false))
             {
                 return resp.Headers;
             }
         }
 
-        public static async Task<AnalyzeReceiptAsyncHeaders> StartAnalyzeReceiptAsync(this IFormRecognizerClient operations, byte[] byteArray, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeReceiptAsyncHeaders> StartAnalyzeReceiptAsync(this IFormRecognizerClient operations, byte[] byteArray, AnalysisContentType contentType, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var resp = await operations.AnalyzeReceiptWithHttpMessagesAsync(byteArray, null, cancellationToken).ConfigureAwait(false))
+            using (var resp = await operations.AnalyzeReceiptWithHttpMessagesAsync(byteArray, contentType, null, cancellationToken).ConfigureAwait(false))
             {
                 return resp.Headers;
             }
@@ -47,9 +47,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             }
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, Stream fileStream, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, Stream fileStream, AnalysisContentType contentType, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var _result = await operations.AnalyzeReceiptWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
+            using (var _result = await operations.AnalyzeReceiptWithHttpMessagesAsync(fileStream, contentType, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
                 var operationId = GetOperationId(header.OperationLocation);
@@ -57,9 +57,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             }
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, byte[] byteArray, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeReceiptAsync(this IFormRecognizerClient operations, byte[] byteArray, AnalysisContentType contentType, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var _result = await operations.AnalyzeReceiptWithHttpMessagesAsync(byteArray, null, cancellationToken).ConfigureAwait(false))
+            using (var _result = await operations.AnalyzeReceiptWithHttpMessagesAsync(byteArray, contentType, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
                 var operationId = GetOperationId(header.OperationLocation);
