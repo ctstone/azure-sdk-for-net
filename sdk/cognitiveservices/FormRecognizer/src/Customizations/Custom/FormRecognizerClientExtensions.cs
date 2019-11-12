@@ -48,7 +48,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// List Custom Models
+        /// Get summary of custom models.
         /// </summary>
         /// <remarks>
         /// Get information about all custom models
@@ -63,19 +63,19 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<ModelsModel> GetCustomModelsSummaryAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<ModelsSummary> GetCustomModelsSummaryAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.GetCustomModelsSummaryWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
             {
-                return _result.Body;
+                return _result.Body.Summary;
             }
         }
 
         /// <summary>
-        /// List Custom Models
+        /// List all custom models.
         /// </summary>
         /// <remarks>
-        /// Get information about all custom models
+        /// Get information about all custom models, automatically fetching the next page if needed.
         /// </remarks>
         /// <param name='operations'>
         /// The operations group for this extension method.
@@ -83,9 +83,20 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static Task<IEnumerable<ModelInfo>> ListCustomModels(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<IEnumerable<ModelInfo>> ListCustomModels(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return operations.ListCustomModelsWithHttpMessagesAsync(null, cancellationToken);
+            var models = new List<ModelInfo>();
+            string nextLink = null;
+            do
+            {
+                using (var resp = await operations.GetCustomModelsWithHttpMessagesAsync(nextLink, null, cancellationToken))
+                {
+                    models.AddRange(resp.Body.ModelList);
+                    nextLink = resp.Body.NextLink;
+                }
+            }
+            while (!string.IsNullOrEmpty(nextLink));
+            return models;
         }
 
         /// <summary>
@@ -136,7 +147,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Analyze Form
+        /// Start asynchronous custom form analysis from URI.
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given document.
@@ -169,7 +180,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Analyze Form
+        /// Start asynchronous custom form analysis from stream.
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given document.
@@ -205,7 +216,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Analyze Form
+        /// Start asynchronous custom form analysis from byte array.
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given document.
@@ -266,6 +277,14 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             }
         }
 
+        /// <summary>
+        /// Analyze Form from URI and wait for operation to complete.
+        /// </summary>
+        /// <param name="operations">The operations group for this extension method.</param>
+        /// <param name="modelId">Model identifier.</param>
+        /// <param name="uri">Remote URL to analyze.</param>
+        /// <param name="includeTextDetails">Include text lines and element references in the result.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, Guid modelId, Uri uri, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, uri, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
@@ -276,6 +295,15 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             }
         }
 
+        /// <summary>
+        /// Analyze Form from stream and wait for operation to complete.
+        /// </summary>
+        /// <param name="operations">The operations group for this extension method.</param>
+        /// <param name="modelId">Model identifier.</param>
+        /// <param name="fileStream">.json, .pdf, .jpg, .png or .tiff type file stream.</param>
+        /// <param name="contentType">Content type of the file stream.</param>
+        /// <param name="includeTextDetails">Include text lines and element references in the result.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, Guid modelId, Stream fileStream, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, fileStream, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
@@ -286,6 +314,15 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             }
         }
 
+        /// <summary>
+        /// Analyze Form from byte array and wait for operation to complete.
+        /// </summary>
+        /// <param name="operations">The operations group for this extension method.</param>
+        /// <param name="modelId">Model identifier.</param>
+        /// <param name="byteArray">.json, .pdf, .jpg, .png or .tiff type byte array.</param>
+        /// <param name="contentType">Content type of the bytes.</param>
+        /// <param name="includeTextDetails">Include text lines and element references in the result.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, Guid modelId, byte[] byteArray, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, byteArray, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))

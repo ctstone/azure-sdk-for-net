@@ -190,11 +190,14 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// List Custom Models
+        /// List Custom Models.
         /// </summary>
         /// <remarks>
-        /// Get information about all custom models
+        /// Get information about all custom models.
         /// </remarks>
+        /// <param name='nextLink'>
+        /// Provide the next link from a previous request to fetch the next page.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -216,35 +219,19 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(string nextLink = null, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return GetCustomModelsWithHttpMessagesAsync(null, customHeaders, cancellationToken);
-        }
-
-        public async Task<IEnumerable<ModelInfo>> ListCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var models = new List<ModelInfo>();
-            var qp = new List<(string, string)>();
-            string nextLinkToken = null;
-            do
+            var queryParameters = new List<(string, string)>();
+            var nextLinkToken = GetNextLinkToken(nextLink);
+            if (!string.IsNullOrEmpty(nextLinkToken))
             {
-                qp.Clear();
-                if (!string.IsNullOrEmpty(nextLinkToken))
-                {
-                    qp.Add(("nextLink", nextLinkToken));
-                }
-                using (var resp = await GetCustomModelsWithHttpMessagesAsync(qp, customHeaders, cancellationToken))
-                {
-                    models.AddRange(resp.Body.ModelList);
-                    nextLinkToken = GetNextLinkToken(resp.Body.NextLink);
-                }
+                queryParameters.Add(("nextLink", nextLinkToken));
             }
-            while (!string.IsNullOrEmpty(nextLinkToken));
-            return models;
+            return GetCustomModelsWithHttpMessagesAsync(queryParameters, customHeaders, cancellationToken);
         }
 
         /// <summary>
-        /// List Custom Models
+        /// Get summary of custom models.
         /// </summary>
         /// <remarks>
         /// Get information about all custom models
@@ -577,7 +564,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Analyze Form
+        /// Analyze Form from URI.
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given document.
@@ -589,11 +576,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='modelId'>
         /// Model identifier.
         /// </param>
-        /// <param name='includeTextDetails'>
-        /// Include text lines and element references in the result.
-        /// </param>
         /// <param name='uri'>
         /// URL to analyze.
+        /// </param>
+        /// <param name='includeTextDetails'>
+        /// Include text lines and element references in the result.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -641,7 +628,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Analyze Form
+        /// Analyze Form from stream
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given document.
@@ -653,11 +640,14 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='modelId'>
         /// Model identifier.
         /// </param>
-        /// <param name='includeTextDetails'>
-        /// Include text lines and element references in the result.
-        /// </param>
         /// <param name='fileStream'>
         /// .json, .pdf, .jpg, .png or .tiff type file stream.
+        /// </param>
+        /// <param name='contentType'>
+        /// Content type of the stream.
+        /// </param>
+        /// <param name='includeTextDetails'>
+        /// Include text lines and element references in the result.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -705,7 +695,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Analyze Form
+        /// Analyze Form from byte array
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given document.
@@ -722,6 +712,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </param>
         /// <param name='byteArray'>
         /// .json, .pdf, .jpg, .png or .tiff type byte array.
+        /// </param>
+        /// <param name='contentType'>
+        /// Content type of the bytes.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.

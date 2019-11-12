@@ -56,13 +56,13 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(string nextLink = null, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// List Custom Model summary.
+        /// Get summary of custom models.
         /// </summary>
         /// <remarks>
-        /// Get information about all custom models
+        /// Get information about all custom models.
         /// </remarks>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -111,7 +111,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         Task<HttpOperationResponse> DeleteCustomModelWithHttpMessagesAsync(System.Guid modelId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Analyze Form
+        /// Analyze Form from stream
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given
@@ -141,7 +141,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         Task<HttpOperationHeaderResponse<AnalyzeWithCustomModelHeaders>> AnalyzeWithCustomModelWithHttpMessagesAsync(System.Guid modelId, Stream fileStream, AnalysisContentType contentType, bool? includeTextDetails = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Analyze Form
+        /// Analyze Form from URI
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given
@@ -168,7 +168,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         Task<HttpOperationHeaderResponse<AnalyzeWithCustomModelHeaders>> AnalyzeWithCustomModelWithHttpMessagesAsync(System.Guid modelId, Uri uri, bool? includeTextDetails = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Analyze Form
+        /// Analyze Form from byte array.
         /// </summary>
         /// <remarks>
         /// Extract key-value pairs, tables, and semantic values from a given
@@ -216,7 +216,5 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse<AnalyzeOperationResult>> GetAnalyzeFormResultWithHttpMessagesAsync(System.Guid modelId, System.Guid resultId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<IEnumerable<ModelInfo>> ListCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
