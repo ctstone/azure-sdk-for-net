@@ -15,49 +15,55 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
     {
         public static async Task<AnalyzeLayoutAsyncHeaders> StartAnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Uri uri, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var resp = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, uri, null, cancellationToken).ConfigureAwait(false);
-            return resp.Headers;
+            using (var resp = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, uri, null, cancellationToken).ConfigureAwait(false))
+            {
+                return resp.Headers;
+            }
         }
 
         public static async Task<AnalyzeLayoutAsyncHeaders> StartAnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Stream fileStream, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var resp = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, fileStream, null, cancellationToken).ConfigureAwait(false);
-            return resp.Headers;
+            using (var resp = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, fileStream, null, cancellationToken).ConfigureAwait(false))
+            {
+                return resp.Headers;
+            }
         }
 
         public static async Task<AnalyzeLayoutAsyncHeaders> StartAnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, byte[] byteArray, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var resp = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, byteArray, null, cancellationToken).ConfigureAwait(false);
-            return resp.Headers;
+            using (var resp = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, byteArray, null, cancellationToken).ConfigureAwait(false))
+            {
+                return resp.Headers;
+            }
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Uri uri, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Uri uri, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, uri, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
-                var guid = GetGuid(header.OperationLocation);
-                return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
+                var operationId = GetOperationId(header.OperationLocation);
+                return await operations.WaitForOperation((ct) => operations.GetAnalyzeLayoutResultAsync(operationId, ct), cancellationToken);
             }
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Stream fileStream, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, Stream fileStream, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, fileStream, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
-                var guid = GetGuid(header.OperationLocation);
-                return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
+                var operationId = GetOperationId(header.OperationLocation);
+                return await operations.WaitForOperation((ct) => operations.GetAnalyzeLayoutResultAsync(operationId, ct), cancellationToken);
             }
         }
 
-        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, byte[] byteArray, int retryTimes = 5, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, byte[] byteArray, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, byteArray, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
-                var guid = GetGuid(header.OperationLocation);
-                return await operations.PollingResultAsync(guid, AnalyzeType.Layout, retryTimes, cancellationToken);
+                var operationId = GetOperationId(header.OperationLocation);
+                return await operations.WaitForOperation((ct) => operations.GetAnalyzeLayoutResultAsync(operationId, ct), cancellationToken);
             }
         }
 

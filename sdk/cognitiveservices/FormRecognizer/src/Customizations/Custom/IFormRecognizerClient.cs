@@ -216,5 +216,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse<AnalyzeOperationResult>> GetAnalyzeFormResultWithHttpMessagesAsync(System.Guid modelId, System.Guid resultId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IEnumerable<ModelInfo>> ListCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

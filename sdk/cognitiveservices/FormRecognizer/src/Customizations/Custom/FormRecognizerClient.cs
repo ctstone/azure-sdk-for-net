@@ -224,14 +224,18 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         public async Task<IEnumerable<ModelInfo>> ListCustomModelsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var models = new List<ModelInfo>();
+            var qp = new List<(string, string)>();
             string nextLinkToken = null;
             do
             {
-                var qp = new List<(string, string)> { ("nextLink", nextLinkToken) };
-                var resp = await GetCustomModelsWithHttpMessagesAsync(qp, customHeaders, cancellationToken);
-                models.AddRange(resp.Body.ModelList);
-                if (!string.IsNullOrEmpty(resp.Body.NextLink))
+                qp.Clear();
+                if (!string.IsNullOrEmpty(nextLinkToken))
                 {
+                    qp.Add(("nextLink", nextLinkToken));
+                }
+                using (var resp = await GetCustomModelsWithHttpMessagesAsync(qp, customHeaders, cancellationToken))
+                {
+                    models.AddRange(resp.Body.ModelList);
                     nextLinkToken = GetNextLinkToken(resp.Body.NextLink);
                 }
             }
@@ -952,8 +956,15 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
         private static string GetNextLinkToken(string nextLink)
         {
-            var parts = nextLink.Split(new[] { "nextLink=" }, StringSplitOptions.None);
-            return parts.Length == 2 ? parts[1] : null;
+            if (string.IsNullOrEmpty(nextLink))
+            {
+                return null;
+            }
+            else
+            {
+                var parts = nextLink.Split(new[] { "nextLink=" }, StringSplitOptions.None);
+                return parts.Length == 2 ? parts[1] : null;
+            }
         }
     }
 }
