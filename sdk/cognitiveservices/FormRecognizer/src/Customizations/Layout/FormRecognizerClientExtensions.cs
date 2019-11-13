@@ -59,7 +59,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
         public static async Task<AnalyzeOperationResult> AnalyzeLayoutAsync(this IFormRecognizerClient operations, string language, byte[] byteArray, AnalysisContentType contentType, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var _result = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, byteArray, contentTyep, null, cancellationToken).ConfigureAwait(false))
+            using (var _result = await operations.AnalyzeLayoutWithHttpMessagesAsync(language, byteArray, contentType, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
                 var operationId = GetOperationId(header.OperationLocation);
