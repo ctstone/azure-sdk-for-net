@@ -67,7 +67,7 @@ namespace FormRecognizerSDK.Tests
             }
         }
 
-        [Theory(Skip = "long test")]
+        [Theory]
         [InlineData(true, ContentTypePdf, "Invoice_1.pdf", "Test_AnalyzeWithCustomModelStreamPdfReturnDetailsAsync")]
         [InlineData(false, ContentTypePdf, "Invoice_1.pdf", "Test_AnalyzeWithCustomModelStreamPdfNoDetailsAsync")]
         public async Task Test_AnalyzeWithCustomModelStreamAsync(bool includeTextDetails, string contentTypeText, string fileName, string methodName)
@@ -89,7 +89,7 @@ namespace FormRecognizerSDK.Tests
             }
         }
 
-        [Theory(Skip = "long test")]
+        [Theory]
         [InlineData(true, "Test_AnalyzeWithCustomModelUriReturnDetailsAsync")]
         [InlineData(false, "Test_AnalyzeWithCustomModelUriNoDetailsAsync")]
         public async Task Test_AnalyzeWithCustomModelUriAsync(bool includeTextDetails, string methodName)
@@ -125,7 +125,7 @@ namespace FormRecognizerSDK.Tests
             }
         }
 
-        [Theory(Skip = "long test")]
+        [Theory]
         [InlineData(true, "Test_TrainModelReturnKeysAsync", "d4deea17-8a01-43d2-acf9-4a74ec7f143d")]
         [InlineData(false, "Test_TrainModelNoKeysAsync", "2cefbbb0-ae1e-411e-8ca3-f4011ebb1e89")]
         public async Task Test_TrainModelAsync(bool includeKeys, string methodName, string expectModelId)
