@@ -1,32 +1,17 @@
 ﻿using Microsoft.Azure.CognitiveServices.FormRecognizer;
-using Microsoft.Azure.CognitiveServices.FormRecognizer.Models;
 using Microsoft.Azure.Test.HttpRecorder;
 using Microsoft.Rest.ClientRuntime.Azure.TestFramework;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
-using Xunit.Abstractions;
-using System;
 using System.IO;
-
 
 namespace FormRecognizerSDK.Tests
 {
     public class FormRecognizerTests : BaseTests
     {
-        private ITestOutputHelper _output;
-
-        public FormRecognizerTests(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
         [Fact]
-        public void VerifyFormClientObjectCreation()
+        public void Test_ApiKey_Endpoint_Overload()
         {
-            var client = GetFormRecognizerClient(null);
-            
-            Assert.True(client.GetType() == typeof(FormRecognizerClient));
+            var client = new FormRecognizerClient("fake-key", "http://example.org");
         }
 
         [Fact(Skip = "not completed")]
@@ -44,35 +29,35 @@ namespace FormRecognizerSDK.Tests
             }
         }
 
-        [Fact]
-        public void FormRecognizerSDK_AnalyzeReceiptAsync()
-        {
-            var expectedResultJson = JObject.Parse(File.ReadAllText(GetTestImagePath("Receipt_003_934.json")));
-            var expectedResult = JsonConvert.DeserializeObject<AnalyzeResult>(expectedResultJson.ToString());
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                HttpMockServer.Initialize(this.GetType(), "FormRecognizerSDK_AnalyzeReceiptAsync");
-                
-                using (IFormRecognizerClient client = GetFormRecognizerClient(HttpMockServer.CreateInstance()))
-                {
-                    using (FileStream stream = new FileStream(GetTestImagePath("Receipt_003_934.jpg"), FileMode.Open))
-                    {
-                        var streamResult = client.AnalyzeReceiptAsync(stream).Result;
-                        // TODO - check if result match expectation
+        // [Fact]
+        // public void FormRecognizerSDK_AnalyzeReceiptAsync()
+        // {
+        //     var expectedResultJson = JObject.Parse(File.ReadAllText(GetTestImagePath("Receipt_003_934.json")));
+        //     var expectedResult = JsonConvert.DeserializeObject<AnalyzeResult>(expectedResultJson.ToString());
+        //     using (MockContext context = MockContext.Start(this.GetType()))
+        //     {
+        //         HttpMockServer.Initialize(this.GetType(), "FormRecognizerSDK_AnalyzeReceiptAsync");
 
-                        using (var streamReader = new MemoryStream())
-                        {
-                            // stream.CopyTo(streamReader);
-                            // var byteArray = streamReader.ToArray();
-                            // var byteResult = client.AnalyzeReceiptAsync(byteArray).Result;
-                            // TODO - check if result match expectation
-                        }
-                    }
-                    //var uriResult = client.AnalyzeReceiptAsync("test1").Result;
-                    // TODO - check if result match expectation
-                }
-            }
-        }
+        //         using (IFormRecognizerClient client = GetFormRecognizerClient(HttpMockServer.CreateInstance()))
+        //         {
+        //             using (FileStream stream = new FileStream(GetTestImagePath("Receipt_003_934.jpg"), FileMode.Open))
+        //             {
+        //                 var streamResult = client.AnalyzeReceiptAsync(stream).Result;
+        //                 // TODO - check if result match expectation
+
+        //                 using (var streamReader = new MemoryStream())
+        //                 {
+        //                     // stream.CopyTo(streamReader);
+        //                     // var byteArray = streamReader.ToArray();
+        //                     // var byteResult = client.AnalyzeReceiptAsync(byteArray).Result;
+        //                     // TODO - check if result match expectation
+        //                 }
+        //             }
+        //             //var uriResult = client.AnalyzeReceiptAsync("test1").Result;
+        //             // TODO - check if result match expectation
+        //         }
+        //     }
+        // }
 
         //[Fact]
         //public void testInbackend()
@@ -82,7 +67,7 @@ namespace FormRecognizerSDK.Tests
         //        using (FileStream stream = new FileStream(GetTestImagePath("Receipt_003_934.jpg"), FileMode.Open))
         //        {
         //            var streamResult = client.AnalyzeReceiptAsync(stream).Result;
-                    
+
         //        }
         //    }
         //}
