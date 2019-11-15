@@ -116,7 +116,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<IEnumerable<ModelInfo>> ListCustomModelsAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<IList<ModelInfo>> ListCustomModelsAsync(this IFormRecognizerClient operations, CancellationToken cancellationToken = default(CancellationToken))
         {
             var models = new List<ModelInfo>();
             string nextLink = null;
@@ -249,42 +249,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         }
 
         /// <summary>
-        /// Start asynchronous custom form analysis from byte array.
-        /// </summary>
-        /// <remarks>
-        /// Extract key-value pairs, tables, and semantic values from a given document.
-        /// The input document must be of one of the supported content types -
-        /// 'application/pdf', 'image/jpeg', 'image/png' or 'image/tiff'.
-        /// Alternatively, use 'application/json' type to specify the location (Uri or
-        /// local path) of the document to be analyzed.
-        /// </remarks>
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='modelId'>
-        /// Model identifier.
-        /// </param>
-        /// <param name='includeTextDetails'>
-        /// Include text lines and element references in the result.
-        /// </param>
-        /// <param name='byteArray'>
-        /// .json, .pdf, .jpg, .png or .tiff type bytes.
-        /// </param>
-        /// <param name='contentType'>
-        /// Content type of the bytes.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<Guid> StartAnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, byte[] byteArray, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, byteArray, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
-            {
-                return GetOperationId(_result.Headers.OperationLocation);
-            }
-        }
-
-        /// <summary>
         /// Get Analyze Form Result
         /// </summary>
         /// <remarks>
@@ -340,25 +304,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, Guid modelId, Stream fileStream, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, fileStream, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
-            {
-                var header = _result.Headers;
-                var operationId = GetOperationId(header.OperationLocation);
-                return await operations.WaitForOperation((ct) => operations.GetAnalyzeFormResultAsync(modelId, operationId, ct), cancellationToken);
-            }
-        }
-
-        /// <summary>
-        /// Analyze Form from byte array and wait for operation to complete.
-        /// </summary>
-        /// <param name="operations">The operations group for this extension method.</param>
-        /// <param name="modelId">Model identifier.</param>
-        /// <param name="byteArray">.json, .pdf, .jpg, .png or .tiff type byte array.</param>
-        /// <param name="contentType">Content type of the bytes.</param>
-        /// <param name="includeTextDetails">Include text lines and element references in the result.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task<AnalyzeOperationResult> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, Guid modelId, byte[] byteArray, AnalysisContentType contentType, bool? includeTextDetails = false, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, byteArray, contentType, includeTextDetails, null, cancellationToken).ConfigureAwait(false))
             {
                 var header = _result.Headers;
                 var operationId = GetOperationId(header.OperationLocation);
