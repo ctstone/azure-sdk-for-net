@@ -14,23 +14,29 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class ImageUrl
+    /// <summary>
+    /// Report for a custom model training field.
+    /// </summary>
+    public partial class FormFieldsReport
     {
         /// <summary>
-        /// Initializes a new instance of the ImageUrl class.
+        /// Initializes a new instance of the FormFieldsReport class.
         /// </summary>
-        public ImageUrl()
+        public FormFieldsReport()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ImageUrl class.
+        /// Initializes a new instance of the FormFieldsReport class.
         /// </summary>
-        /// <param name="url">Publicly reachable URL of an image.</param>
-        public ImageUrl(string url)
+        /// <param name="fieldName">Training field name.</param>
+        /// <param name="accuracy">Estimated extraction accuracy for this
+        /// field.</param>
+        public FormFieldsReport(string fieldName, double accuracy)
         {
-            Url = url;
+            FieldName = fieldName;
+            Accuracy = accuracy;
             CustomInit();
         }
 
@@ -40,10 +46,16 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets publicly reachable URL of an image.
+        /// Gets or sets training field name.
         /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
+        [JsonProperty(PropertyName = "fieldName")]
+        public string FieldName { get; set; }
+
+        /// <summary>
+        /// Gets or sets estimated extraction accuracy for this field.
+        /// </summary>
+        [JsonProperty(PropertyName = "accuracy")]
+        public double Accuracy { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -53,9 +65,9 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (Url == null)
+            if (FieldName == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Url");
+                throw new ValidationException(ValidationRules.CannotBeNull, "FieldName");
             }
         }
     }

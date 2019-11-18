@@ -14,28 +14,29 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Defines headers for BatchReadReceiptInStream operation.
+    /// Defines headers for TrainCustomModelAsync operation.
     /// </summary>
-    public partial class BatchReadReceiptInStreamHeaders
+    public partial class TrainCustomModelAsyncHeaders
     {
         /// <summary>
-        /// Initializes a new instance of the BatchReadReceiptInStreamHeaders
+        /// Initializes a new instance of the TrainCustomModelAsyncHeaders
         /// class.
         /// </summary>
-        public BatchReadReceiptInStreamHeaders()
+        public TrainCustomModelAsyncHeaders()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the BatchReadReceiptInStreamHeaders
+        /// Initializes a new instance of the TrainCustomModelAsyncHeaders
         /// class.
         /// </summary>
-        /// <param name="operationLocation">URL to query for status of the
-        /// operation. The URL will expire in 48 hours. </param>
-        public BatchReadReceiptInStreamHeaders(string operationLocation = default(string))
+        /// <param name="location">Location and ID of the model being trained.
+        /// The status of model training is specified in the status property at
+        /// the model location.</param>
+        public TrainCustomModelAsyncHeaders(string location = default(string))
         {
-            OperationLocation = operationLocation;
+            Location = location;
             CustomInit();
         }
 
@@ -45,11 +46,12 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets URL to query for status of the operation. The URL will
-        /// expire in 48 hours.
+        /// Gets or sets location and ID of the model being trained. The status
+        /// of model training is specified in the status property at the model
+        /// location.
         /// </summary>
-        [JsonProperty(PropertyName = "Operation-Location")]
-        public string OperationLocation { get; set; }
+        [JsonProperty(PropertyName = "Location")]
+        public string Location { get; set; }
 
     }
 }

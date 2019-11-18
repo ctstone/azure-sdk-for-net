@@ -14,23 +14,27 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class ErrorInformation
+    /// <summary>
+    /// Response to the get custom model operation.
+    /// </summary>
+    public partial class Model
     {
         /// <summary>
-        /// Initializes a new instance of the ErrorInformation class.
+        /// Initializes a new instance of the Model class.
         /// </summary>
-        public ErrorInformation()
+        public Model()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ErrorInformation class.
+        /// Initializes a new instance of the Model class.
         /// </summary>
-        public ErrorInformation(string code, string message)
+        public Model(ModelInfo modelInfo, KeysResult keys = default(KeysResult), TrainResult trainResult = default(TrainResult))
         {
-            Code = code;
-            Message = message;
+            ModelInfo = modelInfo;
+            Keys = keys;
+            TrainResult = trainResult;
             CustomInit();
         }
 
@@ -41,13 +45,18 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
+        [JsonProperty(PropertyName = "modelInfo")]
+        public ModelInfo ModelInfo { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "message")]
-        public string Message { get; set; }
+        [JsonProperty(PropertyName = "keys")]
+        public KeysResult Keys { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "trainResult")]
+        public TrainResult TrainResult { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -57,13 +66,21 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (Code == null)
+            if (ModelInfo == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Code");
+                throw new ValidationException(ValidationRules.CannotBeNull, "ModelInfo");
             }
-            if (Message == null)
+            if (ModelInfo != null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Message");
+                ModelInfo.Validate();
+            }
+            if (Keys != null)
+            {
+                Keys.Validate();
+            }
+            if (TrainResult != null)
+            {
+                TrainResult.Validate();
             }
         }
     }

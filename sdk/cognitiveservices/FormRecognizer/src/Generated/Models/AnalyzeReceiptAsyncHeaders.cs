@@ -14,26 +14,27 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
     using System.Linq;
 
     /// <summary>
-    /// Error reported during an operation.
+    /// Defines headers for AnalyzeReceiptAsync operation.
     /// </summary>
-    public partial class FormOperationError
+    public partial class AnalyzeReceiptAsyncHeaders
     {
         /// <summary>
-        /// Initializes a new instance of the FormOperationError class.
+        /// Initializes a new instance of the AnalyzeReceiptAsyncHeaders class.
         /// </summary>
-        public FormOperationError()
+        public AnalyzeReceiptAsyncHeaders()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the FormOperationError class.
+        /// Initializes a new instance of the AnalyzeReceiptAsyncHeaders class.
         /// </summary>
-        /// <param name="errorMessage">Message reported during the train
+        /// <param name="operationLocation">URL containing the resultId used to
+        /// track the progress and obtain the result of the analyze
         /// operation.</param>
-        public FormOperationError(string errorMessage = default(string))
+        public AnalyzeReceiptAsyncHeaders(string operationLocation = default(string))
         {
-            ErrorMessage = errorMessage;
+            OperationLocation = operationLocation;
             CustomInit();
         }
 
@@ -43,10 +44,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets message reported during the train operation.
+        /// Gets or sets URL containing the resultId used to track the progress
+        /// and obtain the result of the analyze operation.
         /// </summary>
-        [JsonProperty(PropertyName = "errorMessage")]
-        public string ErrorMessage { get; set; }
+        [JsonProperty(PropertyName = "Operation-Location")]
+        public string OperationLocation { get; set; }
 
     }
 }
