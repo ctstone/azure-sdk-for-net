@@ -15,9 +15,9 @@ There are three issues with the generated code that must be manually corrected:
 
 #>
 
-$c1 = gc ./IFormRecognizerClient.cs | Out-String
-$c2 = gc ./FormRecognizerClientExtensions.cs | Out-String
-$c3 = gc ./FormRecognizerClient.cs | Out-String
+$c1 = Get-Content ./Customizations/IFormRecognizerClient.cs | Out-String
+$c2 = Get-Content ./Customizations/FormRecognizerClientExtensions.cs | Out-String
+$c3 = Get-Content ./Customizations/FormRecognizerClient.cs | Out-String
 
 # Simple method rename
 $c1 = $c1 -replace "TrainCustomModelAsyncWithHttpMessagesAsync", "TrainCustomModelWithHttpMessagesAsync"
@@ -36,6 +36,6 @@ $c3 = $c3 -replace 'public async Task<HttpOperationResponse<ModelsModel>> GetCus
 $c3 = $c3 -replace '(GetCustomModelsWithHttpMessagesAsync\(string op = default\(string\),)', '${1} string nextLink = default(string),'
 $c3 = $c3 -replace '(?ms)(if \(op != null\)\s+\{.+?\s\})', "`${1}`nif (nextLink != null)`n{`n_queryParameters.Add(string.Format(`"nextLink={0}`", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(nextLink, SerializationSettings).Trim('`"'))));`n}`n"
 
-$c1 > ./IFormRecognizerClient.cs
-$c2 > ./FormRecognizerClientExtensions.cs
-$c3 > ./FormRecognizerClient.cs
+$c1 > ./Customizations/IFormRecognizerClient.cs
+$c2 > ./Customizations/FormRecognizerClientExtensions.cs
+$c3 > ./Customizations/FormRecognizerClient.cs
