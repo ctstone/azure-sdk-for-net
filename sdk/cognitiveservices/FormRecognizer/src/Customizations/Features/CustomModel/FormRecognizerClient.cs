@@ -79,7 +79,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// </return>
         public Task<HttpOperationResponse<ModelsModel>> GetCustomModelsSummaryWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return GetCustomModelsWithHttpMessagesAsync("summary", customHeaders, cancellationToken);
+            return GetCustomModelsWithHttpMessagesAsync("summary", null, customHeaders, cancellationToken);
         }
 
         /// <summary>
