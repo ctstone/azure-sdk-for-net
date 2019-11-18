@@ -22,14 +22,8 @@ namespace FormRecognizerSDK.Tests
         {
             IFormRecognizerClient client = new FormRecognizerClient(new FormClientCredentials(FormRecognizerSubscriptionKey), handlers: handler)
             {
-                // Endpoint = "https://westus.api.cognitive.microsoft.com"
-                Endpoint = "https://example.org"
+                Endpoint = "https://westus.api.cognitive.microsoft.com"
             };
-
-            (client as FormRecognizerClient)
-                .HttpClient
-                .DefaultRequestHeaders
-                .Add("apim-subscription-id", FormRecognizerSubscriptionKey);
 
             return client;
         }
