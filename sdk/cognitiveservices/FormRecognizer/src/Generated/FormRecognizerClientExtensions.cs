@@ -44,37 +44,15 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<TrainCustomModelAsyncHeaders> TrainCustomModelAsyncAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<TrainCustomModelAsyncHeaders> TrainCustomModelAsync(this IFormRecognizerClient operations, TrainRequest trainRequest, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.TrainCustomModelAsyncWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.TrainCustomModelWithHttpMessagesAsync(trainRequest, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Headers;
                 }
             }
 
-            /// <summary>
-            /// List Custom Models
-            /// </summary>
-            /// <remarks>
-            /// Get information about all custom models
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='op'>
-            /// Specify whether to return summary or full list of models. Possible values
-            /// include: 'full', 'summary'
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ModelsModel> GetCustomModelsAsync(this IFormRecognizerClient operations, string op = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetCustomModelsWithHttpMessagesAsync(op, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
+            
 
             /// <summary>
             /// Get Custom Model
@@ -123,38 +101,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 (await operations.DeleteCustomModelWithHttpMessagesAsync(modelId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Analyze Form
-            /// </summary>
-            /// <remarks>
-            /// Extract key-value pairs, tables, and semantic values from a given document.
-            /// The input document must be of one of the supported content types -
-            /// 'application/pdf', 'image/jpeg', 'image/png' or 'image/tiff'.
-            /// Alternatively, use 'application/json' type to specify the location (Uri or
-            /// local path) of the document to be analyzed.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='modelId'>
-            /// Model identifier.
-            /// </param>
-            /// <param name='includeTextDetails'>
-            /// Include text lines and element references in the result.
-            /// </param>
-            /// <param name='fileStream'>
-            /// .json, .pdf, .jpg, .png or .tiff type file stream.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<AnalyzeWithCustomModelHeaders> AnalyzeWithCustomModelAsync(this IFormRecognizerClient operations, System.Guid modelId, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.AnalyzeWithCustomModelWithHttpMessagesAsync(modelId, includeTextDetails, fileStream, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Headers;
-                }
-            }
+            
 
             /// <summary>
             /// Get Analyze Form Result
@@ -182,35 +129,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 }
             }
 
-            /// <summary>
-            /// Analyze Receipt
-            /// </summary>
-            /// <remarks>
-            /// Extract field text and semantic values from a given receipt document. The
-            /// input document must be of one of the supported content types -
-            /// 'application/pdf', 'image/jpeg', 'image/png' or 'image/tiff'.
-            /// Alternatively, use 'application/json' type to specify the location (Uri or
-            /// local path) of the document to be analyzed.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='includeTextDetails'>
-            /// Include text lines and element references in the result.
-            /// </param>
-            /// <param name='fileStream'>
-            /// .json, .pdf, .jpg, .png or .tiff type file stream.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<AnalyzeReceiptAsyncHeaders> AnalyzeReceiptAsyncAsync(this IFormRecognizerClient operations, bool? includeTextDetails = false, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.AnalyzeReceiptAsyncWithHttpMessagesAsync(includeTextDetails, fileStream, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Headers;
-                }
-            }
+            
 
             /// <summary>
             /// Get Analyze Receipt Result
@@ -235,32 +154,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
                 }
             }
 
-            /// <summary>
-            /// Analyze Layout
-            /// </summary>
-            /// <remarks>
-            /// Extract text and layout information from a given document. The input
-            /// document must be of one of the supported content types - 'application/pdf',
-            /// 'image/jpeg', 'image/png' or 'image/tiff'. Alternatively, use
-            /// 'application/json' type to specify the location (Uri or local path) of the
-            /// document to be analyzed.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='fileStream'>
-            /// .json, .pdf, .jpg, .png or .tiff type file stream.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<AnalyzeLayoutAsyncHeaders> AnalyzeLayoutAsyncAsync(this IFormRecognizerClient operations, object fileStream = default(object), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.AnalyzeLayoutAsyncWithHttpMessagesAsync(fileStream, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Headers;
-                }
-            }
+            
 
             /// <summary>
             /// Get Analyze Layout Result
@@ -287,3 +181,4 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
     }
 }
+
