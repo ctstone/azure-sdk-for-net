@@ -5,10 +5,10 @@
     <VersionPrefix>0.8.0</VersionPrefix>
     <PackageTags>FormRecognizer;Form Recognizer;</PackageTags>
     <PackageReleaseNotes>
-<![CDATA[
+      <![CDATA[
 This is a public preview release of the Cognitive Services Form Recognizer SDK.
 ]]>
-	</PackageReleaseNotes>
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,10 +19,14 @@ This is a public preview release of the Cognitive Services Form Recognizer SDK.
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFrameworks>$(RequiredTargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <AzureApiTag />
     <PackageTags>$(PackageTags);$(CommonTags);$(AzureApiTag);</PackageTags>
