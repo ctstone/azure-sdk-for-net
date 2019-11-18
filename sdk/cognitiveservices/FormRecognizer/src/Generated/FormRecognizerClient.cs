@@ -405,7 +405,7 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        private async Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(string op = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<HttpOperationResponse<ModelsModel>> GetCustomModelsWithHttpMessagesAsync(string op = default(string), string nextLink = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (Endpoint == null)
             {
@@ -431,6 +431,11 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
             {
                 _queryParameters.Add(string.Format("op={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(op, SerializationSettings).Trim('"'))));
             }
+if (nextLink != null)
+{
+_queryParameters.Add(string.Format("nextLink={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(nextLink, SerializationSettings).Trim('"'))));
+}
+
             if (_queryParameters.Count > 0)
             {
                 _url += "?" + string.Join("&", _queryParameters);
@@ -1301,4 +1306,6 @@ namespace Microsoft.Azure.CognitiveServices.FormRecognizer
 
     }
 }
+
+
 
