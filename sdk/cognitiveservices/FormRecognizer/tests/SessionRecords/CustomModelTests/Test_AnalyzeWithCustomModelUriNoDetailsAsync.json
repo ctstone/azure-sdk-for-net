@@ -1,8 +1,8 @@
 {
   "Entries": [
     {
-      "RequestUri": "/formrecognizer/v2.0-preview/custom/models/f39efed8-edaf-4e0f-af3d-1ca1119368b3/analyze?includeTextDetails=False",
-      "EncodedRequestUri": "L2Zvcm1yZWNvZ25pemVyL3YyLjAtcHJldmlldy9jdXN0b20vbW9kZWxzL2YzOWVmZWQ4LWVkYWYtNGUwZi1hZjNkLTFjYTExMTkzNjhiMy9hbmFseXplP2luY2x1ZGVUZXh0RGV0YWlscz1GYWxzZQ==",
+      "RequestUri": "/formrecognizer/v2.0-preview/custom/models/f39efed8-edaf-4e0f-af3d-1ca1119368b3/analyze?includeTextDetails=false",
+      "EncodedRequestUri": "L2Zvcm1yZWNvZ25pemVyL3YyLjAtcHJldmlldy9jdXN0b20vbW9kZWxzL2YzOWVmZWQ4LWVkYWYtNGUwZi1hZjNkLTFjYTExMTkzNjhiMy9hbmFseXplP2luY2x1ZGVUZXh0RGV0YWlscz1mYWxzZQ==",
       "RequestMethod": "POST",
       "RequestBody": "{\n  \"source\": \"https://example.org/fake-document.pdf\"\n}",
       "RequestHeaders": {

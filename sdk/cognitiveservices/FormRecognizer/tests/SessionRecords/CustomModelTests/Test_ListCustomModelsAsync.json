@@ -1,8 +1,8 @@
 {
   "Entries": [
     {
-      "RequestUri": "/formrecognizer/v2.0-preview/custom/models",
-      "EncodedRequestUri": "L2Zvcm1yZWNvZ25pemVyL3YyLjAtcHJldmlldy9jdXN0b20vbW9kZWxz",
+      "RequestUri": "/formrecognizer/v2.0-preview/custom/models?op=full",
+      "EncodedRequestUri": "L2Zvcm1yZWNvZ25pemVyL3YyLjAtcHJldmlldy9jdXN0b20vbW9kZWxzP29wPWZ1bGw=",
       "RequestMethod": "GET",
       "RequestBody": "",
       "RequestHeaders": {
