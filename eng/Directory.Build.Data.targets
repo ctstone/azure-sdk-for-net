@@ -10,19 +10,15 @@
     <Error Condition="'@(MissingTargetFrameworks)' != ''" Text="Missing required target frameworks '@(MissingTargetFrameworks)'. Please ensure you add those frameworks." />
   </Target>
 
-  <!-- Set PackageProjectUrl and PackageReleaseNotes to the package README.md and CHANGELOG.md respectively for Client Libraries -->
-  <Target Name="SetPackageProjectUrlandReleaseNotes" BeforeTargets="ValidateTargetFrameworks" Condition="('$(IsClientLibrary)' == 'true' or '$(IsDataPlaneProject)' == 'true') and '$(IsTestProject)' != 'true' and '$(IsSamplesProject)' != 'true' and '$(IsTestSupportProject)' != 'true' and '$(CommitSHA)' != ''">
+  <!-- Set PackageProjectUrl to the package README for Client Libraries -->
+  <Target Name="SetPackageProjectUrl" BeforeTargets="ValidateTargetFrameworks" Condition="'$(IsClientLibrary)' == 'true' and '$(IsTestProject)' != 'true' and
+   '$(IsSamplesProject)' != 'true' and '$(IsTestSupportProject)' != 'true' and '$(CommitSHA)' != ''">
     <PropertyGroup>
       <CurrentCsprojPath>$(MSBuildProjectDirectory)</CurrentCsprojPath>
       <DirectoryPartofPath>$(CurrentCsprojPath.Substring($(CurrentCsprojPath.LastIndexOf("\sdk\"))))</DirectoryPartofPath>
       <DirectoryPartofPath>$(DirectoryPartofPath.Remove($(DirectoryPartofPath.LastIndexOf("\src"))))</DirectoryPartofPath>
-      <DirectoryPartofPath>$(DirectoryPartofPath.Replace('\', '/'))</DirectoryPartofPath>
-      <PackageProjectUrl Condition="Exists('$(RepoRoot)/$(DirectoryPartofPath)/README.md')">$(RepositoryUrl)/blob/$(CommitSHA)$(DirectoryPartofPath)/README.md</PackageProjectUrl>
-      <PackageReleaseNotes Condition="Exists('$(RepoRoot)/$(DirectoryPartofPath)/CHANGELOG.md')">$(RepositoryUrl)/blob/$(CommitSHA)$(DirectoryPartofPath)/CHANGELOG.md</PackageReleaseNotes>
+      <PackageProjectUrl>$(RepositoryUrl)/blob/$(CommitSHA)$(DirectoryPartofPath)/README.md</PackageProjectUrl>
     </PropertyGroup>
-    <ItemGroup Condition="Exists('$(RepoRoot)/$(DirectoryPartofPath)/CHANGELOG.md')">
-      <None Include="$(RepoRoot)/$(DirectoryPartofPath)/CHANGELOG.md" Pack="true" PackagePath="CHANGELOG.md"/>
-    </ItemGroup>
   </Target>
 
   <!-- This allows us to build .NET Framework targets on non-windows
@@ -34,12 +30,19 @@
 
   <!-- Add Client SDK Analyzers -->
   <ItemGroup>
+    <PackageReference Condition="'$(GenerateAPIListing)' == 'true'" Include="Microsoft.DotNet.GenAPI" PrivateAssets="All" />
+
     <PackageReference Condition="'$(EnableClientSdkAnalyzers)' == 'true'" Include="Azure.ClientSdk.Analyzers" PrivateAssets="All" />
 
     <PackageReference Condition="'$(EnableFxCopAnalyzers)' == 'true'" Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <!-- Add Package Icon to DataPlane Packages -->
+  <ItemGroup>
+    <None Include="$(RepoEngPath)/images/pkgicon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
   <!-- Add StyleCop Analyzers -->
@@ -71,6 +74,7 @@
 
   <Import Project="Versioning.targets" />
 
+  <Import Project="ApiListing.targets" />
 
   <!-- CentralPackageVersions properties -->
   <PropertyGroup>

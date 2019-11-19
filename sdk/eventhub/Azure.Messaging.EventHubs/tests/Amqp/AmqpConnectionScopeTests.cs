@@ -35,7 +35,8 @@ namespace Azure.Messaging.EventHubs.Tests
         [Test]
         public void ConstructorValidatesTheEndpoint()
         {
-            Assert.That(() => new AmqpConnectionScope(null, "hub", Mock.Of<TokenCredential>(), TransportType.AmqpTcp, null), Throws.ArgumentNullException);
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
+            Assert.That(() => new AmqpConnectionScope(null, "hub", credential.Object, TransportType.AmqpTcp, null), Throws.ArgumentNullException);
         }
 
         /// <summary>
@@ -45,7 +46,8 @@ namespace Azure.Messaging.EventHubs.Tests
         [Test]
         public void ConstructorValidatesTheEventHubName()
         {
-            Assert.That(() => new AmqpConnectionScope(new Uri("amqp://some.place.com"), null, Mock.Of<TokenCredential>(), TransportType.AmqpWebSockets, Mock.Of<IWebProxy>()), Throws.ArgumentNullException);
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
+            Assert.That(() => new AmqpConnectionScope(new Uri("amqp://some.place.com"), null, credential.Object, TransportType.AmqpWebSockets, Mock.Of<IWebProxy>()), Throws.ArgumentNullException);
         }
 
         /// <summary>
@@ -66,7 +68,8 @@ namespace Azure.Messaging.EventHubs.Tests
         public void ConstructorValidatesTheTransport()
         {
             var invalidTransport = (TransportType)(-2);
-            Assert.That(() => new AmqpConnectionScope(new Uri("amqp://some.place.com"), "hun", Mock.Of<TokenCredential>(), invalidTransport, Mock.Of<IWebProxy>()), Throws.ArgumentException);
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
+            Assert.That(() => new AmqpConnectionScope(new Uri("amqp://some.place.com"), "hun", credential.Object, invalidTransport, Mock.Of<IWebProxy>()), Throws.ArgumentException);
         }
 
         /// <summary>
@@ -78,12 +81,12 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            TokenCredential credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             TransportType transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -116,11 +119,11 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            TokenCredential credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             TransportType transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
 
             var cancellationSource = new CancellationTokenSource();
             cancellationSource.Cancel();
@@ -138,11 +141,11 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            TokenCredential credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             TransportType transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             scope.Dispose();
 
             Assert.That(() => scope.OpenManagementLinkAsync(TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ObjectDisposedException>());
@@ -158,7 +161,7 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            TokenCredential credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             TransportType transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
@@ -166,7 +169,7 @@ namespace Azure.Messaging.EventHubs.Tests
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
             var mockLink = new RequestResponseAmqpLink("test", "test", mockSession, "test");
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -216,13 +219,13 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -275,13 +278,13 @@ namespace Azure.Messaging.EventHubs.Tests
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             Assert.That(() => scope.OpenConsumerLinkAsync(consumerGroup, partitionId, position, options, TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ArgumentException>());
         }
 
@@ -298,35 +301,14 @@ namespace Azure.Messaging.EventHubs.Tests
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
             var consumerGroup = "$Default";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             Assert.That(() => scope.OpenConsumerLinkAsync(consumerGroup, partitionId, position, options, TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ArgumentException>());
-        }
-
-        /// <summary>
-        ///   Verifies functionality of the <see cref="AmqpConnectionScope.OpenConsumerLinkAsync" />
-        ///   method.
-        /// </summary>
-        ///
-        [Test]
-        public void OpenConsumerLinkAsyncValidatesTheEventPosition()
-        {
-            var endpoint = new Uri("amqp://test.service.gov");
-            var eventHub = "myHub";
-            var consumerGroup = "$Default";
-            var partitionId = "0";
-            var options = new EventHubConsumerOptions();
-            var credential = Mock.Of<TokenCredential>();
-            var transport = TransportType.AmqpTcp;
-            var identifier = "customIdentIFIER";
-
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
-            Assert.That(() => scope.OpenConsumerLinkAsync(consumerGroup, partitionId, null, options, TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ArgumentException>());
         }
 
         /// <summary>
@@ -342,11 +324,11 @@ namespace Azure.Messaging.EventHubs.Tests
             var consumerGroup = "$Default";
             var partitionId = "0";
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             Assert.That(() => scope.OpenConsumerLinkAsync(consumerGroup, partitionId, position, null, TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ArgumentException>());
         }
 
@@ -362,13 +344,13 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
 
             var cancellationSource = new CancellationTokenSource();
             cancellationSource.Cancel();
@@ -388,13 +370,13 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             scope.Dispose();
 
             Assert.That(() => scope.OpenConsumerLinkAsync(consumerGroup, partitionId, position, options, TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ObjectDisposedException>());
@@ -412,9 +394,9 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
@@ -422,7 +404,7 @@ namespace Azure.Messaging.EventHubs.Tests
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
             var mockLink = new ReceivingAmqpLink(new AmqpLinkSettings());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -445,7 +427,7 @@ namespace Azure.Messaging.EventHubs.Tests
                     ItExpr.Is<AmqpConnection>(value => value == mockConnection),
                     ItExpr.Is<Uri>(value => value.AbsoluteUri.StartsWith(endpoint.AbsoluteUri)),
                     ItExpr.Is<EventPosition>(value => value == position),
-                    ItExpr.Is<EventHubConsumerOptions>(value => value == options),
+                    ItExpr.Is<EventHubConsumerClientOptions>(value => value == options),
                     ItExpr.IsAny<TimeSpan>(),
                     ItExpr.Is<CancellationToken>(value => value == cancellationSource.Token))
                 .Returns(Task.FromResult(mockLink))
@@ -478,22 +460,21 @@ namespace Azure.Messaging.EventHubs.Tests
             var consumerGroup = "group";
             var partitionId = "0";
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var options = new EventHubConsumerOptions
+            var options = new EventHubConsumerClientOptions
             {
-                Identifier = "testIdentifier123",
                 OwnerLevel = 459,
                 PrefetchCount = 697,
                 TrackLastEnqueuedEventInformation = true
             };
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -538,81 +519,10 @@ namespace Azure.Messaging.EventHubs.Tests
 
             Assert.That(link.Settings.TotalLinkCredit, Is.EqualTo((uint)options.PrefetchCount), "The prefetch count should have been used to set the credits.");
             Assert.That(link.Settings.Properties.Any(item => item.Key.Key.ToString() == AmqpProperty.EntityType.ToString()), Is.True, "There should be an entity type specified.");
-            Assert.That(link.GetSettingPropertyOrDefault<string>(AmqpProperty.ConsumerIdentifier, null), Is.EqualTo(options.Identifier), "The consumer identifier should have been used.");
             Assert.That(link.GetSettingPropertyOrDefault<long>(AmqpProperty.OwnerLevel, -1), Is.EqualTo(options.OwnerLevel.Value), "The owner level should have been used.");
 
             Assert.That(link.Settings.DesiredCapabilities, Is.Not.Null, "There should have been a set of desired capabilities created.");
             Assert.That(link.Settings.DesiredCapabilities.Contains(AmqpProperty.TrackLastEnqueuedEventInformation), Is.True, "Last event tracking should be requested.");
-        }
-
-        /// <summary>
-        ///   Verifies functionality of the <see cref="AmqpConnectionScope.OpenConsumerLinkAsync" />
-        ///   method.
-        /// </summary>
-        ///
-        [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public async Task OpenConsumerLinkAsyncRespectsTheIdentifierOption(string producerIdentifier)
-        {
-            var endpoint = new Uri("amqp://test.service.gov");
-            var eventHub = "myHub";
-            var consumerGroup = "group";
-            var partitionId = "0";
-            var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
-            var transport = TransportType.AmqpTcp;
-            var identifier = "customIdentIFIER";
-            var cancellationSource = new CancellationTokenSource();
-            var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
-            var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
-
-            var options = new EventHubConsumerOptions
-            {
-                Identifier = producerIdentifier,
-                OwnerLevel = 459,
-                PrefetchCount = 697,
-                TrackLastEnqueuedEventInformation = true
-            };
-
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
-            {
-                CallBase = true
-            };
-
-            mockScope
-                .Protected()
-                .Setup<Task<AmqpConnection>>("CreateAndOpenConnectionAsync",
-                    ItExpr.IsAny<Version>(),
-                    ItExpr.Is<Uri>(value => value == endpoint),
-                    ItExpr.Is<TransportType>(value => value == transport),
-                    ItExpr.Is<IWebProxy>(value => value == null),
-                    ItExpr.Is<string>(value => value == identifier),
-                    ItExpr.IsAny<TimeSpan>())
-                .Returns(Task.FromResult(mockConnection));
-
-            mockScope
-                .Protected()
-                .Setup<Task<DateTime>>("RequestAuthorizationUsingCbsAsync",
-                    ItExpr.Is<AmqpConnection>(value => value == mockConnection),
-                    ItExpr.IsAny<CbsTokenProvider>(),
-                    ItExpr.Is<Uri>(value => value.AbsoluteUri.StartsWith(endpoint.AbsoluteUri)),
-                    ItExpr.IsAny<string>(),
-                    ItExpr.IsAny<string>(),
-                    ItExpr.Is<string[]>(value => value.SingleOrDefault() == EventHubsClaim.Listen),
-                    ItExpr.IsAny<TimeSpan>())
-                .Returns(Task.FromResult(DateTime.UtcNow.AddDays(1)));
-
-            mockScope
-                .Protected()
-                .Setup<Task>("OpenAmqpObjectAsync",
-                    ItExpr.IsAny<AmqpObject>(),
-                    ItExpr.IsAny<TimeSpan>())
-                .Returns(Task.CompletedTask);
-
-            var link = await mockScope.Object.OpenConsumerLinkAsync(consumerGroup, partitionId, position, options, TimeSpan.FromDays(1), cancellationSource.Token);
-            Assert.That(link, Is.Not.Null, "The link produced was null");
-            Assert.That(link.GetSettingPropertyOrDefault<string>(AmqpProperty.ConsumerIdentifier, "NONE"), Is.EqualTo("NONE"), "The consumer identifier should not have been set.");
         }
 
         /// <summary>
@@ -628,22 +538,21 @@ namespace Azure.Messaging.EventHubs.Tests
             var consumerGroup = "group";
             var partitionId = "0";
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var options = new EventHubConsumerOptions
+            var options = new EventHubConsumerClientOptions
             {
-                Identifier = "testIdentifier123",
                 OwnerLevel = null,
                 PrefetchCount = 697,
                 TrackLastEnqueuedEventInformation = true
             };
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -696,22 +605,21 @@ namespace Azure.Messaging.EventHubs.Tests
             var consumerGroup = "group";
             var partitionId = "0";
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var options = new EventHubConsumerOptions
+            var options = new EventHubConsumerClientOptions
             {
-                Identifier = "testIdentifier123",
                 OwnerLevel = 9987,
                 PrefetchCount = 697,
                 TrackLastEnqueuedEventInformation = false
             };
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -763,16 +671,16 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -837,16 +745,16 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -937,16 +845,16 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1059,11 +967,11 @@ namespace Azure.Messaging.EventHubs.Tests
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
             var partitionId = "0";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            using var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
 
             var cancellationSource = new CancellationTokenSource();
             cancellationSource.Cancel();
@@ -1081,11 +989,11 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
 
-            var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             scope.Dispose();
 
             Assert.That(() => scope.OpenProducerLinkAsync(null, TimeSpan.FromDays(1), CancellationToken.None), Throws.InstanceOf<ObjectDisposedException>());
@@ -1102,7 +1010,7 @@ namespace Azure.Messaging.EventHubs.Tests
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
             var partitionId = "0";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
@@ -1110,7 +1018,7 @@ namespace Azure.Messaging.EventHubs.Tests
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
             var mockLink = new SendingAmqpLink(new AmqpLinkSettings());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1162,14 +1070,14 @@ namespace Azure.Messaging.EventHubs.Tests
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
             var partitionId = "00_partition_00";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1222,14 +1130,14 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1292,14 +1200,14 @@ namespace Azure.Messaging.EventHubs.Tests
             var timerCallbackInvoked = false;
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1388,14 +1296,14 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1507,10 +1415,10 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
-            var scope = new AmqpConnectionScope(endpoint, eventHub, credential, transport, null, identifier);
+            var scope = new AmqpConnectionScope(endpoint, eventHub, credential.Object, transport, null, identifier);
             var cancellation = GetOperationCancellationSource(scope);
 
             Assert.That(cancellation.IsCancellationRequested, Is.False, "The cancellation source should not be canceled before disposal");
@@ -1529,7 +1437,7 @@ namespace Azure.Messaging.EventHubs.Tests
         {
             var endpoint = new Uri("amqp://test.service.gov");
             var eventHub = "myHub";
-            TokenCredential credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             TransportType transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var connectionClosed = false;
@@ -1540,7 +1448,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             mockConnection.Closed += (snd, args) => connectionClosed = true;
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1594,16 +1502,16 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };
@@ -1668,16 +1576,16 @@ namespace Azure.Messaging.EventHubs.Tests
             var eventHub = "myHub";
             var consumerGroup = "group";
             var partitionId = "0";
-            var options = new EventHubConsumerOptions();
+            var options = new EventHubConsumerClientOptions();
             var position = EventPosition.Latest;
-            var credential = Mock.Of<TokenCredential>();
+            var credential = new Mock<EventHubTokenCredential>(Mock.Of<TokenCredential>(), "{namespace}.servicebus.windows.net");
             var transport = TransportType.AmqpTcp;
             var identifier = "customIdentIFIER";
             var cancellationSource = new CancellationTokenSource();
             var mockConnection = new AmqpConnection(new MockTransport(), CreateMockAmqpSettings(), new AmqpConnectionSettings());
             var mockSession = new AmqpSession(mockConnection, new AmqpSessionSettings(), Mock.Of<ILinkFactory>());
 
-            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential, transport, null, identifier)
+            var mockScope = new Mock<AmqpConnectionScope>(endpoint, eventHub, credential.Object, transport, null, identifier)
             {
                 CallBase = true
             };

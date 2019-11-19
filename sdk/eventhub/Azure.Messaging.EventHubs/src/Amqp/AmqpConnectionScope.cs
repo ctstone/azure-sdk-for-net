@@ -161,7 +161,7 @@ namespace Azure.Messaging.EventHubs.Amqp
         ///
         public AmqpConnectionScope(Uri serviceEndpoint,
                                    string eventHubName,
-                                   TokenCredential credential,
+                                   EventHubTokenCredential credential,
                                    TransportType transport,
                                    IWebProxy proxy,
                                    string identifier = default)
@@ -239,13 +239,12 @@ namespace Azure.Messaging.EventHubs.Amqp
         public virtual async Task<ReceivingAmqpLink> OpenConsumerLinkAsync(string consumerGroup,
                                                                            string partitionId,
                                                                            EventPosition eventPosition,
-                                                                           EventHubConsumerOptions consumerOptions,
+                                                                           EventHubConsumerClientOptions consumerOptions,
                                                                            TimeSpan timeout,
                                                                            CancellationToken cancellationToken)
         {
             Argument.AssertNotNullOrEmpty(consumerGroup, nameof(consumerGroup));
             Argument.AssertNotNullOrEmpty(partitionId, nameof(partitionId));
-            Argument.AssertNotNull(eventPosition, nameof(eventPosition));
             Argument.AssertNotNull(consumerOptions, nameof(consumerOptions));
 
             cancellationToken.ThrowIfCancellationRequested<TaskCanceledException>();
@@ -451,7 +450,7 @@ namespace Azure.Messaging.EventHubs.Amqp
         protected virtual async Task<ReceivingAmqpLink> CreateReceivingLinkAsync(AmqpConnection connection,
                                                                                  Uri endpoint,
                                                                                  EventPosition eventPosition,
-                                                                                 EventHubConsumerOptions consumerOptions,
+                                                                                 EventHubConsumerClientOptions consumerOptions,
                                                                                  TimeSpan timeout,
                                                                                  CancellationToken cancellationToken)
         {
@@ -493,11 +492,6 @@ namespace Azure.Messaging.EventHubs.Amqp
                 };
 
                 linkSettings.AddProperty(AmqpProperty.EntityType, (int)AmqpProperty.Entity.ConsumerGroup);
-
-                if (!string.IsNullOrEmpty(consumerOptions.Identifier))
-                {
-                    linkSettings.AddProperty(AmqpProperty.ConsumerIdentifier, consumerOptions.Identifier);
-                }
 
                 if (consumerOptions.OwnerLevel.HasValue)
                 {
@@ -796,17 +790,16 @@ namespace Azure.Messaging.EventHubs.Amqp
         /// </remarks>
         ///
         protected virtual Task<DateTime> RequestAuthorizationUsingCbsAsync(AmqpConnection connection,
-                                                                          CbsTokenProvider tokenProvider,
-                                                                          Uri endpoint,
-                                                                          string audience,
-                                                                          string resource,
-                                                                          string[] requiredClaims,
-                                                                          TimeSpan timeout)
+                                                                           CbsTokenProvider tokenProvider,
+                                                                           Uri endpoint,
+                                                                           string audience,
+                                                                           string resource,
+                                                                           string[] requiredClaims,
+                                                                           TimeSpan timeout)
         {
             var authLink = connection.Extensions.Find<AmqpCbsLink>();
             return authLink.SendTokenAsync(TokenProvider, endpoint, audience, resource, requiredClaims, timeout);
         }
-
 
         /// <summary>
         ///   Creates the settings to use for AMQP communication.
