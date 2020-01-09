@@ -120,9 +120,14 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="modelId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Response<FormModel>> GetModelAsync(string modelId, CancellationToken cancellationToken = default)
+        public async virtual Task<Response<FormModel>> GetModelAsync(string modelId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateGetModelRequest(modelId))
+            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                var model = await response.GetJsonContentAsync<FormModel>(_options, cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(model, response);
+            }
         }
 
         /// <summary>
@@ -132,7 +137,12 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="cancellationToken"></param>
         public virtual Response<FormModel> GetModel(string modelId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateGetModelRequest(modelId))
+            using (var response = _pipeline.SendRequest(request, cancellationToken))
+            {
+                var model = response.GetJsonContent<FormModel>(_options);
+                return Response.FromValue(model, response);
+            }
         }
 
         /// <summary>
