@@ -8,36 +8,46 @@ using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Features
+namespace Azure.AI.FormRecognizer.Operations
 {
     /// <summary>
     /// Class to analyze form layout.
     /// </summary>
-    public class FormLayoutClient
+    public abstract class PrebuiltFormClient
     {
         private readonly HttpPipeline _pipeline;
+        private readonly string _prebuiltName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormLayoutClient"/> class.
+        /// Prebuilt name.
         /// </summary>
-        internal FormLayoutClient(HttpPipeline pipeline)
-        {
-            _pipeline = pipeline;
-        }
+        protected string PrebuiltName => _prebuiltName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormLayoutClient"/> class.
+        /// Pipeline.
         /// </summary>
-        protected FormLayoutClient()
+        protected HttpPipeline Pipeline => _pipeline;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrebuiltFormClient"/> class.
+        /// </summary>
+        protected PrebuiltFormClient()
         { }
 
+        internal PrebuiltFormClient(string prebuiltName, HttpPipeline pipeline)
+        {
+            _pipeline = pipeline;
+            _prebuiltName = prebuiltName;
+        }
+
         /// <summary>
         /// Analyze form.
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="contentType"></param>
+        /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(Stream stream, FormContentType contentType, CancellationToken cancellationToken = default)
+        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(Stream stream, FormContentType contentType, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -47,8 +57,9 @@ namespace Azure.AI.FormRecognizer.Features
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="contentType"></param>
+        /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> Analyze(Stream stream, FormContentType contentType, CancellationToken cancellationToken = default)
+        public virtual Operation<AnalyzedForm> Analyze(Stream stream, FormContentType contentType, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -57,8 +68,9 @@ namespace Azure.AI.FormRecognizer.Features
         /// Analyze form.
         /// </summary>
         /// <param name="uri"></param>
+        /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(Uri uri, CancellationToken cancellationToken = default)
+        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -67,8 +79,9 @@ namespace Azure.AI.FormRecognizer.Features
         /// Analyze form.
         /// </summary>
         /// <param name="uri"></param>
+        /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> Analyze(Uri uri, CancellationToken cancellationToken = default)
+        public virtual Operation<AnalyzedForm> Analyze(Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

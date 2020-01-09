@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Text;
+using System.Text.Json;
 using Azure.Core;
 
 namespace Azure.AI.FormRecognizer
@@ -30,20 +32,40 @@ namespace Azure.AI.FormRecognizer
         public ServiceVersion Version { get; }
 
         /// <summary>
+        /// Serialization options.
+        /// </summary>
+        public JsonSerializerOptions SerializationOptions { get; }
+
+        /// <summary>
+        /// User agent.
+        /// </summary>
+        public string UserAgent { get; }
+
+        /// <summary>
+        /// Text encoding.
+        /// </summary>
+        internal Encoding Encoding { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClientOptions"/> class.
         /// </summary>
         /// <param name="version"></param>
-        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion)
+        /// <param name="serializationOptions"></param>
+        /// <param name="userAgent"></param>
+        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, JsonSerializerOptions serializationOptions = default, string userAgent = default)
         {
             Version = version;
+            SerializationOptions = serializationOptions;
+            UserAgent = userAgent;
+            Encoding = Encoding.UTF8;
         }
 
-        internal static string GetVersionString(ServiceVersion version)
+        internal string GetVersionString()
         {
-            return version switch
+            return Version switch
             {
                 ServiceVersion.V2_0_preview => "2.0-preview",
-                _ => throw new NotSupportedException($"The service version {version} is not supported."),
+                _ => throw new NotSupportedException($"The service version {Version} is not supported."),
             };
         }
     }

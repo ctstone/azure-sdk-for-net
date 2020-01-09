@@ -22,5 +22,11 @@ namespace Azure.AI.FormRecognizer
         /// Include Label file.
         /// </summary>
         public bool IncludeLabelFile { get; set; }
+
+        private void Temp()
+        {
+            var client = new FormRecognizerClient("", "");
+            client.ApiKey = "foo";
+        }
     }
 }

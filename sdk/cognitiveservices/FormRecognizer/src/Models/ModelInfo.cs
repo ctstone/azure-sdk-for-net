@@ -8,5 +8,14 @@ namespace Azure.AI.FormRecognizer.Models
     /// </summary>
     public class ModelInfo
     {
+        /// <summary>
+        /// Model Id.
+        /// </summary>
+        public string ModelId { get; set; }
+
+        /// <summary>
+        /// Model status.
+        /// </summary>
+        public ModelStatus Status { get; set; }
     }
 }

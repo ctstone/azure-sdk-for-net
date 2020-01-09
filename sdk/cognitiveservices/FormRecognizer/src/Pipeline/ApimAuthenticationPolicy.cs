@@ -13,16 +13,19 @@ namespace Azure.AI.FormRecognizer.Pipeline
         private const string ApimAuthenticationHeader = "Ocp-Apim-Subscription-Key";
         private const string FormRecognizerPathRoot = "formrecognizer";
 
-        private readonly string _apiKey;
         private readonly Uri _endpoint;
         private readonly string _basePath;
+        private readonly string _userAgent;
 
-        public ApimAuthenticationPolicy(Uri endpoint, string apiKey, FormRecognizerClientOptions.ServiceVersion version)
+        public string ApiKey { get; set; }
+
+        public ApimAuthenticationPolicy(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
         {
-            _apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+            ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
             _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
-            var versionSegment = FormRecognizerClientOptions.GetVersionString(version);
+            var versionSegment = options.GetVersionString();
             _basePath = $"/{FormRecognizerPathRoot}/{versionSegment}";
+            _userAgent = options.UserAgent;
         }
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
@@ -40,11 +43,16 @@ namespace Azure.AI.FormRecognizer.Pipeline
         private void UpdateMessage(HttpMessage message)
         {
             var sep = message.Request.Uri.Path.Length > 0 && message.Request.Uri.Path[0] == '/' ? String.Empty : "/";
-            message.Request.Headers.SetValue(ApimAuthenticationHeader, _apiKey);
+            message.Request.Headers.SetValue(ApimAuthenticationHeader, ApiKey);
             message.Request.Uri.Scheme = _endpoint.Scheme;
             message.Request.Uri.Host = _endpoint.Host;
             message.Request.Uri.Port = _endpoint.Port;
             message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
+
+            if (_userAgent != default(string))
+            {
+                message.Request.Headers.SetValue(HttpHeader.Names.UserAgent, _userAgent);
+            }
         }
     }
 }

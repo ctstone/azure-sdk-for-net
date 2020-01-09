@@ -5,10 +5,11 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Features
+namespace Azure.AI.FormRecognizer.Operations
 {
     /// <summary>
     /// Manage custom Form Recognizer models.
@@ -16,6 +17,7 @@ namespace Azure.AI.FormRecognizer.Features
     public class CustomFormClient
     {
         private readonly HttpPipeline _pipeline;
+        private readonly FormRecognizerClientOptions _options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomFormClient"/> class.
@@ -23,23 +25,28 @@ namespace Azure.AI.FormRecognizer.Features
         protected CustomFormClient()
         { }
 
-        internal CustomFormClient(HttpPipeline pipeline)
+        internal CustomFormClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
         {
             _pipeline = pipeline;
+            _options = options;
         }
 
         /// <summary>
         /// Train.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="trainRequest"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<CustomFormModel>> StartTrainAsync(TrainRequest request, CancellationToken cancellationToken = default)
+        public async virtual Task<Operation<CustomFormModel>> StartTrainAsync(TrainRequest trainRequest, CancellationToken cancellationToken = default)
         {
+            using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
+            {
+                var resp = await _pipeline.SendRequestAsync(request, cancellationToken);
+            }
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Get status of operation.
+        /// Get status of training operation.
         /// </summary>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
@@ -51,9 +58,9 @@ namespace Azure.AI.FormRecognizer.Features
         /// <summary>
         /// Start train.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="trainRequest"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<CustomFormModel> StartTrain(TrainRequest request, CancellationToken cancellationToken = default)
+        public virtual Operation<CustomFormModel> StartTrain(TrainRequest trainRequest, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

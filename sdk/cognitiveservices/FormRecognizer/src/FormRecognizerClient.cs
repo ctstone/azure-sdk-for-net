@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
-using Azure.AI.FormRecognizer.Features;
+using Azure.AI.FormRecognizer.Operations;
 using Azure.AI.FormRecognizer.Pipeline;
 using Azure.Core.Pipeline;
 
@@ -16,6 +16,7 @@ namespace Azure.AI.FormRecognizer
         private readonly CustomFormClient _customFormClient;
         private readonly ReceiptClient _receiptClient;
         private readonly FormLayoutClient _layoutClient;
+        private readonly ApimAuthenticationPolicy _authentication;
 
         /// <summary>
         /// Interact with custom Form Recognizer models.
@@ -31,6 +32,15 @@ namespace Azure.AI.FormRecognizer
         /// Layout.
         /// </summary>
         public FormLayoutClient Layout => _layoutClient;
+
+        /// <summary>
+        /// Api key.
+        /// </summary>
+        public string ApiKey
+        {
+            get { return _authentication.ApiKey; }
+            set { _authentication.ApiKey = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
@@ -53,10 +63,10 @@ namespace Azure.AI.FormRecognizer
             ThrowIfMissing(endpoint, nameof(endpoint));
             ThrowIfMissing(apiKey, nameof(apiKey));
             ThrowIfMissing(options, nameof(options));
-            var apimAuthPolicy = new ApimAuthenticationPolicy(new Uri(endpoint), apiKey, options.Version);
-            var pipeline = HttpPipelineBuilder.Build(options, apimAuthPolicy);
+            _authentication = new ApimAuthenticationPolicy(new Uri(endpoint), apiKey, options);
+            var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
-            _customFormClient = new CustomFormClient(pipeline);
+            _customFormClient = new CustomFormClient(pipeline, options);
             _receiptClient = new ReceiptClient(pipeline);
             _layoutClient = new FormLayoutClient(pipeline);
         }
