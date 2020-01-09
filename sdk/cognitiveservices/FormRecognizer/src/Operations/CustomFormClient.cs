@@ -91,9 +91,14 @@ namespace Azure.AI.FormRecognizer.Operations
         /// Get models summary.
         /// </summary>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Response<ModelsSummary>> GetModelsSummaryAsync(CancellationToken cancellationToken = default)
+        public async virtual Task<Response<ModelsSummary>> GetModelsSummaryAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateListModelsRequest(op: "summary"))
+            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                var summary = await response.GetJsonContentAsync<ModelsSummary>(_options, cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(summary, response);
+            }
         }
 
         /// <summary>
@@ -102,7 +107,12 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="cancellationToken"></param>
         public virtual Response<ModelsSummary> GetModelsSummary(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateListModelsRequest(op: "summary"))
+            using (var response = _pipeline.SendRequest(request, cancellationToken))
+            {
+                var summary = response.GetJsonContent<ModelsSummary>(_options);
+                return Response.FromValue(summary, response);
+            }
         }
 
         /// <summary>
