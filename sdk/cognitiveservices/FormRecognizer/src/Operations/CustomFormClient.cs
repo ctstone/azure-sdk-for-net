@@ -36,23 +36,14 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="trainRequest"></param>
         /// <param name="cancellationToken"></param>
-        public async virtual Task<Operation<CustomFormModel>> StartTrainAsync(TrainRequest trainRequest, CancellationToken cancellationToken = default)
+        public async virtual Task<Operation<FormModel>> StartTrainAsync(TrainRequest trainRequest, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
+            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
-                var resp = await _pipeline.SendRequestAsync(request, cancellationToken);
+                var id = TrainOperation.GetTrainingOperationId(response);
+                return new TrainOperation(_pipeline, id, _options);
             }
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Get status of training operation.
-        /// </summary>
-        /// <param name="operationId"></param>
-        /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<CustomFormModel>> StartTrainAsync(string operationId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -60,19 +51,24 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="trainRequest"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<CustomFormModel> StartTrain(TrainRequest trainRequest, CancellationToken cancellationToken = default)
+        public virtual Operation<FormModel> StartTrain(TrainRequest trainRequest, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
+            using (var response = _pipeline.SendRequest(request, cancellationToken))
+            {
+                var id = TrainOperation.GetTrainingOperationId(response);
+                return new TrainOperation(_pipeline, id, _options);
+            }
         }
 
         /// <summary>
-        /// Get status of operation.
+        /// Get status of an existing operation.
         /// </summary>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<CustomFormModel> StartTrain(string operationId, CancellationToken cancellationToken = default)
+        public virtual Operation<FormModel> StartTrain(string operationId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new TrainOperation(_pipeline, operationId, _options);
         }
 
         /// <summary>
@@ -80,7 +76,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         public virtual AsyncPageable<ModelInfo> ListModelsAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new ModelsAsyncPageable(_pipeline, _options, cancellationToken);
         }
 
         /// <summary>
@@ -88,7 +84,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         public virtual Pageable<ModelInfo> ListModels(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new ModelsPageable(_pipeline, _options, cancellationToken);
         }
 
         /// <summary>
@@ -114,7 +110,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="modelId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Response<CustomFormModel>> GetModelAsync(string modelId, CancellationToken cancellationToken = default)
+        public virtual Task<Response<FormModel>> GetModelAsync(string modelId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -124,7 +120,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="modelId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Response<CustomFormModel> GetModel(string modelId, CancellationToken cancellationToken = default)
+        public virtual Response<FormModel> GetModel(string modelId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

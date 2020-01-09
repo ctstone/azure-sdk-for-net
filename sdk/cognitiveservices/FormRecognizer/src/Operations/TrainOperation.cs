@@ -13,14 +13,14 @@ namespace Azure.AI.FormRecognizer.Operations
     /// <summary>
     /// Train operation.
     /// </summary>
-    public class TrainOperation : Operation<CustomFormModel>
+    public class TrainOperation : Operation<FormModel>
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
-        private CustomFormModel _value;
+        private FormModel _value;
         private Response _response;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <summary>
         /// Value.
         /// </summary>
-        public override CustomFormModel Value => HasValue ? _value : default;
+        public override FormModel Value => HasValue ? _value : default;
 
         /// <summary>
         /// Has completed.
@@ -73,7 +73,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateGetModelRequest(Id))
             {
                 _response = _pipeline.SendRequest(request, cancellationToken);
-                var model = _response.GetJsonContent<CustomFormModel>(_options);
+                var model = _response.GetJsonContent<FormModel>(_options);
                 if (model.IsModelComplete())
                 {
                     _value = model;
@@ -91,7 +91,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateGetModelRequest(Id))
             {
                 _response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                _value = await _response.GetJsonContentAsync<CustomFormModel>(_options, cancellationToken).ConfigureAwait(false);
+                _value = await _response.GetJsonContentAsync<FormModel>(_options, cancellationToken).ConfigureAwait(false);
                 return _response;
             }
         }
@@ -100,7 +100,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// Wait for Completion.
         /// </summary>
         /// <param name="cancellationToken"></param>
-        public override ValueTask<Response<CustomFormModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<FormModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
@@ -110,7 +110,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
-        public async override ValueTask<Response<CustomFormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public async override ValueTask<Response<FormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
         {
             do
             {

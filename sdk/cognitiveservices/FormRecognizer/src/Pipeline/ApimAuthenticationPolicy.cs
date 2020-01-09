@@ -42,12 +42,16 @@ namespace Azure.AI.FormRecognizer.Pipeline
 
         private void UpdateMessage(HttpMessage message)
         {
-            var sep = message.Request.Uri.Path.Length > 0 && message.Request.Uri.Path[0] == '/' ? String.Empty : "/";
             message.Request.Headers.SetValue(ApimAuthenticationHeader, ApiKey);
-            message.Request.Uri.Scheme = _endpoint.Scheme;
-            message.Request.Uri.Host = _endpoint.Host;
-            message.Request.Uri.Port = _endpoint.Port;
-            message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
+
+            if (string.IsNullOrEmpty(message.Request.Uri.Host))
+            {
+                var sep = message.Request.Uri.Path.Length > 0 && message.Request.Uri.Path[0] == '/' ? String.Empty : "/";
+                message.Request.Uri.Scheme = _endpoint.Scheme;
+                message.Request.Uri.Host = _endpoint.Host;
+                message.Request.Uri.Port = _endpoint.Port;
+                message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
+            }
 
             if (_userAgent != default(string))
             {

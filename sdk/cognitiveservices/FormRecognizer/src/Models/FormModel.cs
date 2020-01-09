@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Custom Form Recognizer model.
     /// </summary>
-    public class CustomFormModel
+    public class FormModel
     {
         /// <summary>
         /// Model info.
