@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\..\core\Azure.Core\src\Azure.Core.props" />
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Azure.Core" /> -->
+    <PackageReference Include="Microsoft.BCL.AsyncInterfaces" />
+    <PackageReference Include="System.Text.Json" />
+  </ItemGroup>
+
+</Project>
