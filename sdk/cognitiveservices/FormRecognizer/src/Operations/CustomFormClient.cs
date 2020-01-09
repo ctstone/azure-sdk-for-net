@@ -150,9 +150,13 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="modelId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Response> DeleteModelAsync(string modelId, CancellationToken cancellationToken = default)
+        public async virtual Task<Response> DeleteModelAsync(string modelId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateDeleteModelRequest(modelId))
+            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                return response;
+            }
         }
 
         /// <summary>
@@ -162,7 +166,11 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="cancellationToken"></param>
         public virtual Response DeleteModel(string modelId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateDeleteModelRequest(modelId))
+            using (var response = _pipeline.SendRequest(request, cancellationToken))
+            {
+                return response;
+            }
         }
 
         /// <summary>

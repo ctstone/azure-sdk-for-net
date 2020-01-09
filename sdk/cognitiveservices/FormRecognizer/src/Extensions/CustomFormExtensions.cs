@@ -46,6 +46,13 @@ namespace Azure.AI.FormRecognizer.Extensions
             return request;
         }
 
+        public static Request CreateDeleteModelRequest(this HttpPipeline pipeline, string modelId)
+        {
+            var request = pipeline.CreateRequest();
+            request.Method = RequestMethod.Delete;
+            request.Uri.Path = $"/custom/models/{modelId}";
+            return request;
+        }
 
         public static bool IsModelComplete(this FormModel model)
         {
