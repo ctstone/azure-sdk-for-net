@@ -7,7 +7,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\..\..\core\Azure.Core\src\Azure.Core.props" />
 
   <ItemGroup>
-    <!-- <PackageReference Include="Azure.Core" /> -->
+    <PackageReference Include="Azure.Core" />
     <PackageReference Include="Microsoft.BCL.AsyncInterfaces" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>

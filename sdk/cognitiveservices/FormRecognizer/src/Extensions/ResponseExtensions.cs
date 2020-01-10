@@ -22,6 +22,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             var memory = new MemoryStream();
             response.ContentStream.CopyTo(memory);
             var json = options.Encoding.GetString(memory.ToArray());
+            Console.WriteLine("RESPONSE: " + json);
             return JsonSerializer.Deserialize<T>(json, options.SerializationOptions);
         }
     }

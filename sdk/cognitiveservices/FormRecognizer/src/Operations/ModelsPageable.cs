@@ -47,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Operations
                 {
                     var listing = response.GetJsonContent<ModelListing>(_options);
                     nextLink = listing.NextLink;
-                    var page = Page<ModelInfo>.FromValues(listing.Models.ToList(), nextLink, response);
+                    var page = Page<ModelInfo>.FromValues(listing.ModelList.ToList(), nextLink, response);
                     yield return page;
                 }
             }
@@ -68,7 +68,7 @@ namespace Azure.AI.FormRecognizer.Operations
                 {
                     var listing = response.GetJsonContent<ModelListing>(_options);
                     nextLink = listing.NextLink;
-                    foreach (var model in listing.Models)
+                    foreach (var model in listing.ModelList)
                     {
                         yield return model;
                     }

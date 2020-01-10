@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Models summary
     /// </summary>
-    public class ModelsSummary
+    public struct ModelsSummary
     {
     }
 }

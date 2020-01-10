@@ -4,6 +4,7 @@
 using System;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Azure.Core;
 
 namespace Azure.AI.FormRecognizer
@@ -42,6 +43,11 @@ namespace Azure.AI.FormRecognizer
         public string UserAgent { get; }
 
         /// <summary>
+        /// Extra headers.
+        /// </summary>
+        public HttpHeader[] ExtraHeaders { get; }
+
+        /// <summary>
         /// Text encoding.
         /// </summary>
         internal Encoding Encoding { get; }
@@ -50,21 +56,23 @@ namespace Azure.AI.FormRecognizer
         /// Initializes a new instance of the <see cref="FormRecognizerClientOptions"/> class.
         /// </summary>
         /// <param name="version"></param>
-        /// <param name="serializationOptions"></param>
         /// <param name="userAgent"></param>
-        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, JsonSerializerOptions serializationOptions = default, string userAgent = default)
+        /// <param name="extraHeaders"></param>
+        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, string userAgent = default, HttpHeader[] extraHeaders = default)
         {
             Version = version;
-            SerializationOptions = serializationOptions;
             UserAgent = userAgent;
+            ExtraHeaders = extraHeaders;
             Encoding = Encoding.UTF8;
+            SerializationOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, };
+            SerializationOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         }
 
         internal string GetVersionString()
         {
             return Version switch
             {
-                ServiceVersion.V2_0_preview => "2.0-preview",
+                ServiceVersion.V2_0_preview => "v2.0-preview",
                 _ => throw new NotSupportedException($"The service version {Version} is not supported."),
             };
         }

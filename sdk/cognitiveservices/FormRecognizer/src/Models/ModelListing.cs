@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Model listing.
     /// </summary>
-    public class ModelListing
+    public struct ModelListing
     {
         /// <summary>
         /// Summary of models.
@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Page of models.
         /// </summary>
-        public IList<ModelInfo> Models { get; set; }
+        public IList<ModelInfo> ModelList { get; set; }
 
         /// <summary>
         /// Link to next page of models.

@@ -47,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Operations
                 {
                     var listing = await response.GetJsonContentAsync<ModelListing>(_options, CancellationToken).ConfigureAwait(false);
                     nextLink = listing.NextLink;
-                    var page = Page<ModelInfo>.FromValues(listing.Models.ToList(), nextLink, response);
+                    var page = Page<ModelInfo>.FromValues(listing.ModelList.ToList(), nextLink, response);
                     yield return page;
                 }
             }
@@ -69,7 +69,7 @@ namespace Azure.AI.FormRecognizer.Operations
                 {
                     var listing = await response.GetJsonContentAsync<ModelListing>(_options, CancellationToken).ConfigureAwait(false);
                     nextLink = listing.NextLink;
-                    foreach (var model in listing.Models)
+                    foreach (var model in listing.ModelList)
                     {
                         yield return model;
                     }

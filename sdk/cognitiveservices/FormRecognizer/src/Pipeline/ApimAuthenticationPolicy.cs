@@ -16,6 +16,7 @@ namespace Azure.AI.FormRecognizer.Pipeline
         private readonly Uri _endpoint;
         private readonly string _basePath;
         private readonly string _userAgent;
+        private readonly HttpHeader[] _extraHeaders;
 
         public string ApiKey { get; set; }
 
@@ -26,6 +27,7 @@ namespace Azure.AI.FormRecognizer.Pipeline
             var versionSegment = options.GetVersionString();
             _basePath = $"/{FormRecognizerPathRoot}/{versionSegment}";
             _userAgent = options.UserAgent;
+            _extraHeaders = options.ExtraHeaders;
         }
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
@@ -57,6 +59,15 @@ namespace Azure.AI.FormRecognizer.Pipeline
             {
                 message.Request.Headers.SetValue(HttpHeader.Names.UserAgent, _userAgent);
             }
+
+            if (_extraHeaders != default)
+            {
+                foreach (var header in _extraHeaders)
+                {
+                    message.Request.Headers.Add(header);
+                }
+            }
+
         }
     }
 }
