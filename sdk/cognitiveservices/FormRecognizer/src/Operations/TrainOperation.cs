@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
@@ -96,6 +97,7 @@ namespace Azure.AI.FormRecognizer.Operations
         private Response UpdateStatus(Response response)
         {
             _response = response;
+            response.ExpectStatus(HttpStatusCode.OK, _options);
             var model = response.GetJsonContent<FormModel>(_options);
             if (model.IsModelComplete())
             {

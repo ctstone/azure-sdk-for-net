@@ -7,6 +7,7 @@ using System.Threading;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
+using System.Net;
 
 namespace Azure.AI.FormRecognizer.Operations
 {
@@ -45,6 +46,7 @@ namespace Azure.AI.FormRecognizer.Operations
                 using (var request = _pipeline.CreateListModelsRequest(nextLink))
                 using (var response = await _pipeline.SendRequestAsync(request, CancellationToken).ConfigureAwait(false))
                 {
+                    response.ExpectStatus(HttpStatusCode.OK, _options);
                     var listing = await response.GetJsonContentAsync<ModelListing>(_options, CancellationToken).ConfigureAwait(false);
                     nextLink = listing.NextLink;
                     var page = Page<ModelInfo>.FromValues(listing.ModelList.ToList(), nextLink, response);
@@ -67,6 +69,7 @@ namespace Azure.AI.FormRecognizer.Operations
                 using (var request = _pipeline.CreateListModelsRequest(nextLink))
                 using (var response = await _pipeline.SendRequestAsync(request, CancellationToken).ConfigureAwait(false))
                 {
+                    response.ExpectStatus(HttpStatusCode.OK, _options);
                     var listing = await response.GetJsonContentAsync<ModelListing>(_options, CancellationToken).ConfigureAwait(false);
                     nextLink = listing.NextLink;
                     foreach (var model in listing.ModelList)

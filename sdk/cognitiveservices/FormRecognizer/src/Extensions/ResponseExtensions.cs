@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.IO;
+using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure.Core;
+using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {
@@ -19,11 +19,29 @@ namespace Azure.AI.FormRecognizer.Extensions
 
         public static T GetJsonContent<T>(this Response response, FormRecognizerClientOptions options)
         {
-            var memory = new MemoryStream();
-            response.ContentStream.CopyTo(memory);
-            var json = options.Encoding.GetString(memory.ToArray());
-            Console.WriteLine("RESPONSE: " + json);
+            MemoryStream stream;
+            if (response.ContentStream is MemoryStream)
+            {
+                stream = response.ContentStream as MemoryStream;
+            }
+            else
+            {
+                stream = new MemoryStream();
+                response.ContentStream.CopyTo(stream);
+            }
+            var json = options.Encoding.GetString(stream.ToArray());
             return JsonSerializer.Deserialize<T>(json, options.SerializationOptions);
+        }
+
+        public static void ExpectStatus(this Response response, HttpStatusCode statusCode, FormRecognizerClientOptions options)
+        {
+            if (response.Status != (int)statusCode)
+            {
+                var error = response.GetJsonContent<ErrorResponse>(options);
+                var message = error.Message ?? "Request failed";
+                var code = error.Code ?? "GeneralError";
+                throw new RequestFailedException(response.Status, message, code, null);
+            }
         }
     }
 }

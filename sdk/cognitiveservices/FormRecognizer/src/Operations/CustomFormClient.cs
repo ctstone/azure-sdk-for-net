@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
@@ -41,6 +42,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
+                response.ExpectStatus(HttpStatusCode.Created, _options);
                 var id = TrainOperation.GetTrainingOperationId(response);
                 return new TrainOperation(_pipeline, id, _options);
             }
@@ -56,6 +58,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
+                response.ExpectStatus(HttpStatusCode.Created, _options);
                 var id = TrainOperation.GetTrainingOperationId(response);
                 return new TrainOperation(_pipeline, id, _options);
             }
@@ -96,6 +99,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateListModelsRequest(op: "summary"))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
+                response.ExpectStatus(HttpStatusCode.OK, _options);
                 var summary = await response.GetJsonContentAsync<ModelsSummary>(_options, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(summary, response);
             }
@@ -110,6 +114,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateListModelsRequest(op: "summary"))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
+                response.ExpectStatus(HttpStatusCode.OK, _options);
                 var summary = response.GetJsonContent<ModelsSummary>(_options);
                 return Response.FromValue(summary, response);
             }
@@ -125,6 +130,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateGetModelRequest(modelId))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
+                response.ExpectStatus(HttpStatusCode.OK, _options);
                 var model = await response.GetJsonContentAsync<FormModel>(_options, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(model, response);
             }
@@ -140,6 +146,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateGetModelRequest(modelId))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
+                response.ExpectStatus(HttpStatusCode.OK, _options);
                 var model = response.GetJsonContent<FormModel>(_options);
                 return Response.FromValue(model, response);
             }
@@ -155,6 +162,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateDeleteModelRequest(modelId))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
+                response.ExpectStatus(HttpStatusCode.NoContent, _options);
                 return response;
             }
         }
@@ -169,6 +177,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateDeleteModelRequest(modelId))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
+                response.ExpectStatus(HttpStatusCode.NoContent, _options);
                 return response;
             }
         }
@@ -252,6 +261,7 @@ namespace Azure.AI.FormRecognizer.Operations
 
         private AnalysisOperation GetAnalysisOperation(string modelId, Response response)
         {
+            response.ExpectStatus(HttpStatusCode.Accepted, _options);
             var id = AnalysisOperation.GetAnalysisOperationId(response);
             return new AnalysisOperation(_pipeline, modelId, id, _options);
         }
