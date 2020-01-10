@@ -21,37 +21,51 @@ namespace Azure.AI.FormRecognizer.Extensions
         public static bool TryGetContentType(this Stream stream, out FormContentType? contentType)
         {
             var maxBytes = PdfHeader.Length;
-            var minBytes = JpegHeader.Length;
             var isPdf = true;
             var isPng = true;
             var isJpeg = true;
             var isTiff = true;
             var originalPosition = stream.Position;
 
-            if (stream.Length >= minBytes)
+            if (stream.Length >= maxBytes)
             {
                 byte b;
                 Func<byte[], int, bool> isAtEnd = (array, i) => i == array.Length - 1;
+                Func<byte[], int, bool> isBeyond = (array, i) => i >= array.Length;
                 for (var i = 0; i < maxBytes; i += 1, stream.Position = i)
                 {
                     b = (byte)stream.ReadByte();
-                    isPdf &= PdfHeader[i] == b;
-                    if (isPdf && isAtEnd(PdfHeader, i))
+
+                    var endOfPdf = isAtEnd(PdfHeader, i);
+                    var beyondPdf = isBeyond(PdfHeader, i);
+                    isPdf &= !beyondPdf && PdfHeader[i] == b;
+                    if (isPdf && endOfPdf)
                     {
                         break;
                     }
-                    isPng &= PngHeader[i] == b;
+
+                    var endOfPng = isAtEnd(PngHeader, i);
+                    var beyondPng = isBeyond(PngHeader, i);
+                    isPng &= !beyondPng && PngHeader[i] == b;
                     if (isPng && isAtEnd(PngHeader, i))
                     {
                         break;
                     }
-                    isJpeg &= JpegHeader[i] == b;
+
+                    var endOfJpeg = isAtEnd(JpegHeader, i);
+                    var beyondJpeg = isBeyond(JpegHeader, i);
+                    isJpeg &= !beyondJpeg && JpegHeader[i] == b;
                     if (isJpeg && isAtEnd(JpegHeader, i))
                     {
                         break;
                     }
-                    isTiff &= (TiffHeaderLE[i] == b || TiffHeaderBE[i] == b);
-                    if (isTiff && (isAtEnd(TiffHeaderLE, i) || isAtEnd(TiffHeaderBE, i)))
+
+                    var endOfTiffLE = isAtEnd(TiffHeaderLE, i);
+                    var endOfTiffBE = isAtEnd(TiffHeaderBE, i);
+                    var beyondTiffLE = isBeyond(TiffHeaderLE, i);
+                    var beyondTiffBE = isBeyond(TiffHeaderBE, i);
+                    isTiff &= ((!beyondTiffLE && TiffHeaderLE[i] == b) || (!beyondTiffBE && TiffHeaderBE[i] == b));
+                    if (isTiff && (endOfTiffLE || endOfTiffBE))
                     {
                         break;
                     }

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using System.IO;
 using System.Net;
 using System.Text.Json;
@@ -28,7 +29,9 @@ namespace Azure.AI.FormRecognizer.Extensions
             {
                 stream = new MemoryStream();
                 response.ContentStream.CopyTo(stream);
+                stream.Position = 0;
             }
+
             var json = options.Encoding.GetString(stream.ToArray());
             return JsonSerializer.Deserialize<T>(json, options.SerializationOptions);
         }
@@ -37,10 +40,20 @@ namespace Azure.AI.FormRecognizer.Extensions
         {
             if (response.Status != (int)statusCode)
             {
-                var error = response.GetJsonContent<ErrorResponse>(options);
-                var message = error.Message ?? "Request failed";
-                var code = error.Code ?? "GeneralError";
-                throw new RequestFailedException(response.Status, message, code, null);
+                var isJson = response.Headers.ContentType != default && response.Headers.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
+                if (isJson)
+                {
+                    var error = response.GetJsonContent<ErrorResponse>(options);
+                    var message = error.Error.Message ?? "Request failed";
+                    var code = error.Error.Code ?? "GeneralError";
+                    throw new RequestFailedException(response.Status, $"{response.Status} ({code}) - {message}", code, null);
+                }
+                else
+                {
+                    var message = "Request failed";
+                    var code = "GeneralError";
+                    throw new RequestFailedException(response.Status, $"{response.Status} ({code}) - {message}", code, null);
+                }
             }
         }
     }

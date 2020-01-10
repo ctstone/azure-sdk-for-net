@@ -4,7 +4,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Threading;
+using System.Web;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -71,9 +71,11 @@ namespace Azure.AI.FormRecognizer.Extensions
 
         public static Request CreateGetAnalysisRequest(this HttpPipeline pipeline, string modelId, string resultId)
         {
+            ThrowIfMissing(modelId, nameof(modelId));
+            ThrowIfMissing(resultId, nameof(resultId));
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Get;
-            request.Uri.Path = $"/custom/models/{modelId}/analyzeResult/{resultId}";
+            request.Uri.Path = $"/custom/models/{modelId}/analyzeResults/{resultId}";
             return request;
         }
 
@@ -91,12 +93,17 @@ namespace Azure.AI.FormRecognizer.Extensions
 
             if (uri != default)
             {
+                if (!uri.IsWellFormedOriginalString())
+                {
+                    uri = new Uri(HttpUtility.UrlEncode(uri.ToString()));
+                }
                 var analysisRequest = new AnalysisRequest { Source = uri.ToString() };
+                Console.WriteLine(analysisRequest.Source);
                 request.AddJsonContent(analysisRequest, options);
             }
             else if (stream != default)
             {
-                request.AddFormContent(contentType.Value, stream);
+                request.AddBinaryContent(contentType, stream);
             }
             else
             {

@@ -37,14 +37,14 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="trainRequest"></param>
         /// <param name="cancellationToken"></param>
-        public async virtual Task<Operation<FormModel>> StartTrainAsync(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
+        public async virtual Task<TrainingOperation> StartTrainAsync(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.Created, _options);
-                var id = TrainOperation.GetTrainingOperationId(response);
-                return new TrainOperation(_pipeline, id, _options);
+                var id = TrainingOperation.GetTrainingOperationId(response);
+                return new TrainingOperation(_pipeline, id, _options);
             }
         }
 
@@ -53,14 +53,14 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="trainRequest"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<FormModel> StartTrain(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
+        public virtual TrainingOperation StartTrain(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.Created, _options);
-                var id = TrainOperation.GetTrainingOperationId(response);
-                return new TrainOperation(_pipeline, id, _options);
+                var id = TrainingOperation.GetTrainingOperationId(response);
+                return new TrainingOperation(_pipeline, id, _options);
             }
         }
 
@@ -69,9 +69,9 @@ namespace Azure.AI.FormRecognizer.Operations
         /// </summary>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<FormModel> StartTrain(string operationId, CancellationToken cancellationToken = default)
+        public virtual TrainingOperation StartTrain(string operationId, CancellationToken cancellationToken = default)
         {
-            return new TrainOperation(_pipeline, operationId, _options);
+            return new TrainingOperation(_pipeline, operationId, _options);
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var summary = await response.GetJsonContentAsync<ModelsSummary>(_options, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(summary, response);
+                var listing = await response.GetJsonContentAsync<ModelListing>(_options, cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(listing.Summary, response);
             }
         }
 
@@ -190,7 +190,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="contentType"></param>
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public async virtual Task<Operation<AnalyzedForm>> StartAnalyzeAsync(string modelId, Stream stream, FormContentType? contentType = default, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public async virtual Task<AnalysisOperation> StartAnalyzeAsync(string modelId, Stream stream, FormContentType? contentType = default, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeStreamRequest(modelId, stream, contentType, includeTextDetails))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
@@ -207,7 +207,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="contentType"></param>
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> StartAnalyze(string modelId, Stream stream, FormContentType? contentType = default, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public virtual AnalysisOperation StartAnalyze(string modelId, Stream stream, FormContentType? contentType = default, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeStreamRequest(modelId, stream, contentType, includeTextDetails))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
@@ -223,7 +223,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="uri"></param>
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public async virtual Task<Operation<AnalyzedForm>> StartAnalyzeAsync(string modelId, Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public async virtual Task<AnalysisOperation> StartAnalyzeAsync(string modelId, Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeUriRequest(modelId, uri, includeTextDetails, _options))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
@@ -239,7 +239,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="uri"></param>
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> StartAnalyze(string modelId, Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public virtual AnalysisOperation StartAnalyze(string modelId, Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeUriRequest(modelId, uri, includeTextDetails, _options))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
@@ -254,7 +254,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <param name="modelId"></param>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> StartAnalyze(string modelId, string operationId, CancellationToken cancellationToken = default)
+        public virtual AnalysisOperation StartAnalyze(string modelId, string operationId, CancellationToken cancellationToken = default)
         {
             return new AnalysisOperation(_pipeline, modelId, operationId, _options);
         }

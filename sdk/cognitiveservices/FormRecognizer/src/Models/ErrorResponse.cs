@@ -9,13 +9,8 @@ namespace Azure.AI.FormRecognizer.Models
     public struct ErrorResponse
     {
         /// <summary>
-        /// Error status.
+        /// Error details.
         /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// Error code.
-        /// </summary>
-        public string Code { get; set; }
+        public ErrorDetails Error { get; set; }
     }
 }

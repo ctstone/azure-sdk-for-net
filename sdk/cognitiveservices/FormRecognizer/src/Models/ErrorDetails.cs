@@ -4,18 +4,18 @@
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// Models summary
+    /// Error response.
     /// </summary>
-    public struct ModelsSummary
+    public struct ErrorDetails
     {
         /// <summary>
-        /// Count.
+        /// Error status.
         /// </summary>
-        public int Count { get; set; }
+        public string Message { get; set; }
 
         /// <summary>
-        /// Limit.
+        /// Error code.
         /// </summary>
-        public int Limit { get; set; }
+        public string Code { get; set; }
     }
 }

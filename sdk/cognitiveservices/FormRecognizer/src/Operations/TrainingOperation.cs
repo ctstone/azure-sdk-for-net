@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer.Operations
     /// <summary>
     /// Train operation.
     /// </summary>
-    public class TrainOperation : Operation<FormModel>
+    public class TrainingOperation : Operation<FormModel>
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
@@ -36,7 +36,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <inheritdoc/>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
-        internal TrainOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
+        internal TrainingOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
         {
             _id = id;
             _pipeline = pipeline;
@@ -46,7 +46,7 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <summary>
         /// Train operation.
         /// </summary>
-        protected TrainOperation()
+        protected TrainingOperation()
         { }
 
         /// <inheritdoc/>
@@ -80,7 +80,7 @@ namespace Azure.AI.FormRecognizer.Operations
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<FormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public async override ValueTask<Response<FormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {

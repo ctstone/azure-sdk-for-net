@@ -27,7 +27,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             request.Headers.Add(HttpHeader.Common.JsonContentType);
         }
 
-        public static void AddFormContent(this Request request, FormContentType? contentType, Stream stream)
+        public static void AddBinaryContent(this Request request, FormContentType? contentType, Stream stream)
         {
             stream.ThrowIfCannotRead("Stream to analyze is not readable.", nameof(stream));
             if (contentType == default)
