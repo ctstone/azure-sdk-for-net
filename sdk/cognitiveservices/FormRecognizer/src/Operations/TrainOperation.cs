@@ -23,24 +23,16 @@ namespace Azure.AI.FormRecognizer.Operations
         private FormModel _value;
         private Response _response;
 
-        /// <summary>
-        /// Id.
-        /// </summary>
+        /// <inheritdoc/>
         public override string Id => _id;
 
-        /// <summary>
-        /// Value.
-        /// </summary>
+        /// <inheritdoc/>
         public override FormModel Value => HasValue ? _value : default;
 
-        /// <summary>
-        /// Has completed.
-        /// </summary>
+        /// <inheritdoc/>
         public override bool HasCompleted => _value?.IsModelComplete() ?? false;
 
-        /// <summary>
-        /// Has value.
-        /// </summary>
+        /// <inheritdoc/>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
         internal TrainOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
@@ -56,18 +48,13 @@ namespace Azure.AI.FormRecognizer.Operations
         protected TrainOperation()
         { }
 
-        /// <summary>
-        /// Get raw response.
-        /// </summary>
+        /// <inheritdoc/>
         public override Response GetRawResponse()
         {
             return _response;
         }
 
-        /// <summary>
-        /// Update status.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <inheritdoc/>
         public override Response UpdateStatus(CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateGetModelRequest(Id))
@@ -82,10 +69,7 @@ namespace Azure.AI.FormRecognizer.Operations
             }
         }
 
-        /// <summary>
-        /// Update status async.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <inheritdoc/>
         public override async ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateGetModelRequest(Id))
@@ -96,20 +80,13 @@ namespace Azure.AI.FormRecognizer.Operations
             }
         }
 
-        /// <summary>
-        /// Wait for Completion.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <inheritdoc/>
         public override ValueTask<Response<FormModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
-        /// <summary>
-        /// Wait for completion.
-        /// </summary>
-        /// <param name="pollingInterval"></param>
-        /// <param name="cancellationToken"></param>
+        /// <inheritdoc/>
         public async override ValueTask<Response<FormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
         {
             do

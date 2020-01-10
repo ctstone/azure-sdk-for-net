@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 using System;
+using System.IO;
+using System.Threading;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -10,7 +12,7 @@ namespace Azure.AI.FormRecognizer.Extensions
 {
     internal static class CustomFormExtensions
     {
-        public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainRequest trainRequest, FormRecognizerClientOptions options)
+        public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, FormRecognizerClientOptions options)
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Post;
@@ -54,14 +56,54 @@ namespace Azure.AI.FormRecognizer.Extensions
             return request;
         }
 
-        public static bool IsModelComplete(this FormModel model)
+        public static Request CreateAnalyzeStreamRequest(this HttpPipeline pipeline, string modelId, Stream stream, FormContentType? contentType, bool? includeTextDetails)
         {
-            return model.ModelInfo.Status != ModelStatus.Creating;
+            ThrowIfMissing(stream, nameof(stream));
+            return pipeline.CreateAnalyzeRequest(modelId, includeTextDetails, contentType: contentType, stream: stream);
         }
 
-        public static bool IsModelSuccess(this FormModel model)
+        public static Request CreateAnalyzeUriRequest(this HttpPipeline pipeline, string modelId, Uri uri, bool? includeTextDetails, FormRecognizerClientOptions options)
         {
-            return model.ModelInfo.Status == ModelStatus.Ready;
+            ThrowIfMissing(uri, nameof(uri));
+            return pipeline.CreateAnalyzeRequest(modelId, includeTextDetails, options: options, uri: uri);
         }
+
+        private static Request CreateAnalyzeRequest(this HttpPipeline pipeline, string modelId, bool? includeTextDetails, FormRecognizerClientOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
+        {
+            ThrowIfMissing(modelId, nameof(modelId));
+            var request = pipeline.CreateRequest();
+            request.Method = RequestMethod.Post;
+            request.Uri.Path = $"/custom/models/{modelId}/analyze";
+
+            if (includeTextDetails != default)
+            {
+                request.Uri.AppendQuery("includeTextDetails", includeTextDetails.Value.ToString());
+            }
+
+            if (uri != default)
+            {
+                var analysisRequest = new AnalysisRequest { Source = uri.ToString() };
+                request.AddJsonContent(analysisRequest, options);
+            }
+            else if (stream != default)
+            {
+                request.AddFormContent(contentType.Value, stream);
+            }
+            else
+            {
+                throw new InvalidOperationException("Analysis request is missing required fields.");
+            }
+
+            return request;
+        }
+
+        private static void ThrowIfMissing<T>(T arg, string name)
+        {
+            if (arg.Equals(default(T)))
+            {
+                throw new ArgumentNullException(name);
+            }
+        }
+
     }
 }

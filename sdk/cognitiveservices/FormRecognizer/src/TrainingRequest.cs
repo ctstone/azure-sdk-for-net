@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Hello world
     /// </summary>
-    public struct TrainRequest
+    public struct TrainingRequest
     {
         /// <summary>
         /// Source.
@@ -22,11 +22,5 @@ namespace Azure.AI.FormRecognizer
         /// Include Label file.
         /// </summary>
         public bool IncludeLabelFile { get; set; }
-
-        private void Temp()
-        {
-            var client = new FormRecognizerClient("", "");
-            client.ApiKey = "foo";
-        }
     }
 }
