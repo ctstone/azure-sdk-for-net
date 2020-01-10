@@ -40,7 +40,6 @@ namespace Azure.AI.FormRecognizer.Extensions
             }
             request.Headers.Add(FormHttpHeader.Common.ForContentType(contentType.Value));
             request.Content = RequestContent.Create(stream);
-
         }
     }
 }
