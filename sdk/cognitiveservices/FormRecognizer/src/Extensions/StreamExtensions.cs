@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {
@@ -11,48 +12,77 @@ namespace Azure.AI.FormRecognizer.Extensions
         private const string DefaultSeekErrorMessage = "Stream is not seekable.";
         private const string DefaultReadErrorMessage = "Stream is not readable.";
         private const string DefaultContentTypeErrorMessage = "Cannot determine Content-Type of stream.";
-        public static bool IsPdfStream(this Stream stream)
-        {
-            throw new NotImplementedException();
-        }
 
-        public static bool IsPngStream(this Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool IsJpegStream(this Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool IsTiffStream(this Stream stream)
-        {
-            throw new NotImplementedException();
-        }
+        private static byte[] PdfHeader = Encoding.ASCII.GetBytes("%PDF-");
+        private static byte[] PngHeader = new byte[] { 0x89, (byte)'P', (byte)'N', (byte)'G' };
+        private static byte[] JpegHeader = new byte[] { 0xff, 0xd8 };
+        private static byte[] JpegFooter = new byte[] { 0xff, 0xd9 };
+        private static byte[] TiffHeaderBE = Encoding.ASCII.GetBytes("MM");
+        private static byte[] TiffHeaderLE = Encoding.ASCII.GetBytes("II");
 
         public static bool TryGetContentType(this Stream stream, out FormContentType? contentType)
         {
-            if (stream.IsPdfStream())
+            var maxBytes = PdfHeader.Length;
+            var minBytes = JpegHeader.Length;
+            var isPdf = true;
+            var isPng = true;
+            var isJpeg = true;
+            var isTiff = true;
+            var originalPosition = stream.Position;
+
+            if (stream.Length >= minBytes)
+            {
+                byte b;
+                Func<byte[], int, bool> isAtEnd = (array, i) => i == array.Length - 1;
+                for (var i = 0; i < maxBytes; i += 1, stream.Position = i)
+                {
+                    b = (byte)stream.ReadByte();
+                    isPdf &= PdfHeader[i] == b;
+                    if (isPdf && isAtEnd(PdfHeader, i))
+                    {
+                        break;
+                    }
+                    isPng &= PngHeader[i] == b;
+                    if (isPng && isAtEnd(PngHeader, i))
+                    {
+                        break;
+                    }
+                    isJpeg &= JpegHeader[i] == b;
+                    if (isJpeg && isAtEnd(JpegHeader, i))
+                    {
+                        break;
+                    }
+                    isTiff &= (TiffHeaderLE[i] == b || TiffHeaderBE[i] == b);
+                    if (isTiff && (isAtEnd(TiffHeaderLE, i) || isAtEnd(TiffHeaderBE, i)))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            stream.Position = originalPosition;
+
+            if (isPdf)
             {
                 contentType = FormContentType.PDF;
             }
-            else if (stream.IsJpegStream())
-            {
-                contentType = FormContentType.JPEG;
-            }
-            else if (stream.IsPngStream())
+            else if (isPng)
             {
                 contentType = FormContentType.PNG;
             }
-            else if (stream.IsTiffStream())
+            else if (isJpeg)
+            {
+                contentType = FormContentType.JPEG;
+            }
+            else if (isTiff)
             {
                 contentType = FormContentType.TIFF;
             }
             else
             {
-                contentType = null;
+                contentType = new Nullable<FormContentType>();
             }
+
             return contentType.HasValue;
         }
 
