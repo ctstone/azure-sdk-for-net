@@ -21,6 +21,6 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Include Label file.
         /// </summary>
-        public bool IncludeLabelFile { get; set; }
+        public bool UseLabelFile { get; set; }
     }
 }
