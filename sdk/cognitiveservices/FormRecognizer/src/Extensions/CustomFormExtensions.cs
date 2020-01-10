@@ -93,11 +93,7 @@ namespace Azure.AI.FormRecognizer.Extensions
 
             if (uri != default)
             {
-                if (!uri.IsWellFormedOriginalString())
-                {
-                    uri = new Uri(HttpUtility.UrlEncode(uri.ToString()));
-                }
-                var analysisRequest = new AnalysisRequest { Source = uri.ToString() };
+                var analysisRequest = new AnalysisRequest { Source = uri.OriginalString };
                 Console.WriteLine(analysisRequest.Source);
                 request.AddJsonContent(analysisRequest, options);
             }
@@ -109,6 +105,8 @@ namespace Azure.AI.FormRecognizer.Extensions
             {
                 throw new InvalidOperationException("Analysis request is missing required fields.");
             }
+
+            Console.WriteLine(request.Uri);
 
             return request;
         }
