@@ -11,12 +11,10 @@ namespace Azure.AI.FormRecognizer.Extensions
     {
         private const string DefaultSeekErrorMessage = "Stream is not seekable.";
         private const string DefaultReadErrorMessage = "Stream is not readable.";
-        private const string DefaultContentTypeErrorMessage = "Cannot determine Content-Type of stream.";
 
         private static byte[] PdfHeader = Encoding.ASCII.GetBytes("%PDF-");
         private static byte[] PngHeader = new byte[] { 0x89, (byte)'P', (byte)'N', (byte)'G' };
         private static byte[] JpegHeader = new byte[] { 0xff, 0xd8 };
-        private static byte[] JpegFooter = new byte[] { 0xff, 0xd9 };
         private static byte[] TiffHeaderBE = Encoding.ASCII.GetBytes("MM");
         private static byte[] TiffHeaderLE = Encoding.ASCII.GetBytes("II");
 
@@ -58,6 +56,10 @@ namespace Azure.AI.FormRecognizer.Extensions
                         break;
                     }
                 }
+            }
+            else
+            {
+                isPdf = isPng = isJpeg = isTiff = false;
             }
 
             stream.Position = originalPosition;

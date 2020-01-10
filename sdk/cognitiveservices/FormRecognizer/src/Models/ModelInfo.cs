@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Model Info
     /// </summary>
-    public class ModelInfo
+    public struct ModelInfo
     {
         /// <summary>
         /// Model Id.

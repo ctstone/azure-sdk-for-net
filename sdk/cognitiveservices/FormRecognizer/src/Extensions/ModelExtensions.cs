@@ -16,5 +16,15 @@ namespace Azure.AI.FormRecognizer
         {
             return model.ModelInfo.Status == ModelStatus.Ready;
         }
+
+        public static bool IsAnalysisComplete(this AnalyzedForm analysis)
+        {
+            return analysis.Status == AnalysisStatus.Succeeded || analysis.Status == AnalysisStatus.Failed;
+        }
+
+        public static bool IsAnalysisSuccess(this AnalyzedForm analysis)
+        {
+            return analysis.Status == AnalysisStatus.Succeeded;
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Extensions
                 stream.ThrowIfCannotSeek("Content-Type must be provided when stream is not seekable.", nameof(contentType));
                 if (!stream.TryGetContentType(out contentType))
                 {
-                    throw new ArgumentNullException("Cannot get Content-Type of stream. Try providing a Content-Type parameter.", nameof(contentType));
+                    throw new ArgumentNullException(nameof(contentType), "Cannot get Content-Type of stream. Try providing a Content-Type parameter.");
                 }
             }
             request.Headers.Add(FormHttpHeader.Common.ForContentType(contentType.Value));

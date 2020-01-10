@@ -20,14 +20,14 @@ namespace Azure.AI.FormRecognizer.Operations
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
-        private FormModel _value;
+        private FormModel? _value;
         private Response _response;
 
         /// <inheritdoc/>
         public override string Id => _id;
 
         /// <inheritdoc/>
-        public override FormModel Value => HasValue ? _value : default;
+        public override FormModel Value => HasValue ? _value.Value : default;
 
         /// <inheritdoc/>
         public override bool HasCompleted => _value?.IsModelComplete() ?? false;
@@ -59,13 +59,7 @@ namespace Azure.AI.FormRecognizer.Operations
         {
             using (var request = _pipeline.CreateGetModelRequest(Id))
             {
-                _response = _pipeline.SendRequest(request, cancellationToken);
-                var model = _response.GetJsonContent<FormModel>(_options);
-                if (model.IsModelComplete())
-                {
-                    _value = model;
-                }
-                return _response;
+                return UpdateStatus(_pipeline.SendRequest(request, cancellationToken));
             }
         }
 
@@ -74,9 +68,7 @@ namespace Azure.AI.FormRecognizer.Operations
         {
             using (var request = _pipeline.CreateGetModelRequest(Id))
             {
-                _response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                _value = await _response.GetJsonContentAsync<FormModel>(_options, cancellationToken).ConfigureAwait(false);
-                return _response;
+                return UpdateStatus(await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false));
             }
         }
 
@@ -98,7 +90,18 @@ namespace Azure.AI.FormRecognizer.Operations
                 }
             }
             while (!HasCompleted);
-            return Response.FromValue(_value, _response);
+            return Response.FromValue(_value.Value, _response);
+        }
+
+        private Response UpdateStatus(Response response)
+        {
+            _response = response;
+            var model = response.GetJsonContent<FormModel>(_options);
+            if (model.IsModelComplete())
+            {
+                _value = model;
+            }
+            return response;
         }
 
         internal static string GetTrainingOperationId(Response response)

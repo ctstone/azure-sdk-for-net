@@ -186,7 +186,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateAnalyzeStreamRequest(modelId, stream, contentType, includeTextDetails))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
-                return GetAnalysisOperation(response);
+                return GetAnalysisOperation(modelId, response);
             }
         }
 
@@ -203,7 +203,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateAnalyzeStreamRequest(modelId, stream, contentType, includeTextDetails))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
-                return GetAnalysisOperation(response);
+                return GetAnalysisOperation(modelId, response);
             }
         }
 
@@ -219,7 +219,7 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateAnalyzeUriRequest(modelId, uri, includeTextDetails, _options))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
-                return GetAnalysisOperation(response);
+                return GetAnalysisOperation(modelId, response);
             }
         }
 
@@ -235,24 +235,25 @@ namespace Azure.AI.FormRecognizer.Operations
             using (var request = _pipeline.CreateAnalyzeUriRequest(modelId, uri, includeTextDetails, _options))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
-                return GetAnalysisOperation(response);
+                return GetAnalysisOperation(modelId, response);
             }
         }
 
         /// <summary>
         /// Get operation result.
         /// </summary>
+        /// <param name="modelId"></param>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> StartAnalyze(string operationId, CancellationToken cancellationToken = default)
+        public virtual Operation<AnalyzedForm> StartAnalyze(string modelId, string operationId, CancellationToken cancellationToken = default)
         {
-            return new AnalysisOperation(_pipeline, operationId, _options);
+            return new AnalysisOperation(_pipeline, modelId, operationId, _options);
         }
 
-        private AnalysisOperation GetAnalysisOperation(Response response)
+        private AnalysisOperation GetAnalysisOperation(string modelId, Response response)
         {
             var id = AnalysisOperation.GetAnalysisOperationId(response);
-            return new AnalysisOperation(_pipeline, id, _options);
+            return new AnalysisOperation(_pipeline, modelId, id, _options);
         }
     }
 }

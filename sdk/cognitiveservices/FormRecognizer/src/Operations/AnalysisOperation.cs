@@ -16,57 +16,94 @@ namespace Azure.AI.FormRecognizer.Operations
     public class AnalysisOperation : Operation<AnalyzedForm>
     {
         private const string LocationHeader = "Operation-Location";
+        private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
+        private readonly string _modelId;
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
+        private AnalyzedForm? _value;
+        private Response _response;
 
         /// <inheritdoc/>
-        public override string Id => throw new NotImplementedException();
+        public override string Id => _id;
 
         /// <inheritdoc/>
-        public override AnalyzedForm Value => throw new NotImplementedException();
+        public override AnalyzedForm Value => HasValue ? _value.Value : default;
 
         /// <inheritdoc/>
-        public override bool HasCompleted => throw new NotImplementedException();
+        public override bool HasCompleted => _value?.IsAnalysisComplete() ?? false;
 
         /// <inheritdoc/>
-        public override bool HasValue => throw new NotImplementedException();
+        public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
-        internal AnalysisOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
+        internal AnalysisOperation(HttpPipeline pipeline, string modelId, string id, FormRecognizerClientOptions options)
         {
+            _modelId = modelId;
             _id = id;
             _pipeline = pipeline;
             _options = options;
         }
 
+        /// <summary>
+        /// Analysis operation.
+        /// </summary>
+        protected AnalysisOperation()
+        { }
+
         /// <inheritdoc/>
         public override Response GetRawResponse()
         {
-            throw new NotImplementedException();
+            return _response;
         }
 
         /// <inheritdoc/>
         public override Response UpdateStatus(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateGetAnalysisRequest(_modelId, Id))
+            {
+                return UpdateStatus(_pipeline.SendRequest(request, cancellationToken));
+            }
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
+        public async override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            using (var request = _pipeline.CreateGetAnalysisRequest(_modelId, Id))
+            {
+                return UpdateStatus(await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false));
+            }
         }
 
         /// <inheritdoc/>
         public override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public async override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            do
+            {
+                await UpdateStatusAsync(cancellationToken).ConfigureAwait(false);
+                if (!HasCompleted)
+                {
+                    await Task.Delay(pollingInterval).ConfigureAwait(false);
+                }
+            }
+            while (!HasCompleted);
+            return Response.FromValue(_value.Value, _response);
+        }
+
+        private Response UpdateStatus(Response response)
+        {
+            _response = response;
+            var analysis = response.GetJsonContent<AnalyzedForm>(_options);
+            if (analysis.IsAnalysisComplete())
+            {
+                _value = analysis;
+            }
+            return response;
         }
 
         internal static string GetAnalysisOperationId(Response response)

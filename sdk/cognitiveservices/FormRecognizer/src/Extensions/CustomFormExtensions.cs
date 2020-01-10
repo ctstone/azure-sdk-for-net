@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using Azure.AI.FormRecognizer.Models;
@@ -68,6 +69,14 @@ namespace Azure.AI.FormRecognizer.Extensions
             return pipeline.CreateAnalyzeRequest(modelId, includeTextDetails, options: options, uri: uri);
         }
 
+        public static Request CreateGetAnalysisRequest(this HttpPipeline pipeline, string modelId, string resultId)
+        {
+            var request = pipeline.CreateRequest();
+            request.Method = RequestMethod.Get;
+            request.Uri.Path = $"/custom/models/{modelId}/analyzeResult/{resultId}";
+            return request;
+        }
+
         private static Request CreateAnalyzeRequest(this HttpPipeline pipeline, string modelId, bool? includeTextDetails, FormRecognizerClientOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
         {
             ThrowIfMissing(modelId, nameof(modelId));
@@ -77,7 +86,7 @@ namespace Azure.AI.FormRecognizer.Extensions
 
             if (includeTextDetails != default)
             {
-                request.Uri.AppendQuery("includeTextDetails", includeTextDetails.Value.ToString());
+                request.Uri.AppendQuery("includeTextDetails", includeTextDetails.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             if (uri != default)
