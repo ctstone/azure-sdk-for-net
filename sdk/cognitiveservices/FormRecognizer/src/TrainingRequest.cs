@@ -4,22 +4,22 @@
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// Hello world
+    /// Request parameter to train a new custom model.
     /// </summary>
     public struct TrainingRequest
     {
         /// <summary>
-        /// Source.
+        /// Source path containing the training documents.
         /// </summary>
         public string Source { get; set; }
 
         /// <summary>
-        /// Source Filter.
+        /// Filter to apply to the documents in the source path for training.
         /// </summary>
         public SourceFilter SourceFilter { get; set; }
 
         /// <summary>
-        /// Include Label file.
+        /// Use label file for training a model.
         /// </summary>
         public bool UseLabelFile { get; set; }
     }

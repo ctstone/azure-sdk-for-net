@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using Azure.Core;
+using Azure.AI.FormRecognizer.Http;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {

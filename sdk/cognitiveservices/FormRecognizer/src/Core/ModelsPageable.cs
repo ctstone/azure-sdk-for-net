@@ -9,7 +9,7 @@ using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 using System.Net;
 
-namespace Azure.AI.FormRecognizer.Operations
+namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
     /// Models async pageable.

@@ -80,19 +80,19 @@ namespace Azure.AI.FormRecognizer.Extensions
 
             if (isPdf)
             {
-                contentType = FormContentType.PDF;
+                contentType = FormContentType.Pdf;
             }
             else if (isPng)
             {
-                contentType = FormContentType.PNG;
+                contentType = FormContentType.Png;
             }
             else if (isJpeg)
             {
-                contentType = FormContentType.JPEG;
+                contentType = FormContentType.Jpeg;
             }
             else if (isTiff)
             {
-                contentType = FormContentType.TIFF;
+                contentType = FormContentType.Tiff;
             }
             else
             {

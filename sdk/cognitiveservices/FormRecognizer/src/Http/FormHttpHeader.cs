@@ -4,10 +4,15 @@
 using System;
 using Azure.Core;
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Http
 {
     internal readonly struct FormHttpHeader
     {
+        public static class Names
+        {
+            public static string ClientRequestId => "client-request-id";
+        }
+
         public static class Common
         {
             public static readonly HttpHeader PdfContentType
@@ -23,10 +28,10 @@ namespace Azure.AI.FormRecognizer
             {
                 return contentType switch
                 {
-                    FormContentType.PDF => PdfContentType,
-                    FormContentType.PNG => PngContentType,
-                    FormContentType.JPEG => JpegContentType,
-                    FormContentType.TIFF => TiffContentType,
+                    FormContentType.Pdf => PdfContentType,
+                    FormContentType.Png => PngContentType,
+                    FormContentType.Jpeg => JpegContentType,
+                    FormContentType.Tiff => TiffContentType,
                     _ => throw new NotSupportedException($"Content-Type {contentType} is not supported."),
                 };
             }

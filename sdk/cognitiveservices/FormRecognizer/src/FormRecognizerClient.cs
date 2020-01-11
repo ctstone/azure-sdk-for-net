@@ -2,39 +2,40 @@
 // Licensed under the MIT License.
 
 using System;
-using Azure.AI.FormRecognizer.Operations;
-using Azure.AI.FormRecognizer.Pipeline;
+using Azure.AI.FormRecognizer.Core;
+using Azure.AI.FormRecognizer.Http;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// Hello World
+    /// The FormRecognizer client provides syncronous and asynchronous methods to manage custom forms,
+    /// prebuilt models, and layout requests.
     /// </summary>
     public class FormRecognizerClient
     {
         private readonly CustomFormClient _customFormClient;
         private readonly ReceiptClient _receiptClient;
         private readonly FormLayoutClient _layoutClient;
-        private readonly ApimAuthenticationPolicy _authentication;
+        private readonly FormHttpPolicy _authentication;
 
         /// <summary>
-        /// Interact with custom Form Recognizer models.
+        /// Access custom form models.
         /// </summary>
-        public CustomFormClient Custom => _customFormClient;
+        public virtual CustomFormClient Custom => _customFormClient;
 
         /// <summary>
-        /// Receipts.
+        /// Access the prebuilt receipt model.
         /// </summary>
-        public ReceiptClient Receipt => _receiptClient;
+        public virtual ReceiptClient Receipt => _receiptClient;
 
         /// <summary>
-        /// Layout.
+        /// Access form layout models.
         /// </summary>
-        public FormLayoutClient Layout => _layoutClient;
+        public virtual FormLayoutClient Layout => _layoutClient;
 
         /// <summary>
-        /// Api key.
+        /// Get or set the api key. This value may be updated at any time without creating a new <see cref="FormRecognizerClient" />.
         /// </summary>
         public string ApiKey
         {
@@ -45,25 +46,31 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="endpoint"></param>
-        /// <param name="apiKey"></param>
+        /// <param name="endpoint">
+        /// The base url of the Form Recognizer Service. For example,
+        /// <code>https://eastus.cognitiveservices.com/</code>
+        /// </param>
+        /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
         public FormRecognizerClient(string endpoint, string apiKey)
         : this(endpoint, apiKey, new FormRecognizerClientOptions())
         {
         }
 
         /// <summary>
-        /// /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
+        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="endpoint"></param>
-        /// <param name="apiKey"></param>
-        /// <param name="options"></param>
+        /// <param name="endpoint">
+        /// The base url of the Form Recognizer Service. For example,
+        /// <code>https://eastus.cognitiveservices.com/</code>
+        /// </param>
+        /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
+        /// <param name="options">General service options for the Form Recognizer client.</param>
         public FormRecognizerClient(string endpoint, string apiKey, FormRecognizerClientOptions options)
         {
-            ThrowIfMissing(endpoint, nameof(endpoint));
-            ThrowIfMissing(apiKey, nameof(apiKey));
-            ThrowIfMissing(options, nameof(options));
-            _authentication = new ApimAuthenticationPolicy(new Uri(endpoint), apiKey, options);
+            Throw.IfMissing(endpoint, nameof(endpoint));
+            Throw.IfMissing(apiKey, nameof(apiKey));
+            Throw.IfMissing(options, nameof(options));
+            _authentication = new FormHttpPolicy(new Uri(endpoint), apiKey, options);
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
             _customFormClient = new CustomFormClient(pipeline, options);
@@ -72,18 +79,10 @@ namespace Azure.AI.FormRecognizer
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
+        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class for mocking.
         /// </summary>
         protected FormRecognizerClient()
         {
-        }
-
-        private static void ThrowIfMissing<T>(T arg, string name)
-        {
-            if (arg.Equals(default(T)))
-            {
-                throw new ArgumentNullException(name);
-            }
         }
     }
 }

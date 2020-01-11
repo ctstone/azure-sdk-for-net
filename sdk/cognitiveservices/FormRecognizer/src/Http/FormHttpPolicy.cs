@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Pipeline
+namespace Azure.AI.FormRecognizer.Http
 {
-    internal class ApimAuthenticationPolicy : HttpPipelinePolicy
+    internal class FormHttpPolicy : HttpPipelinePolicy
     {
         private const string ApimAuthenticationHeader = "Ocp-Apim-Subscription-Key";
         private const string FormRecognizerPathRoot = "formrecognizer";
@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Pipeline
 
         public string ApiKey { get; set; }
 
-        public ApimAuthenticationPolicy(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
+        public FormHttpPolicy(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
         {
             ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
             _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
@@ -45,6 +45,7 @@ namespace Azure.AI.FormRecognizer.Pipeline
         private void UpdateMessage(HttpMessage message)
         {
             message.Request.Headers.SetValue(ApimAuthenticationHeader, ApiKey);
+            message.Request.Headers.SetValue(FormHttpHeader.Names.ClientRequestId, Guid.NewGuid().ToString());
 
             if (string.IsNullOrEmpty(message.Request.Uri.Host))
             {
@@ -55,7 +56,7 @@ namespace Azure.AI.FormRecognizer.Pipeline
                 message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
             }
 
-            if (_userAgent != default(string))
+            if (_userAgent != default)
             {
                 message.Request.Headers.SetValue(HttpHeader.Names.UserAgent, _userAgent);
             }
@@ -67,7 +68,6 @@ namespace Azure.AI.FormRecognizer.Pipeline
                     message.Request.Headers.Add(header);
                 }
             }
-
         }
     }
 }

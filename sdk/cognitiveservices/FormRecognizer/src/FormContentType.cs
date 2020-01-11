@@ -4,20 +4,20 @@
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// Form content type.
+    /// Form content type for local files.
     /// </summary>
     public enum FormContentType
     {
         /// <summary>application/pdf</summary>
-        PDF = 1,
+        Pdf = 1,
 
         /// <summary>image/png</summary>
-        PNG = 2,
+        Png = 2,
 
         /// <summary>image/jpeg</summary>
-        JPEG = 3,
+        Jpeg = 3,
 
         /// <summary>image/tiff</summary>
-        TIFF = 4,
+        Tiff = 4,
     }
 }

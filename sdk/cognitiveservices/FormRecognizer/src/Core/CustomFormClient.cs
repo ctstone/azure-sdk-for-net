@@ -10,10 +10,12 @@ using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Operations
+namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Manage custom Form Recognizer models.
+    /// The CustomForm client provides syncronous and asynchronous methods to manage custom form models. The client
+    /// supports training, retrieving, listing, and deleting models. The client also supports analyzing new forms
+    /// from either a <see cref="Stream" /> or <see cref="Uri" /> object.
     /// </summary>
     public class CustomFormClient
     {
@@ -21,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Operations
         private readonly FormRecognizerClientOptions _options;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomFormClient"/> class.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class for mocking.
         /// </summary>
         protected CustomFormClient()
         { }
@@ -33,10 +35,32 @@ namespace Azure.AI.FormRecognizer.Operations
         }
 
         /// <summary>
-        /// Train.
+        /// Asynchronously create and train a custom model.
+        ///
+        /// This method returns a <see cref="TrainingOperation" /> that can be used to track the status of the training
+        /// operation, including waiting for its completion.
+        ///
+        /// ```csharp
+        /// var op = await client.StartTrainAsync(new TrainingRequest { Source = "https://example.org/" });
+        /// var model = await op.WaitForCompletionAsync();
+        /// ```
         /// </summary>
-        /// <param name="trainRequest"></param>
-        /// <param name="cancellationToken"></param>
+        /// <param name="trainRequest">
+        /// The request must include a `Source` parameter that is either an externally accessible Azure storage
+        /// blob container Uri (preferably using a Shared Access Signature) or a valid path to a data folder in a locally
+        /// mounted drive (local folders are only supported when accessing an endpoint that is a self-hosted container).
+        ///
+        /// All training data must be under the source folder or subfolders under it. Models are trained using documents
+        /// matching any of the following file extensions:
+        ///
+        /// - `.pdf`
+        /// - `.jpg` / `.jpeg`
+        /// - `.png`
+        /// - `.tiff` / `.tif`
+        ///
+        /// Any other files are ignored.
+        /// </param>
+        /// <param name="cancellationToken">Optional cancellation token.</param>
         public async virtual Task<TrainingOperation> StartTrainAsync(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
@@ -49,10 +73,41 @@ namespace Azure.AI.FormRecognizer.Operations
         }
 
         /// <summary>
-        /// Start train.
+        /// Create and train a custom model.
+        ///
+        /// This method returns a <see cref="TrainingOperation" /> that can be used to track the status of the training
+        /// operation, including waiting for its completion.
+        ///
+        /// ```csharp
+        /// // Wait for completion is only available as an `async` method.
+        /// var op = client.TrainAsync(new TrainingRequest { Source = "https://example.org/" });
+        /// while (!op.HasCompleted)
+        /// {
+        ///     op.UpdateStatus()
+        ///     Thread.Sleep(1000);
+        /// }
+        /// if (op.HasValue)
+        /// {
+        ///     var model = op.Value
+        /// }
+        /// ```
         /// </summary>
-        /// <param name="trainRequest"></param>
-        /// <param name="cancellationToken"></param>
+        /// <param name="trainRequest">
+        /// The request must include a `Source` parameter that is either an externally accessible Azure storage
+        /// blob container Uri (preferably using a Shared Access Signature) or a valid path to a data folder in a locally
+        /// mounted drive (local folders are only supported when accessing an endpoint that is a self-hosted container).
+        ///
+        /// All training data must be under the source folder or subfolders under it. Models are trained using documents
+        /// matching any of the following file extensions:
+        ///
+        /// - `.pdf`
+        /// - `.jpg` / `.jpeg`
+        /// - `.png`
+        /// - `.tiff` / `.tif`
+        ///
+        /// Any other files are ignored.
+        /// </param>
+        /// <param name="cancellationToken">Optional cancellation token.</param>
         public virtual TrainingOperation StartTrain(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))

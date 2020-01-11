@@ -10,7 +10,7 @@ using Azure.Core;
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// Hello World
+    /// Set options for the Form Recognizer client.
     /// </summary>
     public class FormRecognizerClientOptions : ClientOptions
     {
@@ -28,36 +28,33 @@ namespace Azure.AI.FormRecognizer
         }
 
         /// <summary>
-        /// Get the Gets the <see cref="ServiceVersion"/> of the service API used when making requests.
+        /// Get the <see cref="ServiceVersion"/> of the service API used when making requests.
         /// </summary>
         public ServiceVersion Version { get; }
 
         /// <summary>
-        /// Serialization options.
+        /// Get the <see cref="JsonSerializerOptions" /> used by the client when processing JSON messages.
         /// </summary>
         public JsonSerializerOptions SerializationOptions { get; }
 
         /// <summary>
-        /// User agent.
+        /// Get the user agent string sent by the client to the service on each request.
         /// </summary>
         public string UserAgent { get; }
 
         /// <summary>
-        /// Extra headers.
+        /// Get the extra headers sent by the client to the service on each request.
         /// </summary>
         public HttpHeader[] ExtraHeaders { get; }
 
-        /// <summary>
-        /// Text encoding.
-        /// </summary>
         internal Encoding Encoding { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClientOptions"/> class.
         /// </summary>
-        /// <param name="version"></param>
-        /// <param name="userAgent"></param>
-        /// <param name="extraHeaders"></param>
+        /// <param name="version">Set the service version to use for all requests.</param>
+        /// <param name="userAgent">Set the user agent string to send to the service for all requests.</param>
+        /// <param name="extraHeaders">Set extra HTTP headers that will be sent to the service for all requests.</param>
         public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, string userAgent = default, HttpHeader[] extraHeaders = default)
         {
             Version = version;

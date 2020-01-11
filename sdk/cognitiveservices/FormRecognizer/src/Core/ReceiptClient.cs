@@ -3,7 +3,7 @@
 
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Operations
+namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
     /// Class to analyze form layout.

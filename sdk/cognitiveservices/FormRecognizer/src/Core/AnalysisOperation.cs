@@ -9,44 +9,46 @@ using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Operations
+namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Train operation.
+    /// Analysis operation.
     /// </summary>
-    public class TrainingOperation : Operation<FormModel>
+    public class AnalysisOperation : Operation<AnalyzedForm>
     {
-        private const string LocationHeader = "Location";
+        private const string LocationHeader = "Operation-Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
+        private readonly string _modelId;
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
-        private FormModel? _value;
+        private AnalyzedForm? _value;
         private Response _response;
 
         /// <inheritdoc/>
         public override string Id => _id;
 
         /// <inheritdoc/>
-        public override FormModel Value => HasValue ? _value.Value : default;
+        public override AnalyzedForm Value => HasValue ? _value.Value : default;
 
         /// <inheritdoc/>
-        public override bool HasCompleted => _value?.IsModelComplete() ?? false;
+        public override bool HasCompleted => _value?.IsAnalysisComplete() ?? false;
 
         /// <inheritdoc/>
-        public override bool HasValue => _value?.IsModelSuccess() ?? false;
+        public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
-        internal TrainingOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
+        internal AnalysisOperation(HttpPipeline pipeline, string modelId, string id, FormRecognizerClientOptions options)
         {
+            _modelId = modelId;
             _id = id;
             _pipeline = pipeline;
             _options = options;
         }
 
         /// <summary>
-        /// Train operation.
+        /// Analysis operation.
         /// </summary>
-        protected TrainingOperation()
+        protected AnalysisOperation()
         { }
 
         /// <inheritdoc/>
@@ -58,29 +60,29 @@ namespace Azure.AI.FormRecognizer.Operations
         /// <inheritdoc/>
         public override Response UpdateStatus(CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateGetModelRequest(Id))
+            using (var request = _pipeline.CreateGetAnalysisRequest(_modelId, Id))
             {
                 return UpdateStatus(_pipeline.SendRequest(request, cancellationToken));
             }
         }
 
         /// <inheritdoc/>
-        public override async ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
+        public async override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateGetModelRequest(Id))
+            using (var request = _pipeline.CreateGetAnalysisRequest(_modelId, Id))
             {
                 return UpdateStatus(await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false));
             }
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<FormModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<FormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -98,26 +100,26 @@ namespace Azure.AI.FormRecognizer.Operations
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var model = response.GetJsonContent<FormModel>(_options);
-            if (model.IsModelComplete())
+            var analysis = response.GetJsonContent<AnalyzedForm>(_options);
+            if (analysis.IsAnalysisComplete())
             {
-                _value = model;
+                _value = analysis;
             }
             return response;
         }
 
-        internal static string GetTrainingOperationId(Response response)
+        internal static string GetAnalysisOperationId(Response response)
         {
             string location;
             if (!response.Headers.TryGetValue(LocationHeader, out location))
             {
-                throw new RequestFailedException("Unable to retrieve train location URL.");
+                throw new RequestFailedException("Unable to retrieve analysis location URL.");
             }
 
             var i = location.LastIndexOf('/');
             if (i == -1)
             {
-                throw new RequestFailedException("Unable to parse train location URL.");
+                throw new RequestFailedException("Unable to parse analysis location URL.");
             }
 
             return location.Substring(i + 1);

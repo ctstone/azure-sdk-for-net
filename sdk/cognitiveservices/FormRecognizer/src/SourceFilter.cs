@@ -9,12 +9,12 @@ namespace Azure.AI.FormRecognizer
     public struct SourceFilter
     {
         /// <summary>
-        /// Prefix.
+        /// A case-sensitive prefix string to filter documents in the source path for training. For example, when using an Azure storage container URI, use the prefix to restrict sub folders for training.
         /// </summary>
         public string Prefix { get; set; }
 
         /// <summary>
-        /// IncludeSubFolders
+        /// A flag to indicate if subfolders within the set of prefix folders will also need to be included when searching for content to be preprocessed.
         /// </summary>
         public bool IncludeSubFolders { get; set; }
     }
