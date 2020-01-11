@@ -25,6 +25,7 @@ namespace Azure.AI.FormRecognizer.Samples
                     "analyze" => AnalyzeAsync(client, args),
                     "analysis" => GetAnalysisAsync(client, args),
                     "summary" => GetModelsSummaryAsync(client),
+                    "delete" => DeleteModelAsync(client, args),
                     "list" => ListModelsAsync(client),
                     _ => throw new NotSupportedException(),
                 });
@@ -33,6 +34,13 @@ namespace Azure.AI.FormRecognizer.Samples
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        private static async Task DeleteModelAsync(FormRecognizerClient client, string[] args)
+        {
+            var modelId = args[1];
+            await client.Custom.DeleteModelAsync(modelId);
+            Console.WriteLine("Deleted!");
         }
 
         private static async Task AnalyzeAsync(FormRecognizerClient client, string[] args)
