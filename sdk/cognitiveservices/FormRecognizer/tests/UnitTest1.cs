@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System;
 using Xunit;
 
-namespace Azure.AI.FormRecognizer.Test
+namespace Azure.AI.FormRecognizer.Tests
 {
     public class UnitTest1
     {
