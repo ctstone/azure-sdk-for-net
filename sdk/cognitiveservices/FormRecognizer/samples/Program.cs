@@ -72,6 +72,8 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var result = await client.Custom.GetAnalysisResultAsync(modelId, resultId);
             Console.WriteLine(result.Value.Status);
+            Console.WriteLine(result.Value.CreatedDateTime);
+            Console.WriteLine(result.Value.LastUpdatedDateTime);
         }
 
         private static async Task AnalyzeFileAsync(FormRecognizerClient client, string modelId, string[] args)

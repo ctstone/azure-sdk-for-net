@@ -4,13 +4,13 @@
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// Analyzed form.
+    /// Base class for extracted text elements with confidence value.
     /// </summary>
-    public struct AnalyzedForm
+    public abstract class PredictedTextElement<T> : TextElement
     {
         /// <summary>
-        /// Status.
+        /// Confidence value.
         /// </summary>
-        public AnalysisStatus Status { get; set; }
+        public T Confidence { get; internal set; }
     }
 }

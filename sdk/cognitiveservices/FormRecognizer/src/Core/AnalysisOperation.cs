@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// Represents a long-running analysis operation.
     /// </summary>
-    public class AnalysisOperation : Operation<AnalyzedForm>
+    public class AnalysisOperation : Operation<Analysis>
     {
         private const string LocationHeader = "Operation-Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Core
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
-        private AnalyzedForm? _value;
+        private Analysis _value;
         private Response _response;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <summary>
         /// The final result of the analysis operation, if the operation completed successfully.
         /// </summary>
-        public override AnalyzedForm Value => HasValue ? _value.Value : default;
+        public override Analysis Value => HasValue ? _value : default;
 
         /// <summary>
         /// True if the analysis operation completed.
@@ -84,13 +84,13 @@ namespace Azure.AI.FormRecognizer.Core
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<Analysis>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<AnalyzedForm>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<Analysis>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -101,14 +101,14 @@ namespace Azure.AI.FormRecognizer.Core
                 }
             }
             while (!HasCompleted);
-            return Response.FromValue(_value.Value, _response);
+            return Response.FromValue(_value, _response);
         }
 
         private Response UpdateStatus(Response response)
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var analysis = response.GetJsonContent<AnalyzedForm>(_options);
+            var analysis = response.GetJsonContent<Analysis>(_options);
             if (analysis.IsAnalysisComplete())
             {
                 _value = analysis;

@@ -37,7 +37,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <param name="stream"></param>
         /// <param name="contentType"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(Stream stream, FormContentType contentType, CancellationToken cancellationToken = default)
+        public virtual Task<Operation<Analysis>> AnalyzeAsync(Stream stream, FormContentType contentType, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -48,7 +48,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <param name="stream"></param>
         /// <param name="contentType"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> Analyze(Stream stream, FormContentType contentType, CancellationToken cancellationToken = default)
+        public virtual Operation<Analysis> Analyze(Stream stream, FormContentType contentType, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -58,7 +58,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         /// <param name="uri"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(Uri uri, CancellationToken cancellationToken = default)
+        public virtual Task<Operation<Analysis>> AnalyzeAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -68,7 +68,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         /// <param name="uri"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> Analyze(Uri uri, CancellationToken cancellationToken = default)
+        public virtual Operation<Analysis> Analyze(Uri uri, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -78,7 +78,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<Operation<AnalyzedForm>> AnalyzeAsync(string operationId, CancellationToken cancellationToken = default)
+        public virtual Task<Operation<Analysis>> AnalyzeAsync(string operationId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -88,7 +88,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
-        public virtual Operation<AnalyzedForm> Analyze(string operationId, CancellationToken cancellationToken = default)
+        public virtual Operation<Analysis> Analyze(string operationId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

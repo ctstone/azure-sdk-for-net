@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
@@ -480,13 +481,14 @@ namespace Azure.AI.FormRecognizer.Core
         /// <param name="modelId">Model identifier.</param>
         /// <param name="operationId">The operation id from a previous analysis request.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<AnalyzedForm>> GetAnalysisResultAsync(string modelId, string operationId, CancellationToken cancellationToken = default)
+        public async virtual Task<Response<Analysis>> GetAnalysisResultAsync(string modelId, string operationId, CancellationToken cancellationToken = default)
         {
-            var operation = new AnalysisOperation(_pipeline, modelId, operationId, _options);
-            using (var response = await operation.UpdateStatusAsync(cancellationToken).ConfigureAwait(false))
+            using (var request = _pipeline.CreateGetAnalysisRequest(modelId, operationId))
+            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
-                var result = await response.GetJsonContentAsync<AnalyzedForm>(_options, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(result, response);
+                response.ExpectStatus(HttpStatusCode.OK, _options);
+                var analysis = await response.GetJsonContentAsync<Analysis>(_options, cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(analysis, response);
             }
         }
 
@@ -496,13 +498,14 @@ namespace Azure.AI.FormRecognizer.Core
         /// <param name="modelId">Model identifier.</param>
         /// <param name="operationId">The operation id from a previous analysis request.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<AnalyzedForm> GetAnalysisResult(string modelId, string operationId, CancellationToken cancellationToken = default)
+        public virtual Response<Analysis> GetAnalysisResult(string modelId, string operationId, CancellationToken cancellationToken = default)
         {
-            var operation = new AnalysisOperation(_pipeline, modelId, operationId, _options);
-            using (var response = operation.UpdateStatus())
+            using (var request = _pipeline.CreateGetAnalysisRequest(modelId, operationId))
+            using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
-                var result = response.GetJsonContent<AnalyzedForm>(_options);
-                return Response.FromValue(result, response);
+                response.ExpectStatus(HttpStatusCode.OK, _options);
+                var analysis = response.GetJsonContent<Analysis>(_options);
+                return Response.FromValue(analysis, response);
             }
         }
 

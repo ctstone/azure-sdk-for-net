@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Azure.AI.FormRecognizer.Serialization;
 using Azure.Core;
 
 namespace Azure.AI.FormRecognizer
@@ -63,6 +64,8 @@ namespace Azure.AI.FormRecognizer
             Encoding = Encoding.UTF8;
             SerializationOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, };
             SerializationOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+            SerializationOptions.Converters.Add(new AnalysisJsonConverter());
+            SerializationOptions.Converters.Add(new AnalysisResultJsonConverter());
             SerializationOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         }
 

@@ -3,8 +3,10 @@
 
 namespace Azure.AI.FormRecognizer.Models
 {
-    internal struct ErrorResponse
+    /// <summary>
+    /// Represents an extracted word.
+    /// </summary>
+    public class TextWord : PredictedTextElement<float>
     {
-        public ErrorDetails Error { get; set; }
     }
 }

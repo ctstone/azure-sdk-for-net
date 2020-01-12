@@ -3,14 +3,8 @@
 
 namespace Azure.AI.FormRecognizer.Models
 {
-    /// <summary>
-    /// Hello world
-    /// </summary>
-    public struct AnalysisRequest
+    internal struct AnalysisRequest
     {
-        /// <summary>
-        /// Source.
-        /// </summary>
         public string Source { get; set; }
     }
 }
