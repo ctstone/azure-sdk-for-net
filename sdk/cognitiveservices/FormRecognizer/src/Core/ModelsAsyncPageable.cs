@@ -8,11 +8,12 @@ using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Models async pageable.
+    /// A collection of custom form models that may take multiple service requests to asynchronously iterate over.
     /// </summary>
     public class ModelsAsyncPageable : AsyncPageable<ModelInfo>
     {
@@ -27,50 +28,50 @@ namespace Azure.AI.FormRecognizer.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelsAsyncPageable"/> class.
+        /// Initializes a new instance of the <see cref="ModelsAsyncPageable"/> class for mocking.
         /// </summary>
         protected ModelsAsyncPageable()
         { }
 
-        /// <summary>
-        /// As pages.
-        /// </summary>
-        /// <param name="continuationToken"></param>
-        /// <param name="pageSizeHint"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async override IAsyncEnumerable<Page<ModelInfo>> AsPages(string continuationToken = null, int? pageSizeHint = null)
         {
-            string nextLink = null;
+            Page<ModelInfo> page;
             do
             {
-                using (var request = _pipeline.CreateListModelsRequest(nextLink))
-                using (var response = await _pipeline.SendRequestAsync(request, CancellationToken).ConfigureAwait(false))
-                {
-                    response.ExpectStatus(HttpStatusCode.OK, _options);
-                    var listing = await response.GetJsonContentAsync<ModelListing>(_options, CancellationToken).ConfigureAwait(false);
-                    nextLink = listing.NextLink;
-                    var page = Page<ModelInfo>.FromValues(listing.ModelList.ToList(), nextLink, response);
-                    yield return page;
-                }
+                page = await GetPageAsync(continuationToken, CancellationToken).ConfigureAwait(false);
+                yield return page;
             }
-            while (!string.IsNullOrEmpty(nextLink));
+            while (!string.IsNullOrEmpty(page.ContinuationToken));
         }
 
         /// <summary>
-        /// Enumerate models asyncronously. This may make multiple service requests.
+        /// Get a page of models.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="continuationToken">Optional continuation token from a previous page result.</param>
+        /// <param name="cancellationToken">Optional cancellation token.</param>
+        public async Task<Page<ModelInfo>> GetPageAsync(string continuationToken = null, CancellationToken cancellationToken = default)
+        {
+            using (var request = _pipeline.CreateListModelsRequest(continuationToken))
+            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                response.ExpectStatus(HttpStatusCode.OK, _options);
+                var listing = await response.GetJsonContentAsync<ModelListing>(_options, cancellationToken).ConfigureAwait(false);
+                return Page<ModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
+            }
+        }
+
+        /// <inheritdoc />
         public async override IAsyncEnumerator<ModelInfo> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             string nextLink = null;
             do
             {
                 using (var request = _pipeline.CreateListModelsRequest(nextLink))
-                using (var response = await _pipeline.SendRequestAsync(request, CancellationToken).ConfigureAwait(false))
+                using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
                 {
                     response.ExpectStatus(HttpStatusCode.OK, _options);
-                    var listing = await response.GetJsonContentAsync<ModelListing>(_options, CancellationToken).ConfigureAwait(false);
+                    var listing = await response.GetJsonContentAsync<ModelListing>(_options, cancellationToken).ConfigureAwait(false);
                     nextLink = listing.NextLink;
                     foreach (var model in listing.ModelList)
                     {

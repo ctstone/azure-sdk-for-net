@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
@@ -17,5 +19,10 @@ namespace Azure.AI.FormRecognizer.Models
         /// Limit.
         /// </summary>
         public int Limit { get; set; }
+
+        /// <summary>
+        /// Last updated date.
+        /// </summary>
+        public DateTimeOffset LastUpdatedDateTime { get; set; }
     }
 }

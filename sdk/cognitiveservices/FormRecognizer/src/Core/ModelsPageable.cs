@@ -12,7 +12,7 @@ using System.Net;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Models async pageable.
+    /// A collection of custom form models that may take multiple service requests to synchronously iterate over.
     /// </summary>
     public class ModelsPageable : Pageable<ModelInfo>
     {
@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Core
         private FormRecognizerClientOptions _options;
 
         internal ModelsPageable(HttpPipeline pipeline, FormRecognizerClientOptions options, CancellationToken cancellationToken)
-        : base(cancellationToken)
+            : base(cancellationToken)
         {
             _pipeline = pipeline;
             _options = options;
@@ -32,34 +32,35 @@ namespace Azure.AI.FormRecognizer.Core
         protected ModelsPageable()
         { }
 
-        /// <summary>
-        /// As pages.
-        /// </summary>
-        /// <param name="continuationToken"></param>
-        /// <param name="pageSizeHint"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override IEnumerable<Page<ModelInfo>> AsPages(string continuationToken = null, int? pageSizeHint = null)
         {
-            string nextLink = null;
+            Page<ModelInfo> page;
             do
             {
-                using (var request = _pipeline.CreateListModelsRequest(nextLink))
-                using (var response = _pipeline.SendRequest(request, CancellationToken))
-                {
-                    response.ExpectStatus(HttpStatusCode.OK, _options);
-                    var listing = response.GetJsonContent<ModelListing>(_options);
-                    nextLink = listing.NextLink;
-                    var page = Page<ModelInfo>.FromValues(listing.ModelList.ToList(), nextLink, response);
-                    yield return page;
-                }
+                page = GetPage(continuationToken);
+                yield return page;
+
             }
-            while (!string.IsNullOrEmpty(nextLink));
+            while (!string.IsNullOrEmpty(page.ContinuationToken));
         }
 
         /// <summary>
-        /// Enumerate models. This may make multiple service requests.
+        /// Get a page of models.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="continuationToken"></param>
+        public Page<ModelInfo> GetPage(string continuationToken = null)
+        {
+            using (var request = _pipeline.CreateListModelsRequest(continuationToken))
+            using (var response = _pipeline.SendRequest(request, CancellationToken))
+            {
+                response.ExpectStatus(HttpStatusCode.OK, _options);
+                var listing = response.GetJsonContent<ModelListing>(_options);
+                return Page<ModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
+            }
+        }
+
+        /// <inheritdoc />
         public override IEnumerator<ModelInfo> GetEnumerator()
         {
             string nextLink = null;

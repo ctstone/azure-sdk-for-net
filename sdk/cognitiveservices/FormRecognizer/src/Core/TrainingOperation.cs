@@ -12,7 +12,7 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Train operation.
+    /// Represents a long-running training operation.
     /// </summary>
     public class TrainingOperation : Operation<FormModel>
     {
@@ -24,16 +24,24 @@ namespace Azure.AI.FormRecognizer.Core
         private FormModel? _value;
         private Response _response;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Get the ID of the training operation. This value can be used to poll for the status of the training outcome.
+        /// </summary>
         public override string Id => _id;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// The final result of the training operation, if the operation completed successfully.
+        /// </summary>
         public override FormModel Value => HasValue ? _value.Value : default;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// True if the training operation completed.
+        /// </summary>
         public override bool HasCompleted => _value?.IsModelComplete() ?? false;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// True if the training operation completed successfully.
+        /// </summary>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
         internal TrainingOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
@@ -44,7 +52,7 @@ namespace Azure.AI.FormRecognizer.Core
         }
 
         /// <summary>
-        /// Train operation.
+        /// Initializes a new instance of the <see cref="TrainingOperation"/> class for mocking.
         /// </summary>
         protected TrainingOperation()
         { }

@@ -12,7 +12,7 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Analysis operation.
+    /// Represents a long-running analysis operation.
     /// </summary>
     public class AnalysisOperation : Operation<AnalyzedForm>
     {
@@ -25,16 +25,24 @@ namespace Azure.AI.FormRecognizer.Core
         private AnalyzedForm? _value;
         private Response _response;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Get the ID of the analysis operation. This value can be used to poll for the status of the analysis outcome.
+        /// </summary>
         public override string Id => _id;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// The final result of the analysis operation, if the operation completed successfully.
+        /// </summary>
         public override AnalyzedForm Value => HasValue ? _value.Value : default;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// True if the analysis operation completed.
+        /// </summary>
         public override bool HasCompleted => _value?.IsAnalysisComplete() ?? false;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// True if the analysis operation completed successfully.
+        /// </summary>
         public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
         internal AnalysisOperation(HttpPipeline pipeline, string modelId, string id, FormRecognizerClientOptions options)
@@ -46,7 +54,7 @@ namespace Azure.AI.FormRecognizer.Core
         }
 
         /// <summary>
-        /// Analysis operation.
+        /// Initializes a new instance of the <see cref="AnalysisOperation"/> class for mocking.
         /// </summary>
         protected AnalysisOperation()
         { }
