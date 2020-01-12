@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Azure.Core;
 
@@ -24,6 +25,7 @@ namespace Azure.AI.FormRecognizer.Samples
                     "model" => GetModelAsync(client, args),
                     "analyze" => AnalyzeAsync(client, args),
                     "analysis" => GetAnalysisAsync(client, args),
+                    "analysisResult" => GetAnalysisResultAsync(client, args),
                     "summary" => GetModelsSummaryAsync(client),
                     "delete" => DeleteModelAsync(client, args),
                     "list" => ListModelsAsync(client),
@@ -61,6 +63,14 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var op = client.Custom.StartAnalyze(modelId, resultId);
             var result = await op.WaitForCompletionAsync();
+            Console.WriteLine(result.Value.Status);
+        }
+
+        private static async Task GetAnalysisResultAsync(FormRecognizerClient client, string[] args)
+        {
+            var modelId = args[1];
+            var resultId = args[2];
+            var result = await client.Custom.GetAnalysisResultAsync(modelId, resultId);
             Console.WriteLine(result.Value.Status);
         }
 
@@ -134,8 +144,16 @@ namespace Azure.AI.FormRecognizer.Samples
             var resp = await client.Custom.GetModelsSummaryAsync();
             Console.WriteLine($"Count: {resp.Value.Count}");
             Console.WriteLine($"Limit: {resp.Value.Limit}");
+            Console.WriteLine($"Last Updated: {resp.Value.LastUpdatedDateTime}");
         }
 
+        private static void ListModels(FormRecognizerClient client)
+        {
+            foreach (var modelInfo in client.Custom.ListModels())
+            {
+
+            }
+        }
 
         private static async Task ListModelsAsync(FormRecognizerClient client)
         {
@@ -144,6 +162,5 @@ namespace Azure.AI.FormRecognizer.Samples
                 Console.WriteLine(foo.ModelId);
             }
         }
-
     }
 }
