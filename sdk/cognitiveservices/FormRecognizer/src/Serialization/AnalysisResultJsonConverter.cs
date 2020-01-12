@@ -25,17 +25,20 @@ namespace Azure.AI.FormRecognizer.Serialization
 
         internal static AnalysisResult ReadAnalysisResult(JsonElement root)
         {
-            var analysisResult = new AnalysisResult();
+            var analysisResult = AnalysisResult.Create();
             foreach (JsonProperty property in root.EnumerateObject())
             {
-                // ReadPropertyValue(ref analysisResult, property);
+                ReadPropertyValue(ref analysisResult, property);
             }
             return analysisResult;
         }
 
-        // private static void ReadPropertyValue(ref AnalysisResult analyzedForm, JsonProperty property)
-        // {
-
-        // }
+        private static void ReadPropertyValue(ref AnalysisResult analyzedForm, JsonProperty property)
+        {
+            if (property.NameEquals("version"))
+            {
+                analyzedForm.Version = property.Value.GetString();
+            }
+        }
     }
 }

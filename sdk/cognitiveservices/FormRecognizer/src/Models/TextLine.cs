@@ -21,5 +21,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// List of words extracted from the line.
         /// </summary>
         public IList<TextWord> Words { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextLine"/> class.
+        /// </summary>
+        protected TextLine()
+        { }
+
+        internal static TextLine Create() => new TextLine();
     }
 }

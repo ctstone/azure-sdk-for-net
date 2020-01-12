@@ -27,5 +27,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// Confidence value.
         /// </summary>
         public float Confidence { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyValuePair"/> class.
+        /// </summary>
+        protected KeyValuePair()
+        { }
+
+        internal static KeyValuePair Create() => new KeyValuePair();
     }
 }

@@ -8,21 +8,29 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Models summary
     /// </summary>
-    public struct ModelsSummary
+    public class ModelsSummary
     {
         /// <summary>
         /// Count.
         /// </summary>
-        public int Count { get; set; }
+        public int Count { get; internal set; }
 
         /// <summary>
         /// Limit.
         /// </summary>
-        public int Limit { get; set; }
+        public int Limit { get; internal set; }
 
         /// <summary>
         /// Last updated date.
         /// </summary>
-        public DateTimeOffset LastUpdatedDateTime { get; set; }
+        public DateTimeOffset LastUpdatedDateTime { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModelsSummary"/> class.
+        /// </summary>
+        protected ModelsSummary()
+        { }
+
+        internal static ModelsSummary Create() => new ModelsSummary();
     }
 }

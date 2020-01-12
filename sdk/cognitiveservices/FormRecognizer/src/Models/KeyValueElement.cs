@@ -12,5 +12,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// When includeTextDetails is set to true, a list of references to the text elements constituting this key or value.
         /// </summary>
         public TextElement[] Elements { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyValueElement"/> class.
+        /// </summary>
+        protected KeyValueElement()
+        { }
+
+        internal static KeyValueElement Create() => new KeyValueElement();
     }
 }

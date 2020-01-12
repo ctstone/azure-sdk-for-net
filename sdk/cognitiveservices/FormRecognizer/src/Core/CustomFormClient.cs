@@ -219,13 +219,13 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         /// <param name="modelId">Model identifier.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<FormModel>> GetModelAsync(string modelId, CancellationToken cancellationToken = default)
+        public async virtual Task<Response<Model>> GetModelAsync(string modelId, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateGetModelRequest(modelId))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var model = await response.GetJsonContentAsync<FormModel>(_options, cancellationToken).ConfigureAwait(false);
+                var model = await response.GetJsonContentAsync<Model>(_options, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(model, response);
             }
         }
@@ -235,13 +235,13 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         /// <param name="modelId">Model identifier.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<FormModel> GetModel(string modelId, CancellationToken cancellationToken = default)
+        public virtual Response<Model> GetModel(string modelId, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateGetModelRequest(modelId))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var model = response.GetJsonContent<FormModel>(_options);
+                var model = response.GetJsonContent<Model>(_options);
                 return Response.FromValue(model, response);
             }
         }

@@ -50,5 +50,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// should be built upon the actual line location instead of order.
         /// </summary>
         public IList<TextLine> Lines { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReadResult"/> class.
+        /// </summary>
+        protected ReadResult()
+        { }
+
+        internal static ReadResult Create() => new ReadResult();
     }
 }

@@ -4,19 +4,19 @@
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// Model status.
+    /// Status of the training operation.
     /// </summary>
 #pragma warning disable CA1717 // plural enum
-    public enum ModelStatus
+    public enum TrainingStatus
 #pragma warning restore CA1717 // plural enum
     {
-        /// <summary>Creating.</summary>
-        Creating = 1,
+        /// <summary>Succeeded.</summary>
+        Succeeded = 1,
 
-        /// <summary>Ready.</summary>
-        Ready = 2,
+        /// <summary>Partially succeeded.</summary>
+        PartiallySucceeded = 2,
 
-        /// <summary>Invalid.</summary>
-        Invalid = 3,
+        /// <summary>Failed.</summary>
+        Failed = 3,
     }
 }

@@ -42,5 +42,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// Is the current cell a footer cell?
         /// </summary>
         public bool? IsFooter { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataTableCell"/> class.
+        /// </summary>
+        protected DataTableCell()
+        { }
+
+        internal DataTableCell Create() => new DataTableCell();
     }
 }

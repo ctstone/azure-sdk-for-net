@@ -24,5 +24,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// Dictionary of named field values.
         /// </summary>
         public IDictionary<string, FieldValue> Fields { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DocumentResult"/> class.
+        /// </summary>
+        protected DocumentResult()
+        { }
+
+        internal static DocumentResult Create() => new DocumentResult();
     }
 }

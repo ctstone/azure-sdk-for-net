@@ -22,5 +22,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// List of cells contained in the table.
         /// </summary>
         public DataTableCell[] Cells { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataTable"/> class.
+        /// </summary>
+        protected DataTable()
+        { }
+
+        internal static DataTable Create() => new DataTable();
     }
 }

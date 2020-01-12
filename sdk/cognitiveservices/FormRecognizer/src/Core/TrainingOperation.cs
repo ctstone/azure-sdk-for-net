@@ -14,14 +14,14 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// Represents a long-running training operation.
     /// </summary>
-    public class TrainingOperation : Operation<FormModel>
+    public class TrainingOperation : Operation<Model>
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
-        private FormModel? _value;
+        private Model _value;
         private Response _response;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <summary>
         /// The final result of the training operation, if the operation completed successfully.
         /// </summary>
-        public override FormModel Value => HasValue ? _value.Value : default;
+        public override Model Value => HasValue ? _value : default;
 
         /// <summary>
         /// True if the training operation completed.
@@ -82,13 +82,13 @@ namespace Azure.AI.FormRecognizer.Core
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<FormModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<Model>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<FormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<Model>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -99,14 +99,14 @@ namespace Azure.AI.FormRecognizer.Core
                 }
             }
             while (!HasCompleted);
-            return Response.FromValue(_value.Value, _response);
+            return Response.FromValue(_value, _response);
         }
 
         private Response UpdateStatus(Response response)
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var model = response.GetJsonContent<FormModel>(_options);
+            var model = response.GetJsonContent<Model>(_options);
             if (model.IsModelComplete())
             {
                 _value = model;

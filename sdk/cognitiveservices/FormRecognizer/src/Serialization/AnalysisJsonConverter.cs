@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer.Serialization
 
         internal static Analysis ReadAnalyzedForm(JsonElement root)
         {
-            var analyzedForm = new Analysis();
+            var analyzedForm = Analysis.Create();
             foreach (JsonProperty property in root.EnumerateObject())
             {
                 ReadPropertyValue(ref analyzedForm, property);

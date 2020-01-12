@@ -27,5 +27,13 @@ namespace Azure.AI.FormRecognizer.Models
         /// List of data tables extracted from the page.
         /// </summary>
         public DataTable[] Tables { get; internal set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageResult"/> class.
+        /// </summary>
+        protected PageResult()
+        { }
+
+        internal static PageResult Create() => new PageResult();
     }
 }

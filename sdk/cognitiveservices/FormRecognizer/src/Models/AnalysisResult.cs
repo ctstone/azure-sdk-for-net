@@ -38,8 +38,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public ErrorDetails[] Errors { get; internal set; }
 
-
-        internal AnalysisResult()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalysisResult"/> class.
+        /// </summary>
+        protected AnalysisResult()
         { }
+
+        internal static AnalysisResult Create() => new AnalysisResult();
     }
 }

@@ -8,5 +8,12 @@ namespace Azure.AI.FormRecognizer.Models
     /// </summary>
     public class TextWord : PredictedTextElement<float>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextWord"/> class.
+        /// </summary>
+        protected TextWord()
+        { }
+
+        internal static TextWord Create() => new TextWord();
     }
 }
