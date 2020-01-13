@@ -6,10 +6,12 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Class to analyze receipts.
+    /// The receipt client extract field text and semantic values from receipt documents.
     /// </summary>
     public class ReceiptClient : PrebuiltFormClient
     {
+        private const string ModelName = "receipt";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ReceiptClient"/> class.
         /// </summary>
@@ -17,7 +19,7 @@ namespace Azure.AI.FormRecognizer.Core
         { }
 
         internal ReceiptClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
-            : base("receipt", pipeline, options)
+            : base(ModelName, pipeline, options)
         { }
     }
 }

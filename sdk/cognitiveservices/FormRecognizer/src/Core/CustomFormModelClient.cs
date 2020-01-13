@@ -14,8 +14,8 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// The CustomFormModelClient provides syncronous and asynchronous methods to manage a custom form model. The client
-    /// supports retrieving and deleting models. The client also supports analyzing new forms from either both
+    /// The custom form model client provides syncronous and asynchronous methods to manage a custom form model. The client
+    /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
     public class CustomFormModelClient : AnalysisClient<AnalyzeOptions>

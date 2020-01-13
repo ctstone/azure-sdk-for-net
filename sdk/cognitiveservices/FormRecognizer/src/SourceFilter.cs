@@ -16,6 +16,6 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// A flag to indicate if subfolders within the set of prefix folders will also need to be included when searching for content to be preprocessed.
         /// </summary>
-        public bool IncludeSubFolders { get; set; }
+        public bool? IncludeSubFolders { get; set; }
     }
 }

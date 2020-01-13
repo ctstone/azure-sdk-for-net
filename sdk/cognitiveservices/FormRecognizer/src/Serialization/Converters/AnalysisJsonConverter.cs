@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Serialization
+namespace Azure.AI.FormRecognizer.Serialization.Converters
 {
     internal class AnalysisJsonConverter : JsonConverter<Analysis>
     {

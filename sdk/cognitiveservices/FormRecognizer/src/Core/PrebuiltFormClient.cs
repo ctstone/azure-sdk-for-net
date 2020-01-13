@@ -14,7 +14,7 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Class to analyze form layout.
+    /// The prebuilt form client extracts information from prebuilt Form Recognizer models.
     /// </summary>
     public abstract class PrebuiltFormClient : AnalysisClient<AnalyzeOptions>
     {

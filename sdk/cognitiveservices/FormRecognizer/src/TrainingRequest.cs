@@ -16,11 +16,11 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Filter to apply to the documents in the source path for training.
         /// </summary>
-        public SourceFilter SourceFilter { get; set; }
+        public SourceFilter? SourceFilter { get; set; }
 
         /// <summary>
         /// Use label file for training a model.
         /// </summary>
-        public bool UseLabelFile { get; set; }
+        public bool? UseLabelFile { get; set; }
     }
 }

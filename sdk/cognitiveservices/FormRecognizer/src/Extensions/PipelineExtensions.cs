@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer.Extensions
     {
         private const string OperatorQueryKey = "op";
 
-
+        #region CustomModel
         public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, FormRecognizerClientOptions options)
         {
             var request = pipeline.CreateRequest();
@@ -58,7 +58,9 @@ namespace Azure.AI.FormRecognizer.Extensions
             request.Uri.Path = CustomFormModelClient.GetModelPath(modelId);
             return request;
         }
+        #endregion
 
+        #region Analyze
         public static Request CreateAnalyzeStreamRequest<TOptions>(this HttpPipeline pipeline, string basePath, Stream stream, FormContentType? contentType, TOptions? analyzeOptions, Action<TOptions, Request> applyOptions)
             where TOptions : struct
         {
@@ -71,14 +73,6 @@ namespace Azure.AI.FormRecognizer.Extensions
         {
             Throw.IfMissing(uri, nameof(uri));
             return CreateAnalyzeRequest(pipeline, basePath, analyzeOptions, applyOptions, options: options, uri: uri);
-        }
-
-        public static Request CreateGetAnalysisRequest(this HttpPipeline pipeline, string basePath, string id)
-        {
-            var request = pipeline.CreateRequest();
-            request.Method = RequestMethod.Get;
-            request.Uri.Path = $"{basePath}/analyzeResults/{id}";
-            return request;
         }
 
         private static Request CreateAnalyzeRequest<TOptions>(HttpPipeline pipeline, string basePath, TOptions? analyzeOptions, Action<TOptions, Request> applyOptions, FormRecognizerClientOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
@@ -107,6 +101,15 @@ namespace Azure.AI.FormRecognizer.Extensions
                 throw new InvalidOperationException("Analysis request is missing required fields.");
             }
 
+            return request;
+        }
+        #endregion
+
+        public static Request CreateGetAnalysisRequest(this HttpPipeline pipeline, string basePath, string id)
+        {
+            var request = pipeline.CreateRequest();
+            request.Method = RequestMethod.Get;
+            request.Uri.Path = $"{basePath}/analyzeResults/{id}";
             return request;
         }
     }

@@ -17,5 +17,11 @@ namespace Azure.AI.FormRecognizer.Models
         /// Error code.
         /// </summary>
         public string Code { get; set; }
+
+        internal ErrorDetails(string message, string code)
+        {
+            Message = message;
+            Code = code;
+        }
     }
 }

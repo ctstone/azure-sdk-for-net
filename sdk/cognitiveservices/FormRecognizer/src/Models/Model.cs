@@ -1,11 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Text.Json.Serialization;
+using Azure.AI.FormRecognizer.Serialization.Converters;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
     /// Custom Form Recognizer model.
     /// </summary>
+    [JsonConverter(typeof(ModelJsonConverter))]
     public class Model
     {
         /// <summary>

@@ -3,7 +3,7 @@
 
 using System;
 using System.Text.Json.Serialization;
-using Azure.AI.FormRecognizer.Serialization;
+using Azure.AI.FormRecognizer.Serialization.Converters;
 
 namespace Azure.AI.FormRecognizer.Models
 {

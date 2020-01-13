@@ -6,7 +6,7 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Class to analyze form layout.
+    /// The form layout client extracts text and layout information from a given document.
     /// </summary>
     public class FormLayoutClient : AnalysisClient<AnalyzeLayoutOptions>
     {
@@ -30,6 +30,5 @@ namespace Azure.AI.FormRecognizer.Core
     /// Options for analyzing layout.
     /// </summary>
     public struct AnalyzeLayoutOptions
-    {
-    }
+    { }
 }
