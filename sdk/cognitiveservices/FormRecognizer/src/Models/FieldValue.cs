@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Recognized field value.
     /// </summary>
-    public class FieldValue : PredictedTextElement<float?>
+    public class FieldValue : TextElement
     {
         /// <summary>
         /// Type of field value.
@@ -53,12 +53,17 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Dictionary of field values.
         /// </summary>
-        public Dictionary<string, FieldValue> ObjectValue { get; internal set; }
+        public IDictionary<string, FieldValue> ObjectValue { get; internal set; }
 
         /// <summary>
         /// When includeTextDetails is set to true, a list of references to the text elements constituting this field.
         /// </summary>
         public TextElement[] Elements { get; internal set; }
+
+        /// <summary>
+        /// Confidence value.
+        /// </summary>
+        public float? Confidence { get; internal set; }
 
         /// <summary>
         /// The 1-based page number in the input document.

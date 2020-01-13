@@ -6,8 +6,13 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Represents an extracted word.
     /// </summary>
-    public class TextWord : PredictedTextElement<float>
+    public class TextWord : TextElement
     {
+        /// <summary>
+        /// Confidence value.
+        /// </summary>
+        public float Confidence { get; internal set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TextWord"/> class.
         /// </summary>

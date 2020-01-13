@@ -10,7 +10,6 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Result of an analysis operation.
     /// </summary>
-    [JsonConverter(typeof(AnalysisResultJsonConverter))]
     public class AnalysisResult
     {
         /// <summary>

@@ -29,6 +29,11 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedDateTime { get; internal set; }
 
         /// <summary>
+        /// Results of the analyze operation.
+        /// </summary>
+        public AnalysisResult AnalyzeResult { get; internal set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Analysis"/> class.
         /// </summary>
         protected Analysis()

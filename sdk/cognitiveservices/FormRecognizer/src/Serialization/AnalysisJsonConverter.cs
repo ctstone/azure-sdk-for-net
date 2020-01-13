@@ -23,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             throw new NotImplementedException();
         }
 
-        internal static Analysis ReadAnalyzedForm(JsonElement root)
+        public static Analysis ReadAnalyzedForm(JsonElement root)
         {
             var analyzedForm = Analysis.Create();
             foreach (JsonProperty property in root.EnumerateObject())
@@ -46,6 +46,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             else if (property.NameEquals("lastUpdatedDateTime"))
             {
                 analyzedForm.LastUpdatedDateTime = property.Value.GetDateTimeOffset();
+            }
+            else if (property.NameEquals("analyzeResult"))
+            {
+                analyzedForm.AnalyzeResult = AnalysisResultJson.Read(property.Value);
             }
         }
     }

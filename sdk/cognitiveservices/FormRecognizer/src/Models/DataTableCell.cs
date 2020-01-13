@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
     /// Information about the extracted cell in a table.
     /// </summary>
-    public class DataTableCell : PredictedTextElement<float>
+    public class DataTableCell : TextElement
     {
         /// <summary>
         /// Row index of the cell.
@@ -29,11 +31,6 @@ namespace Azure.AI.FormRecognizer.Models
         public int? ColumnSpan { get; internal set; }
 
         /// <summary>
-        /// When includeTextDetails is set to true, a list of references to the text elements constituting this table cell.
-        /// </summary>
-        public TextElement[] Elements { get; internal set; }
-
-        /// <summary>
         /// Is the current cell a header cell?
         /// </summary>
         public bool? IsHeader { get; internal set; }
@@ -44,11 +41,30 @@ namespace Azure.AI.FormRecognizer.Models
         public bool? IsFooter { get; internal set; }
 
         /// <summary>
+        /// Confidence value.
+        /// </summary>
+        public float Confidence { get; internal set; }
+
+        internal DataTable DataTable { get; set; }
+
+        internal string[] ElementReferences { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DataTableCell"/> class.
         /// </summary>
         protected DataTableCell()
         { }
 
-        internal DataTableCell Create() => new DataTableCell();
+        /// <summary>
+        /// Resolve the text elements referenced in the `ElementReferences` field.
+        /// </summary>
+        /// <param name="root">The root analysis result object.</param>
+        public TextElement[] GetElements(AnalysisResult root)
+        {
+            Console.WriteLine($"{root}-{this.ElementReferences.Length}");
+            throw new NotImplementedException();
+        }
+
+        internal static DataTableCell Create() => new DataTableCell();
     }
 }
