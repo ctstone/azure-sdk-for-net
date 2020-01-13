@@ -22,7 +22,6 @@ namespace Azure.AI.FormRecognizer.Core
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
-        private readonly string _analysisPath;
         private Analysis _value;
         private Response _response;
 
@@ -69,7 +68,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <inheritdoc/>
         public override Response UpdateStatus(CancellationToken cancellationToken = default)
         {
-            using (var request = FormRequests.CreateGetAnalysisRequest(_pipeline, _basePath, _id))
+            using (var request = _pipeline.CreateGetAnalysisRequest(_basePath, _id))
             {
                 return UpdateStatus(_pipeline.SendRequest(request, cancellationToken));
             }
@@ -78,7 +77,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <inheritdoc/>
         public async override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
         {
-            using (var request = FormRequests.CreateGetAnalysisRequest(_pipeline, _basePath, _id))
+            using (var request = _pipeline.CreateGetAnalysisRequest(_basePath, _id))
             {
                 return UpdateStatus(await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false));
             }

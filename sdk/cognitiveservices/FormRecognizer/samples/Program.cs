@@ -38,10 +38,12 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
+
+
         private static async Task DeleteModelAsync(FormRecognizerClient client, string[] args)
         {
             var modelId = args[1];
-            await client.Custom.DeleteModelAsync(modelId);
+            await client.Custom.UseModel(modelId).DeleteAsync();
             Console.WriteLine("Deleted!");
         }
 
@@ -61,7 +63,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var modelId = args[1];
             var resultId = args[2];
-            var op = client.Custom.StartAnalyze(modelId, resultId);
+            var op = client.Custom.UseModel(modelId).StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
             Console.WriteLine(result.Value.Status);
         }
@@ -70,7 +72,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var modelId = args[1];
             var resultId = args[2];
-            var result = await client.Custom.GetAnalysisResultAsync(modelId, resultId);
+            var result = await client.Custom.UseModel(modelId).GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
             Console.WriteLine(result.Value.CreatedDateTime);
             Console.WriteLine(result.Value.LastUpdatedDateTime);
@@ -80,7 +82,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
-            var op = await client.Custom.StartAnalyzeAsync(modelId, stream);
+            var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(stream);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -97,7 +99,7 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task AnalyzeUrlAsync(FormRecognizerClient client, string modelId, string[] args)
         {
             var url = new Uri(args[3]);
-            var op = await client.Custom.StartAnalyzeAsync(modelId, url);
+            var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(url);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -114,7 +116,7 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task GetModelAsync(FormRecognizerClient client, string[] args)
         {
             var modelId = args[1];
-            var model = await client.Custom.GetModelAsync(modelId);
+            var model = await client.Custom.UseModel(modelId).GetAsync();
             Console.WriteLine(model.Value.ModelInfo.Status);
         }
 
@@ -143,7 +145,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task GetModelsSummaryAsync(FormRecognizerClient client)
         {
-            var resp = await client.Custom.GetModelsSummaryAsync();
+            var resp = await client.Custom.GetSummaryAsync();
             Console.WriteLine($"Count: {resp.Value.Count}");
             Console.WriteLine($"Limit: {resp.Value.Limit}");
             Console.WriteLine($"Last Updated: {resp.Value.LastUpdatedDateTime}");
