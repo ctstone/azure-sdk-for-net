@@ -39,8 +39,8 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         public string ApiKey
         {
-            get { return _authentication.ApiKey; }
-            set { _authentication.ApiKey = value; }
+            get => _authentication.ApiKey;
+            set => _authentication.ApiKey = value;
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace Azure.AI.FormRecognizer
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
             _customFormClient = new CustomFormClient(pipeline, options);
-            _receiptClient = new ReceiptClient(pipeline);
-            _layoutClient = new FormLayoutClient(pipeline);
+            _receiptClient = new ReceiptClient(pipeline, options);
+            _layoutClient = new FormLayoutClient(pipeline, options);
         }
 
         /// <summary>

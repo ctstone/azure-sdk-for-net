@@ -4,10 +4,10 @@
 using System;
 using System.IO;
 using System.Net;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
+using Azure.AI.FormRecognizer.Extensions.Custom;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 
@@ -20,6 +20,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// </summary>
     public class CustomFormClient
     {
+        internal const string BasePath = "/custom/models";
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
 
@@ -285,7 +286,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// - `image/png`
         /// - `image/tiff`
         ///
-        /// This method returns an <see cref="AnalysisOperation" /> that can be used to track the status of the training
+        /// This method returns an <see cref="AnalysisOperation" /> that can be used to track the status of the analysis
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -514,6 +515,12 @@ namespace Azure.AI.FormRecognizer.Core
             response.ExpectStatus(HttpStatusCode.Accepted, _options);
             var id = AnalysisOperation.GetAnalysisOperationId(response);
             return new AnalysisOperation(_pipeline, modelId, id, _options);
+        }
+
+        internal static string GetModelPath(string modelId)
+        {
+            Throw.IfMissing(modelId, nameof(modelId));
+            return $"{BasePath}/{modelId}";
         }
     }
 }

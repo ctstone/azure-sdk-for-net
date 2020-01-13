@@ -18,10 +18,11 @@ namespace Azure.AI.FormRecognizer.Core
     {
         private const string LocationHeader = "Operation-Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
-        private readonly string _modelId;
+        private readonly string _basePath;
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
+        private readonly string _analysisPath;
         private Analysis _value;
         private Response _response;
 
@@ -45,9 +46,9 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
-        internal AnalysisOperation(HttpPipeline pipeline, string modelId, string id, FormRecognizerClientOptions options)
+        internal AnalysisOperation(HttpPipeline pipeline, string basePath, string id, FormRecognizerClientOptions options)
         {
-            _modelId = modelId;
+            _basePath = basePath;
             _id = id;
             _pipeline = pipeline;
             _options = options;
@@ -68,7 +69,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <inheritdoc/>
         public override Response UpdateStatus(CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateGetAnalysisRequest(_modelId, Id))
+            using (var request = FormRequests.CreateGetAnalysisRequest(_pipeline, _basePath, _id))
             {
                 return UpdateStatus(_pipeline.SendRequest(request, cancellationToken));
             }
@@ -77,7 +78,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <inheritdoc/>
         public async override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateGetAnalysisRequest(_modelId, Id))
+            using (var request = FormRequests.CreateGetAnalysisRequest(_pipeline, _basePath, _id))
             {
                 return UpdateStatus(await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false));
             }
@@ -131,6 +132,13 @@ namespace Azure.AI.FormRecognizer.Core
             }
 
             return location.Substring(i + 1);
+        }
+
+        internal static AnalysisOperation FromResponse(HttpPipeline pipeline, string basePath, Response response, FormRecognizerClientOptions options)
+        {
+            response.ExpectStatus(HttpStatusCode.Accepted, options);
+            var id = AnalysisOperation.GetAnalysisOperationId(response);
+            return new AnalysisOperation(pipeline, basePath, id, options);
         }
     }
 }

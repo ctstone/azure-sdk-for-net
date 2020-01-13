@@ -6,7 +6,7 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Core
 {
     /// <summary>
-    /// Class to analyze form layout.
+    /// Class to analyze receipts.
     /// </summary>
     public class ReceiptClient : PrebuiltFormClient
     {
@@ -16,8 +16,8 @@ namespace Azure.AI.FormRecognizer.Core
         protected ReceiptClient()
         { }
 
-        internal ReceiptClient(HttpPipeline pipeline)
-            : base("receipt", pipeline)
+        internal ReceiptClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
+            : base("receipt", pipeline, options)
         { }
     }
 }

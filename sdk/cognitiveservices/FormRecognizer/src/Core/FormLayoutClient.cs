@@ -16,13 +16,15 @@ namespace Azure.AI.FormRecognizer.Core
     public class FormLayoutClient
     {
         private readonly HttpPipeline _pipeline;
+        private readonly FormRecognizerClientOptions _options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormLayoutClient"/> class.
         /// </summary>
-        internal FormLayoutClient(HttpPipeline pipeline)
+        internal FormLayoutClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
         {
             _pipeline = pipeline;
+            _options = options;
         }
 
         /// <summary>
