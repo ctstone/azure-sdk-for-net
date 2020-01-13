@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
+using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer.Core
@@ -16,8 +17,13 @@ namespace Azure.AI.FormRecognizer.Core
     /// Defines the synchronous and asynchronous operations to analyze forms and retrieve results.
     /// Supports analyzing files from both <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class AnalysisClient
+    public class AnalysisClient<TOptions>
+        where TOptions : struct
     {
+        private const string IncludeTextDetailsQueryKey = "includeTextDetails";
+        private const string True = "true";
+        private const string False = "false";
+
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
         private readonly string _basePath;
@@ -37,8 +43,9 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         protected string BasePath => _basePath;
 
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnalysisClient"/> class.
+        /// /// Initializes a new instance of the <see cref="AnalysisClient{TOptions}"/> class.
         /// </summary>
         protected AnalysisClient()
         { }
@@ -126,11 +133,11 @@ namespace Azure.AI.FormRecognizer.Core
         ///
         /// If this parameter is null, the provided `stream` must be seekable.
         /// </param>
-        /// <param name="includeTextDetails">Set to `true` to include text lines and element references in the result.</param>
+        /// <param name="analyzeOptions">Optional analyze options.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual AnalysisOperation StartAnalyze(Stream stream, FormContentType? contentType = null, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public virtual AnalysisOperation StartAnalyze(Stream stream, FormContentType? contentType = null, TOptions? analyzeOptions = null, CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateAnalyzeStreamRequest(_basePath, stream, contentType, includeTextDetails))
+            using (var request = _pipeline.CreateAnalyzeStreamRequest(_basePath, stream, contentType, analyzeOptions, this.ApplyOptions))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 return GetAnalysisOperation(response);
@@ -167,11 +174,11 @@ namespace Azure.AI.FormRecognizer.Core
         /// - `image/png`
         /// - `image/tiff`
         /// </param>
-        /// <param name="includeTextDetails">Set to `true` to include text lines and element references in the result.</param>
+        /// <param name="analyzeOptions">Optional analyze options.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual AnalysisOperation StartAnalyze(Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public virtual AnalysisOperation StartAnalyze(Uri uri, TOptions? analyzeOptions = null, CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateAnalyzeUriRequest(_basePath, uri, includeTextDetails, _options))
+            using (var request = _pipeline.CreateAnalyzeUriRequest(_basePath, uri, _options, analyzeOptions, this.ApplyOptions))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 return GetAnalysisOperation(response);
@@ -224,11 +231,11 @@ namespace Azure.AI.FormRecognizer.Core
         ///
         /// If this parameter is null, the provided `stream` must be seekable.
         /// </param>
-        /// <param name="includeTextDetails">Set to `true` to include text lines and element references in the result.</param>
+        /// <param name="analyzeOptions">Optional analyze options.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual async Task<AnalysisOperation> StartAnalyzeAsync(Stream stream, FormContentType? contentType = null, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public virtual async Task<AnalysisOperation> StartAnalyzeAsync(Stream stream, FormContentType? contentType = null, TOptions? analyzeOptions = null, CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateAnalyzeStreamRequest(_basePath, stream, contentType, includeTextDetails))
+            using (var request = _pipeline.CreateAnalyzeStreamRequest(_basePath, stream, contentType, analyzeOptions, this.ApplyOptions))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
                 return GetAnalysisOperation(response);
@@ -265,15 +272,32 @@ namespace Azure.AI.FormRecognizer.Core
         /// - `image/png`
         /// - `image/tiff`
         /// </param>
-        /// <param name="includeTextDetails">Set to `true` to include text lines and element references in the result.</param>
+        /// <param name="analyzeOptions">Optional analyze options.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual async Task<AnalysisOperation> StartAnalyzeAsync(Uri uri, bool? includeTextDetails = null, CancellationToken cancellationToken = default)
+        public virtual async Task<AnalysisOperation> StartAnalyzeAsync(Uri uri, TOptions? analyzeOptions = null, CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateAnalyzeUriRequest(_basePath, uri, includeTextDetails, _options))
+            using (var request = _pipeline.CreateAnalyzeUriRequest(_basePath, uri, _options, analyzeOptions, this.ApplyOptions))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
                 return GetAnalysisOperation(response);
             }
+        }
+
+        /// <summary>
+        /// Apply options to an analyze request.
+        /// </summary>
+        protected virtual void ApplyOptions(TOptions options, Request request)
+        {
+        }
+
+        /// <summary>
+        /// Apply option to include text details on an analyze request.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="request"></param>
+        protected void ApplyAnalyzeOptions(AnalyzeOptions options, Request request)
+        {
+            request.Uri.AppendQuery(IncludeTextDetailsQueryKey, options.IncludeTextDetails ? True : False);
         }
 
         private AnalysisOperation GetAnalysisOperation(Response response)
@@ -282,5 +306,37 @@ namespace Azure.AI.FormRecognizer.Core
             var id = AnalysisOperation.GetAnalysisOperationId(response);
             return new AnalysisOperation(_pipeline, _basePath, id, _options);
         }
+    }
+
+    /// <summary>
+    /// Options for the analyze operation.
+    /// </summary>
+    public struct AnalyzeOptions
+    {
+        /// <summary>
+        /// Set to `true` to include text lines and element references in the result.
+        /// </summary>
+        public bool IncludeTextDetails { get; set; }
+
+        /// <summary>
+        /// Create options.
+        /// </summary>
+        /// <param name="includeTextDetails">Set to `true` to include text lines and element references in the result.</param>
+        public AnalyzeOptions(bool includeTextDetails)
+        {
+            IncludeTextDetails = includeTextDetails;
+        }
+
+        /// <summary>
+        /// Convert from bool
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public static implicit operator bool(AnalyzeOptions options) => options.IncludeTextDetails;
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="b"></param>
+        public static implicit operator AnalyzeOptions(bool b) => new AnalyzeOptions(b);
     }
 }

@@ -82,7 +82,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
-            var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(stream);
+            var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(stream, null, true);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));

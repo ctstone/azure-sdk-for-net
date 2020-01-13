@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
+using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer.Core
@@ -15,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// Class to analyze form layout.
     /// </summary>
-    public abstract class PrebuiltFormClient : AnalysisClient
+    public abstract class PrebuiltFormClient : AnalysisClient<AnalyzeOptions>
     {
         internal const string PrebuiltBasePath = "/prebuilt";
         private readonly string _prebuiltName;
@@ -43,5 +44,14 @@ namespace Azure.AI.FormRecognizer.Core
             return $"{PrebuiltBasePath}/{modelName}";
         }
 
+        /// <summary>
+        /// Apply options to an analyze request.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="request"></param>
+        protected override void ApplyOptions(AnalyzeOptions options, Request request)
+        {
+            ApplyAnalyzeOptions(options, request);
+        }
     }
 }

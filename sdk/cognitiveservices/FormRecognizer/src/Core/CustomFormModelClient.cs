@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
+using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer.Core
@@ -17,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// supports retrieving and deleting models. The client also supports analyzing new forms from either both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelClient : AnalysisClient
+    public class CustomFormModelClient : AnalysisClient<AnalyzeOptions>
     {
         private readonly string _modelId;
 
@@ -89,6 +90,16 @@ namespace Azure.AI.FormRecognizer.Core
                 response.ExpectStatus(HttpStatusCode.NoContent, Options);
                 return response;
             }
+        }
+
+        /// <summary>
+        /// Apply options to an analyze request.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="request"></param>
+        protected override void ApplyOptions(AnalyzeOptions options, Request request)
+        {
+            ApplyAnalyzeOptions(options, request);
         }
 
         internal static string GetModelPath(string modelId)

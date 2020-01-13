@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// Class to analyze form layout.
     /// </summary>
-    public class FormLayoutClient : AnalysisClient
+    public class FormLayoutClient : AnalysisClient<AnalyzeLayoutOptions>
     {
         private const string LayoutPrefix = "/layout";
 
@@ -24,5 +24,12 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         protected FormLayoutClient()
         { }
+    }
+
+    /// <summary>
+    /// Options for analyzing layout.
+    /// </summary>
+    public struct AnalyzeLayoutOptions
+    {
     }
 }
