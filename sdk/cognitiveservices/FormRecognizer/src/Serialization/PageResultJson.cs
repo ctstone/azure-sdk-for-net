@@ -16,6 +16,14 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 ReadPropertyValue(ref pageResult, property);
             }
+            if (pageResult.KeyValuePairs == default)
+            {
+                pageResult.KeyValuePairs = Array.Empty<KeyValuePair>();
+            }
+            if (pageResult.Tables == default)
+            {
+                pageResult.Tables = Array.Empty<DataTable>();
+            }
             return pageResult;
         }
 

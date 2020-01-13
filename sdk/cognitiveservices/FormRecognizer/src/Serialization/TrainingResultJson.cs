@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
 
@@ -14,6 +15,18 @@ namespace Azure.AI.FormRecognizer.Serialization
             foreach (JsonProperty property in root.EnumerateObject())
             {
                 ReadPropertyValue(ref trainingResult, property);
+            }
+            if (trainingResult.TrainingDocuments == default)
+            {
+                trainingResult.TrainingDocuments = Array.Empty<TrainingDocument>();
+            }
+            if (trainingResult.Fields == default)
+            {
+                trainingResult.Fields = Array.Empty<TrainingField>();
+            }
+            if (trainingResult.Errors == default)
+            {
+                trainingResult.Errors = Array.Empty<ErrorDetails>();
             }
             return trainingResult;
         }

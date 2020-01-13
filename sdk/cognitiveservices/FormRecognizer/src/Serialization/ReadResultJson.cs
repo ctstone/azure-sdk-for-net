@@ -16,6 +16,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 ReadPropertyValue(ref readResult, property);
             }
+            if (readResult.Lines == default)
+            {
+                readResult.Lines = Array.Empty<TextLine>();
+            }
             return readResult;
         }
 

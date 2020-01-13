@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted cell in a table.
     /// </summary>
-    public class DataTableCell : TextElement
+    public class DataTableCell : ReferencingTextElement
     {
         /// <summary>
         /// Row index of the cell.
@@ -47,23 +47,11 @@ namespace Azure.AI.FormRecognizer.Models
 
         internal DataTable DataTable { get; set; }
 
-        internal string[] ElementReferences { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DataTableCell"/> class.
         /// </summary>
         protected DataTableCell()
         { }
-
-        /// <summary>
-        /// Resolve the text elements referenced in the `ElementReferences` field.
-        /// </summary>
-        /// <param name="root">The root analysis result object.</param>
-        public TextElement[] GetElements(AnalysisResult root)
-        {
-            Console.WriteLine($"{root}-{this.ElementReferences.Length}");
-            throw new NotImplementedException();
-        }
 
         internal static DataTableCell Create() => new DataTableCell();
     }

@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
 
@@ -63,11 +61,6 @@ namespace Azure.AI.FormRecognizer.Serialization
             else if (property.NameEquals("valueObject"))
             {
                 fieldValue.ObjectValue = ObjectJson.Read(property.Value, FieldValueJson.Read);
-                // = new Dictionary<string, FieldValue>();
-                // foreach (var json in property.Value.EnumerateObject())
-                // {
-                //     fieldValue.ObjectValue[json.Name] = FieldValueJson.Read(json.Value);
-                // }
             }
             else if (property.NameEquals("text"))
             {

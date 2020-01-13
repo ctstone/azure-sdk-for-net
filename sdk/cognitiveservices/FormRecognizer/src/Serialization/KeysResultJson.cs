@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Collections.Generic;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
 
@@ -14,6 +15,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             foreach (JsonProperty property in root.EnumerateObject())
             {
                 ReadPropertyValue(ref keysResult, property);
+            }
+            if (keysResult.Clusters == default)
+            {
+                keysResult.Clusters = new Dictionary<string, string[]>();
             }
             return keysResult;
         }

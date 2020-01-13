@@ -17,6 +17,44 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 ReadPropertyValue(ref analysisResult, property);
             }
+            if (analysisResult.ReadResults == default)
+            {
+                analysisResult.ReadResults = Array.Empty<ReadResult>();
+            }
+            if (analysisResult.PageResults == default)
+            {
+                analysisResult.PageResults = Array.Empty<PageResult>();
+            }
+            if (analysisResult.DocumentResults == default)
+            {
+                analysisResult.DocumentResults = Array.Empty<DocumentResult>();
+            }
+            if (analysisResult.Errors == default)
+            {
+                analysisResult.Errors = Array.Empty<ErrorDetails>();
+            }
+            foreach (var page in analysisResult.PageResults)
+            {
+                foreach (var keyValuePair in page.KeyValuePairs)
+                {
+                    keyValuePair.Key.ResolveTextReferences(analysisResult.ReadResults);
+                    keyValuePair.Value.ResolveTextReferences(analysisResult.ReadResults);
+                }
+                foreach (var table in page.Tables)
+                {
+                    foreach (var cell in table.Cells)
+                    {
+                        cell.ResolveTextReferences(analysisResult.ReadResults);
+                    }
+                }
+            }
+            foreach (var documentResult in analysisResult.DocumentResults)
+            {
+                foreach (var field in documentResult.Fields)
+                {
+                    field.Value.ResolveTextReferences(analysisResult.ReadResults);
+                }
+            }
             return analysisResult;
         }
 

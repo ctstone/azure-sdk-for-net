@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Recognized field value.
     /// </summary>
-    public class FieldValue : TextElement
+    public class FieldValue : ReferencingTextElement
     {
         /// <summary>
         /// Type of field value.
@@ -58,7 +58,6 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// When includeTextDetails is set to true, a list of references to the text elements constituting this field.
         /// </summary>
-        public TextElement[] Elements { get; internal set; }
 
         /// <summary>
         /// Confidence value.
