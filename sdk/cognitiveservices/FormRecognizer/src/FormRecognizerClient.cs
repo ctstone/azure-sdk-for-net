@@ -15,7 +15,7 @@ namespace Azure.AI.FormRecognizer
     public class FormRecognizerClient
     {
         private readonly CustomFormClient _customFormClient;
-        private readonly ReceiptClient _receiptClient;
+        private readonly PrebuiltFormClient _prebuiltFormClient;
         private readonly FormLayoutClient _layoutClient;
         private readonly FormHttpPolicy _authentication;
 
@@ -25,9 +25,9 @@ namespace Azure.AI.FormRecognizer
         public virtual CustomFormClient Custom => _customFormClient;
 
         /// <summary>
-        /// Access the prebuilt receipt model.
+        /// Access the prebuilt models.
         /// </summary>
-        public virtual ReceiptClient Receipt => _receiptClient;
+        public virtual PrebuiltFormClient Prebuilt => _prebuiltFormClient;
 
         /// <summary>
         /// Access form layout models.
@@ -74,7 +74,7 @@ namespace Azure.AI.FormRecognizer
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
             _customFormClient = new CustomFormClient(pipeline, options);
-            _receiptClient = new ReceiptClient(pipeline, options);
+            _prebuiltFormClient = new PrebuiltFormClient(pipeline, options);
             _layoutClient = new FormLayoutClient(pipeline, options);
         }
 

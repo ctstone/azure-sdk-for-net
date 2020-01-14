@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// The receipt client extract field text and semantic values from receipt documents.
     /// </summary>
-    public class ReceiptClient : PrebuiltFormClient
+    public class ReceiptClient : AnalysisClient
     {
         private const string ModelName = "receipt";
 
@@ -19,7 +19,12 @@ namespace Azure.AI.FormRecognizer.Core
         { }
 
         internal ReceiptClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
-            : base(ModelName, pipeline, options)
+            : base(pipeline, options, GetModelPath())
         { }
+
+        internal static string GetModelPath()
+        {
+            return PrebuiltFormClient.GetModelPath(ModelName);
+        }
     }
 }

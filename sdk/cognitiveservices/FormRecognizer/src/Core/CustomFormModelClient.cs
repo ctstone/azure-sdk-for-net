@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelClient : AnalysisClient<AnalyzeOptions>
+    public class CustomFormModelClient : AnalysisClient
     {
         private readonly string _modelId;
 
@@ -90,16 +90,6 @@ namespace Azure.AI.FormRecognizer.Core
                 response.ExpectStatus(HttpStatusCode.NoContent, Options);
                 return response;
             }
-        }
-
-        /// <summary>
-        /// Apply options to an analyze request.
-        /// </summary>
-        /// <param name="options"></param>
-        /// <param name="request"></param>
-        protected override void ApplyOptions(AnalyzeOptions options, Request request)
-        {
-            ApplyAnalyzeOptions(options, request);
         }
 
         internal static string GetModelPath(string modelId)
