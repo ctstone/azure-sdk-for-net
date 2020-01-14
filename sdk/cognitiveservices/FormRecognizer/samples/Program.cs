@@ -28,6 +28,8 @@ namespace Azure.AI.FormRecognizer.Samples
                     "summary" => GetModelsSummaryAsync(client),
                     "delete" => DeleteModelAsync(client, args),
                     "list" => ListModelsAsync(client),
+                    "receipt" => UseReceipt(client, args),
+                    "layout" => UseLayout(client, args),
                     _ => throw new NotSupportedException(),
                 });
             }
@@ -37,7 +39,159 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
+        private static async Task UseLayout(FormRecognizerClient client, string[] args)
+        {
+            var op = args[1];
+            await (op switch
+            {
+                "analyze" => AnalyzeLayoutAsync(client, args),
+                "analysis" => GetLayoutAnalysisAsync(client, args),
+                "analysisResult" => GetLayoutAnalysisResultAsync(client, args),
+                _ => throw new NotSupportedException(),
+            });
+        }
 
+        private static async Task AnalyzeLayoutAsync(FormRecognizerClient client, string[] args)
+        {
+            var type = args[2];
+            await (type switch
+            {
+                "file" => AnalyzeLayoutFileAsync(client, args),
+                "url" => AnalyzeLayoutUrlAsync(client, args),
+                _ => throw new InvalidOperationException(),
+            });
+        }
+
+        private static async Task AnalyzeLayoutFileAsync(FormRecognizerClient client, string[] args)
+        {
+            var filePath = args[3];
+            var stream = File.OpenRead(filePath);
+            var op = await client.Layout.StartAnalyzeAsync(stream);
+            Console.WriteLine($"Created request with id {op.Id}");
+            Console.WriteLine("Waiting for completion...");
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
+            if (op.HasValue)
+            {
+                Console.WriteLine($"Status: {op.Value.Status}");
+            }
+            else
+            {
+                Console.WriteLine("error!");
+            }
+        }
+
+        private static async Task AnalyzeLayoutUrlAsync(FormRecognizerClient client, string[] args)
+        {
+            var url = new Uri(args[3]);
+            var op = await client.Layout.StartAnalyzeAsync(url);
+            Console.WriteLine($"Created request with id {op.Id}");
+            Console.WriteLine("Waiting for completion...");
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
+            if (op.HasValue)
+            {
+                Console.WriteLine($"Status: {op.Value.Status}");
+            }
+            else
+            {
+                Console.WriteLine("error!");
+            }
+        }
+
+        private static async Task GetLayoutAnalysisAsync(FormRecognizerClient client, string[] args)
+        {
+            var modelId = args[1];
+            var resultId = args[2];
+            var op = client.Layout.StartAnalyze(resultId);
+            var result = await op.WaitForCompletionAsync();
+            Console.WriteLine(result.Value.Status);
+        }
+
+        private static async Task GetLayoutAnalysisResultAsync(FormRecognizerClient client, string[] args)
+        {
+            var modelId = args[1];
+            var resultId = args[2];
+            var result = await client.Layout.GetAnalysisResultAsync(resultId);
+            Console.WriteLine(result.Value.Status);
+            Console.WriteLine(result.Value.CreatedDateTime);
+            Console.WriteLine(result.Value.LastUpdatedDateTime);
+        }
+
+        private static async Task UseReceipt(FormRecognizerClient client, string[] args)
+        {
+            var op = args[1];
+            await (op switch
+            {
+                "analyze" => AnalyzeReceiptAsync(client, args),
+                "analysis" => GetReceiptAnalysisAsync(client, args),
+                "analysisResult" => GetReceiptAnalysisResultAsync(client, args),
+                _ => throw new NotSupportedException(),
+            });
+        }
+
+        private static async Task AnalyzeReceiptAsync(FormRecognizerClient client, string[] args)
+        {
+            var type = args[2];
+            await (type switch
+            {
+                "file" => AnalyzeReceiptFileAsync(client, args),
+                "url" => AnalyzeReceiptUrlAsync(client, args),
+                _ => throw new InvalidOperationException(),
+            });
+        }
+
+        private static async Task AnalyzeReceiptFileAsync(FormRecognizerClient client, string[] args)
+        {
+            var filePath = args[3];
+            var stream = File.OpenRead(filePath);
+            var op = await client.Prebuilt.Receipt.StartAnalyzeAsync(stream, null, true);
+            Console.WriteLine($"Created request with id {op.Id}");
+            Console.WriteLine("Waiting for completion...");
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
+            if (op.HasValue)
+            {
+                Console.WriteLine($"Status: {op.Value.Status}");
+            }
+            else
+            {
+                Console.WriteLine("error!");
+            }
+        }
+
+        private static async Task AnalyzeReceiptUrlAsync(FormRecognizerClient client, string[] args)
+        {
+            var url = new Uri(args[3]);
+            var op = await client.Prebuilt.Receipt.StartAnalyzeAsync(url);
+            Console.WriteLine($"Created request with id {op.Id}");
+            Console.WriteLine("Waiting for completion...");
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
+            if (op.HasValue)
+            {
+                Console.WriteLine($"Status: {op.Value.Status}");
+            }
+            else
+            {
+                Console.WriteLine("error!");
+            }
+        }
+
+        private static async Task GetReceiptAnalysisAsync(FormRecognizerClient client, string[] args)
+        {
+            var modelId = args[1];
+            var resultId = args[2];
+            var op = client.Prebuilt.Receipt.StartAnalyze(resultId);
+            var result = await op.WaitForCompletionAsync();
+            Console.WriteLine(result.Value.Status);
+        }
+
+        private static async Task GetReceiptAnalysisResultAsync(FormRecognizerClient client, string[] args)
+        {
+            var modelId = args[1];
+            var resultId = args[2];
+            var result = await client.Prebuilt.Receipt.GetAnalysisResultAsync(resultId);
+            Console.WriteLine(result.Value.Status);
+            Console.WriteLine(result.Value.CreatedDateTime);
+            Console.WriteLine(result.Value.LastUpdatedDateTime);
+        }
 
         private static async Task DeleteModelAsync(FormRecognizerClient client, string[] args)
         {
