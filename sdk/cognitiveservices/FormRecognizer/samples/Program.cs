@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Samples
             {
                 var op = args.Length > 0 ? args[0] : String.Empty;
                 var options = new FormRecognizerClientOptions(extraHeaders: new[] { new HttpHeader("apim-subscription-id", "123") });
-                var client = new FormRecognizerClient("http://192.168.1.4:5000", String.Empty, options);
+                var client = new FormRecognizerClient(new Uri("http://192.168.1.4:5000"), String.Empty, options);
 
                 await (op switch
                 {

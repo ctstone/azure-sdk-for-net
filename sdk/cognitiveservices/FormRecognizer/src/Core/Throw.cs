@@ -14,5 +14,13 @@ namespace Azure.AI.FormRecognizer.Core
                 throw new ArgumentNullException(name);
             }
         }
+
+        public static void IfNullOrEmpty(string arg, string name)
+        {
+            if (string.IsNullOrEmpty(arg))
+            {
+                throw new ArgumentException("Argument must not be null or empty.", name);
+            }
+        }
     }
 }

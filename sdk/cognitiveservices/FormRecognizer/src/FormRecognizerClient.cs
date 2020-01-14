@@ -51,7 +51,7 @@ namespace Azure.AI.FormRecognizer
         /// <code>https://eastus.cognitiveservices.com/</code>
         /// </param>
         /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
-        public FormRecognizerClient(string endpoint, string apiKey)
+        public FormRecognizerClient(Uri endpoint, string apiKey)
         : this(endpoint, apiKey, new FormRecognizerClientOptions())
         {
         }
@@ -65,12 +65,12 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
         /// <param name="options">General service options for the Form Recognizer client.</param>
-        public FormRecognizerClient(string endpoint, string apiKey, FormRecognizerClientOptions options)
+        public FormRecognizerClient(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
         {
             Throw.IfMissing(endpoint, nameof(endpoint));
-            Throw.IfMissing(apiKey, nameof(apiKey));
+            Throw.IfNullOrEmpty(apiKey, nameof(apiKey));
             Throw.IfMissing(options, nameof(options));
-            _authentication = new FormHttpPolicy(new Uri(endpoint), apiKey, options);
+            _authentication = new FormHttpPolicy(endpoint, apiKey, options);
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
             _customFormClient = new CustomFormClient(pipeline, options);
@@ -82,7 +82,6 @@ namespace Azure.AI.FormRecognizer
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class for mocking.
         /// </summary>
         protected FormRecognizerClient()
-        {
-        }
+        { }
     }
 }
