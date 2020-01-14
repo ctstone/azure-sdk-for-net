@@ -32,7 +32,7 @@ The Form Recognizer client supports all generally-available Form Recognizer serv
 
 The complete Microsoft Azure SDK can be downloaded from the Microsoft Azure Downloads Page and ships with support for building deployment packages, integrating with tooling, rich command line tooling, and more.
 
-Please review [What is Form Recognizer] if you are not familiar with Azure Key Vault.
+Please review [What is Form Recognizer] if you are not familiar with Azure Form Recognizer.
 
 For the best development experience, developers should use the official Microsoft NuGet packages for libraries. NuGet packages are regularly updated with new functionality and hotfixes.
 
@@ -58,7 +58,7 @@ For information on building the Azure Form Recognizer SDK, please see [Building 
 
 ## Running Tests
 
-Tests for the Azure Key Vault SDK are run in the same manner as the rest of the tests for the Azure SDK for .NET. For information please see [How to Run Tests].
+Tests for the Azure Form Recognizer SDK are run in the same manner as the rest of the tests for the Azure SDK for .NET. For information please see [How to Run Tests].
 
 ## Samples
 
