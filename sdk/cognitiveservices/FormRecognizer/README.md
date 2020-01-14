@@ -38,7 +38,7 @@ For the best development experience, developers should use the official Microsof
 
 ## Requirements
 
-- Microsoft Azure Subscription: To call Microsoft Azure services, you need to first create an account. Sign up for a free trial or use your MSDN subscriber benefits.
+Microsoft Azure Subscription: To call Microsoft Azure services, you need to first create an account. Sign up for a free trial or use your MSDN subscriber benefits.
 
 ## Download Package
 
@@ -50,7 +50,7 @@ The Form Recognizer SDK uses the [semantic versioning scheme].
 
 ## Prerequisites
 
-- The Form Recognizer Client Library shares the same [prerequisites] as the Microsoft Azure SDK for .NET.
+The Form Recognizer Client Library shares the same [prerequisites] as the Microsoft Azure SDK for .NET.
 
 ## To Build
 
@@ -64,6 +64,7 @@ Tests for the Azure Form Recognizer SDK are run in the same manner as the rest o
 
 Code samples for the Azure Form Recognizer SDK are available on [Azure Code Samples].
 
+<!-- Links -->
 
 [Microsoft Azure .NET Developer Center]: http://azure.microsoft.com/en-us/develop/net/
 [Microsoft Azure Downloads Page]: http://azure.microsoft.com/en-us/downloads/?sdk=net
