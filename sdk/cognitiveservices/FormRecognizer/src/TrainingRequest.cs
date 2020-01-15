@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Request parameter to train a new custom model.
     /// </summary>
-    public struct TrainingRequest
+    public class TrainingRequest
     {
         /// <summary>
         /// Source path containing the training documents.
@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Filter to apply to the documents in the source path for training.
         /// </summary>
-        public SourceFilter? SourceFilter { get; set; }
+        public SourceFilter SourceFilter { get; set; }
 
         /// <summary>
         /// Use label file for training a model.

@@ -66,6 +66,7 @@ namespace Azure.AI.FormRecognizer
             SerializationOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             SerializationOptions.Converters.Add(new AnalysisJsonConverter());
             SerializationOptions.Converters.Add(new ModelJsonConverter());
+            SerializationOptions.Converters.Add(new TrainingRequestJsonConverter());
             SerializationOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         }
 
