@@ -62,6 +62,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <param name="cancellationToken">Optional cancellation token.</param>
         public virtual Response<Analysis> GetAnalysisResult(string operationId, CancellationToken cancellationToken = default)
         {
+            Throw.IfNullOrEmpty(operationId, nameof(operationId));
             using (var request = _pipeline.CreateGetAnalysisRequest(_basePath, operationId))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
@@ -78,6 +79,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// <param name="cancellationToken">Optional cancellation token.</param>
         public virtual async Task<Response<Analysis>> GetAnalysisResultAsync(string operationId, CancellationToken cancellationToken = default)
         {
+            Throw.IfNullOrEmpty(operationId, nameof(operationId));
             using (var request = _pipeline.CreateGetAnalysisRequest(_basePath, operationId))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
