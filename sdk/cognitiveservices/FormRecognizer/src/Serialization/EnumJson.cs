@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static T Read<T>(JsonElement root)
             where T : Enum
         {
-            return (T)Enum.Parse(typeof(T), root.GetString());
+            return (T)Enum.Parse(typeof(T), root.GetString(), true);
         }
     }
 }
