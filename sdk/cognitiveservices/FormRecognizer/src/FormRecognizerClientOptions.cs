@@ -4,7 +4,6 @@
 using System;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Azure.AI.FormRecognizer.Serialization.Converters;
 using Azure.Core;
 
