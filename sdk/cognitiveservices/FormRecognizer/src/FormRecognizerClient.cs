@@ -19,6 +19,7 @@ namespace Azure.AI.FormRecognizer
         private readonly FormLayoutClient _layoutClient;
         private readonly FormHttpPolicy _authentication;
 
+
         /// <summary>
         /// Access custom form models.
         /// </summary>
@@ -35,20 +36,39 @@ namespace Azure.AI.FormRecognizer
         public virtual FormLayoutClient Layout => _layoutClient;
 
         /// <summary>
-        /// Get or set the api key. This value may be updated at any time without creating a new <see cref="FormRecognizerClient" />.
+        /// Get or set the api key. This value can be updated at any time.
         /// </summary>
-        public string ApiKey
+        public virtual string ApiKey
         {
             get => _authentication.ApiKey;
-            set => _authentication.ApiKey = value;
+            set
+            {
+                Throw.IfMissing(value, nameof(ApiKey));
+                Throw.IfNullOrEmpty(value, nameof(ApiKey));
+                _authentication.ApiKey = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or set the base URI. For example, `https://eastus.cognitiveservices.com/`.
+        ///
+        /// This value can can be updated at any time.
+        /// </summary>
+        public virtual Uri Endpoint
+        {
+            get => _authentication.Endpoint;
+            set
+            {
+                Throw.IfUriNotWellFormed(value, nameof(Endpoint));
+                _authentication.Endpoint = value;
+            }
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
         /// <param name="endpoint">
-        /// The base url of the Form Recognizer Service. For example,
-        /// <code>https://eastus.cognitiveservices.com/</code>
+        /// The base URI of the Form Recognizer Service. For example, `https://eastus.cognitiveservices.com/`.
         /// </param>
         /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
         public FormRecognizerClient(Uri endpoint, string apiKey)

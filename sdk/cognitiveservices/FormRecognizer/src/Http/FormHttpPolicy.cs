@@ -13,17 +13,18 @@ namespace Azure.AI.FormRecognizer.Http
         private const string ApimAuthenticationHeader = "Ocp-Apim-Subscription-Key";
         private const string FormRecognizerPathRoot = "formrecognizer";
 
-        private readonly Uri _endpoint;
         private readonly string _basePath;
         private readonly string _userAgent;
         private readonly HttpHeader[] _extraHeaders;
 
         public string ApiKey { get; set; }
 
+        public Uri Endpoint { get; set; }
+
         public FormHttpPolicy(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
         {
             ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
-            _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+            Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
             var versionSegment = options.GetVersionString();
             _basePath = $"/{FormRecognizerPathRoot}/{versionSegment}";
             _userAgent = options.UserAgent;
@@ -50,9 +51,9 @@ namespace Azure.AI.FormRecognizer.Http
             if (string.IsNullOrEmpty(message.Request.Uri.Host))
             {
                 var sep = message.Request.Uri.Path.Length > 0 && message.Request.Uri.Path[0] == '/' ? String.Empty : "/";
-                message.Request.Uri.Scheme = _endpoint.Scheme;
-                message.Request.Uri.Host = _endpoint.Host;
-                message.Request.Uri.Port = _endpoint.Port;
+                message.Request.Uri.Scheme = Endpoint.Scheme;
+                message.Request.Uri.Host = Endpoint.Host;
+                message.Request.Uri.Port = Endpoint.Port;
                 message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
             }
 
