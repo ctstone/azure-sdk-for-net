@@ -11,7 +11,6 @@ namespace Azure.AI.FormRecognizer.Tests
 {
     public class FormRecognizerClientTests
     {
-
         [Fact]
         public void Constructor_Throws_OnInvalidParams()
         {
