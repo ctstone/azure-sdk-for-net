@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Core;
@@ -88,19 +89,32 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             Assert.Contains("foo", ex.Message);
         }
 
-        [Theory]
-        [InlineData("succeeded")]
-        [InlineData("failed")]
-        public async Task WaitForCompletion_ReturnsAnalysis_On200()
+        [Theory(Timeout = 2000)]
+        [InlineData("succeeded", AnalysisStatus.Succeeded)]
+        [InlineData("failed", AnalysisStatus.Failed)]
+        public async Task WaitForCompletion_ReturnsAnalysis_On200(string finalStatus, AnalysisStatus expectStatus)
         {
+            // Arrange
             var responses = new[] {
                 @"{ ""status"": ""notStarted"" }",
                 @"{ ""status"": ""running"" }",
-                @"{ ""status"": ""succeeded"" }",
-            };
-            var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-            mockResponse.SetContent(content);
+                @"{ ""status"": ""{finalStatus}"" }".Replace("{finalStatus}", finalStatus),
+            }.Select((content) =>
+            {
+                var mockResponse = new MockResponse((int)HttpStatusCode.OK);
+                mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
+                mockResponse.SetContent(content);
+                return mockResponse;
+            }).ToArray();
+            var op = GetOperation(responses);
+
+            // Act
+            var response = await op.WaitForCompletionAsync(TimeSpan.FromSeconds(0.1));
+
+            // Assert
+            Assert.NotNull(response);
+            Assert.NotNull(response.Value);
+            Assert.Equal(expectStatus, response.Value.Status);
         }
 
         private AnalyzeOperation GetOperation(params MockResponse[] responses)
