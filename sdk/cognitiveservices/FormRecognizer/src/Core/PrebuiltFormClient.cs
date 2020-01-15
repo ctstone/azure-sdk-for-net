@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// The prebuilt form client extracts information from prebuilt Form Recognizer models.
     /// </summary>
-    public class PrebuiltFormClient : AnalysisClient
+    public class PrebuiltFormClient : AnalyzeClient
     {
         internal const string PrebuiltBasePath = "/prebuilt";
         private readonly ReceiptClient _receipt;

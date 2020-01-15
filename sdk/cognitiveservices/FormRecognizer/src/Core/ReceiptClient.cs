@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// The receipt client extract field text and semantic values from receipt documents.
     /// </summary>
-    public class ReceiptClient : AnalysisClient
+    public class ReceiptClient : AnalyzeClient
     {
         private const string ModelName = "receipt";
 

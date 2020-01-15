@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// The form layout client extracts text and layout information from a given document.
     /// </summary>
-    public class FormLayoutClient : AnalysisClient<AnalyzeLayoutOptions>
+    public class FormLayoutClient : AnalyzeClient<AnalyzeLayoutOptions>
     {
         private const string LayoutPrefix = "/layout";
 

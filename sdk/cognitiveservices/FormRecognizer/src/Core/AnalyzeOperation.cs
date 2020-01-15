@@ -14,10 +14,11 @@ namespace Azure.AI.FormRecognizer.Core
     /// <summary>
     /// Represents a long-running analysis operation.
     /// </summary>
-    public class AnalysisOperation : Operation<Analysis>
+    public class AnalyzeOperation : Operation<Analysis>
     {
+        private const int DefaultPollingIntervalSeconds = 10;
         private const string LocationHeader = "Operation-Location";
-        private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
+        private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(DefaultPollingIntervalSeconds);
         private readonly string _basePath;
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
@@ -45,7 +46,7 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
-        internal AnalysisOperation(HttpPipeline pipeline, string basePath, string id, FormRecognizerClientOptions options)
+        internal AnalyzeOperation(HttpPipeline pipeline, string basePath, string id, FormRecognizerClientOptions options)
         {
             _basePath = basePath;
             _id = id;
@@ -54,9 +55,9 @@ namespace Azure.AI.FormRecognizer.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnalysisOperation"/> class for mocking.
+        /// Initializes a new instance of the <see cref="AnalyzeOperation"/> class for mocking.
         /// </summary>
-        protected AnalysisOperation()
+        protected AnalyzeOperation()
         { }
 
         /// <inheritdoc/>
@@ -133,11 +134,11 @@ namespace Azure.AI.FormRecognizer.Core
             return location.Substring(i + 1);
         }
 
-        internal static AnalysisOperation FromResponse(HttpPipeline pipeline, string basePath, Response response, FormRecognizerClientOptions options)
+        internal static AnalyzeOperation FromResponse(HttpPipeline pipeline, string basePath, Response response, FormRecognizerClientOptions options)
         {
             response.ExpectStatus(HttpStatusCode.Accepted, options);
-            var id = AnalysisOperation.GetAnalysisOperationId(response);
-            return new AnalysisOperation(pipeline, basePath, id, options);
+            var id = AnalyzeOperation.GetAnalysisOperationId(response);
+            return new AnalyzeOperation(pipeline, basePath, id, options);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Core
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelClient : AnalysisClient
+    public class CustomFormModelClient : AnalyzeClient
     {
         private readonly string _modelId;
 

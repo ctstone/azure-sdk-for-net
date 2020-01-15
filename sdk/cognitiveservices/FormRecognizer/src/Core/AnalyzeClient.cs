@@ -14,19 +14,19 @@ namespace Azure.AI.FormRecognizer.Core
     ///
     /// This client exposes default handling for the `includeTextDetails` query parameter.
     /// </summary>
-    public class AnalysisClient : AnalysisClient<AnalyzeOptions>
+    public class AnalyzeClient : AnalyzeClient<AnalyzeOptions>
     {
         private const string IncludeTextDetailsQueryKey = "includeTextDetails";
         private const string True = "true";
         private const string False = "false";
 
         /// <summary>
-        /// /// Initializes a new instance of the <see cref="AnalysisClient"/> class.
+        /// /// Initializes a new instance of the <see cref="AnalyzeClient"/> class.
         /// </summary>
-        protected AnalysisClient()
+        protected AnalyzeClient()
         { }
 
-        internal AnalysisClient(HttpPipeline pipeline, FormRecognizerClientOptions options, string basePath)
+        internal AnalyzeClient(HttpPipeline pipeline, FormRecognizerClientOptions options, string basePath)
             : base(pipeline, options, basePath)
         {
         }
