@@ -4,7 +4,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
+using Azure.Core.Diagnostics;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
@@ -14,9 +16,15 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             try
             {
+                // Default user agent looks like: azsdk-net-AI.FormRecognizer/1.0.0-dev.20200114.1+e5a3b85bb6f85c29ef8e3dc47b2e89165ce5a98d,(.NET Core 4.6.28008.01; Darwin 19.2.0 Darwin Kernel Version 19.2.0: Sat Nov  9 03:47:04 PST 2019; root:xnu-6153.61.1~20/RELEASE_X86_64)
+                // https://github.com/Azure/azure-sdk-for-net/blob/d99777ef4a7d75dd5f9482c84c0240a900e15f9c/sdk/core/Azure.Core/samples/Configuration.md
+                using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
+
                 var op = args.Length > 0 ? args[0] : String.Empty;
                 var options = new FormRecognizerClientOptions(extraHeaders: new[] { new HttpHeader("apim-subscription-id", "123") });
-                var client = new FormRecognizerClient(new Uri("http://192.168.1.4:5000"), String.Empty, options);
+                options.Diagnostics.IsLoggingContentEnabled = true;
+                options.Diagnostics.IsLoggingEnabled = true;
+                var client = new FormRecognizerClient(new Uri("http://192.168.1.4:5000"), "key", options);
 
                 await (op switch
                 {
@@ -233,6 +241,9 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task AnalyzeFileAsync(FormRecognizerClient client, string modelId, string[] args)
         {
+            var model = client.Custom.UseModel("...");
+            var m = await model.GetAsync();
+
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
             var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(stream, null, true);
@@ -276,7 +287,7 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task TrainAsync(FormRecognizerClient client, string[] args)
         {
             var source = args[1];
-            var prefix = args[2];
+            var prefix = args.Length == 3 ? args[2] : default;
             var op = await client.Custom.StartTrainAsync(new TrainingRequest
             {
                 Source = source,
@@ -285,7 +296,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             Console.WriteLine($"Created model with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
-            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(2));
             if (op.HasValue)
             {
                 Console.WriteLine($"Status: {op.Value.ModelInfo.Status}");
