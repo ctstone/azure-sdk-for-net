@@ -35,13 +35,39 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             // Act
             var apiKey = "fake-key";
-            var client = new FormRecognizerClient(new Uri("http://localhost"), "fake-key");
+            var client = new FormRecognizerClient(new Uri("http://localhost"), apiKey);
 
             // Assert
             Assert.NotNull(client.Custom);
             Assert.NotNull(client.Prebuilt);
             Assert.NotNull(client.Layout);
             Assert.Equal(apiKey, client.ApiKey);
+        }
+
+        [Fact]
+        public void Client_Updates_ApiKey()
+        {
+            // Act
+            var apiKey = "fake-key-1";
+            var updatedApiKey = "fake-key-2";
+            var client = new FormRecognizerClient(new Uri("http://localhost"), apiKey);
+            client.ApiKey = updatedApiKey;
+
+            // Assert
+            Assert.Equal(updatedApiKey, client.ApiKey);
+        }
+
+        [Fact]
+        public void Client_Updates_Endpoint()
+        {
+            // Act
+            var endpoint = new Uri("http://localhost/");
+            var updatedEndpoint = new Uri("http://localhost:5000/");
+            var client = new FormRecognizerClient(endpoint, "fake-key");
+            client.Endpoint = updatedEndpoint;
+
+            // Assert
+            Assert.Equal(updatedEndpoint, client.Endpoint);
         }
     }
 }

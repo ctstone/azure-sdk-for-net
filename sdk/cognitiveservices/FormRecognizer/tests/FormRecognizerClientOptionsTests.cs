@@ -14,7 +14,16 @@ namespace Azure.AI.FormRecognizer.Tests
         [Fact]
         public void Constructor_Handles_DefaultParameters()
         {
+            // Act
             var options = new FormRecognizerClientOptions();
+
+            // Assert
+            Assert.Equal(Encoding.UTF8, options.Encoding);
+            Assert.Equal(FormRecognizerClientOptions.LatestVersion, options.Version);
+            Assert.Null(options.UserAgent);
+            Assert.Null(options.ExtraHeaders);
+            Assert.NotNull(options.SerializationOptions);
+            Assert.NotNull(options.GetVersionString());
         }
 
         [Fact]
@@ -51,16 +60,6 @@ namespace Azure.AI.FormRecognizer.Tests
 
             // Assert
             Assert.Equal(extraHeaders, options.ExtraHeaders);
-        }
-
-        [Fact]
-        public void Constructor_Exposes_SerializationOptions()
-        {
-            // Arrange
-            var options = new FormRecognizerClientOptions();
-
-            // Assert
-            Assert.NotNull(options.SerializationOptions);
         }
     }
 }
