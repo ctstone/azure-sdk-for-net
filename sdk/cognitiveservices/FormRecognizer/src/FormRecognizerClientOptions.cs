@@ -62,6 +62,7 @@ namespace Azure.AI.FormRecognizer
             UserAgent = userAgent;
             ExtraHeaders = extraHeaders;
             Encoding = Encoding.UTF8;
+            SerializationOptions = new JsonSerializerOptions();
             // SerializationOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, };
             // SerializationOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             // SerializationOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

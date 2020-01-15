@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 
 namespace Azure.AI.FormRecognizer.Core
 {
@@ -9,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Core
     {
         public static void IfMissing<T>(T arg, string name)
         {
-            if (arg.Equals(default(T)))
+            if (EqualityComparer<T>.Default.Equals(arg, default(T)))
             {
                 throw new ArgumentNullException(name);
             }
@@ -20,6 +21,14 @@ namespace Azure.AI.FormRecognizer.Core
             if (string.IsNullOrEmpty(arg))
             {
                 throw new ArgumentException("Argument must not be null or empty.", name);
+            }
+        }
+
+        public static void IfUriNotWellFormed(Uri uri, string name)
+        {
+            if (!uri.IsWellFormedOriginalString())
+            {
+                throw new ArgumentException("Uri must be well formed.", name);
             }
         }
     }

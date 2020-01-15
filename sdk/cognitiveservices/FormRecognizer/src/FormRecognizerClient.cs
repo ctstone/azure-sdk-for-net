@@ -68,8 +68,10 @@ namespace Azure.AI.FormRecognizer
         public FormRecognizerClient(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
         {
             Throw.IfMissing(endpoint, nameof(endpoint));
+            Throw.IfMissing(apiKey, nameof(apiKey));
             Throw.IfNullOrEmpty(apiKey, nameof(apiKey));
             Throw.IfMissing(options, nameof(options));
+            Throw.IfUriNotWellFormed(endpoint, nameof(endpoint));
             _authentication = new FormHttpPolicy(endpoint, apiKey, options);
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
