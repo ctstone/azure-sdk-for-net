@@ -17,20 +17,38 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 {
     public class ThrowTests
     {
-        [Fact]
-        public void IfMissing_Throws_WhenNull()
+        [Theory]
+        [InlineData("", true)]
+        [InlineData("123", true)]
+        [InlineData(null, false)]
+        public void IfMissing_Throws_WhenNull(string value, bool isValid)
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => Throw.IfMissing(null as string, "foo"));
-            Assert.Equal("foo", ex.ParamName);
+            if (isValid)
+            {
+                Throw.IfMissing(value, "foo");
+            }
+            else
+            {
+                var ex = Assert.Throws<ArgumentNullException>(() => Throw.IfMissing(value, "foo"));
+                Assert.Equal("foo", ex.ParamName);
+            }
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        public void IfNullOrEmpty_Throws_WhenNullOrEmpty(string value)
+        [InlineData("", false)]
+        [InlineData("123", true)]
+        [InlineData(null, false)]
+        public void IfNullOrEmpty_Throws_WhenNullOrEmpty(string value, bool isValid)
         {
-            var ex = Assert.Throws<ArgumentException>(() => Throw.IfNullOrEmpty(value, "foo"));
-            Assert.Equal("foo", ex.ParamName);
+            if (isValid)
+            {
+                Throw.IfNullOrEmpty(value, "foo");
+            }
+            else
+            {
+                var ex = Assert.Throws<ArgumentException>(() => Throw.IfNullOrEmpty(value, "foo"));
+                Assert.Equal("foo", ex.ParamName);
+            }
         }
 
         [Theory]
