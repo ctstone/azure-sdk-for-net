@@ -23,6 +23,11 @@ namespace Azure.AI.FormRecognizer.Core
         private readonly string _modelId;
 
         /// <summary>
+        /// Get the current model identifier.
+        /// </summary>
+        public string ModelId => _modelId;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CustomFormClient"/> class for mocking.
         /// </summary>
         protected CustomFormModelClient()
@@ -31,6 +36,7 @@ namespace Azure.AI.FormRecognizer.Core
         internal CustomFormModelClient(string modelId, HttpPipeline pipeline, FormRecognizerClientOptions options)
             : base(pipeline, options, GetModelPath(modelId))
         {
+            Throw.IfNullOrEmpty(modelId, nameof(modelId));
             _modelId = modelId;
         }
 
