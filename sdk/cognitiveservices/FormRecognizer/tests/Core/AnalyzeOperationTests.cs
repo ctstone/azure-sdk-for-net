@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -125,6 +124,4 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             return new AnalyzeOperation(pipeline, FakeBasePath, FakeOperationId, options);
         }
     }
-
-
 }
