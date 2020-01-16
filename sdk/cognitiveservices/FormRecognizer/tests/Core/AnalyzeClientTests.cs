@@ -198,7 +198,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         }
 
         [Fact]
-        public void StartAnalyze_ReturnsOperation()
+        public void StartAnalyze_Returns_Operation()
         {
             // Arrange
             var operationId = "fake-operation-id";
