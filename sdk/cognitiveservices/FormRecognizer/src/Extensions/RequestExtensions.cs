@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading;
 using Azure.Core;
 using Azure.AI.FormRecognizer.Http;
+using System.Threading.Tasks;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {
@@ -19,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             request.Headers.Add(HttpHeader.Common.JsonContentType);
         }
 
-        public static async void AddJsonContentAsync<T>(this Request request, T obj, FormRecognizerClientOptions options, CancellationToken cancellationToken)
+        public static async Task AddJsonContentAsync<T>(this Request request, T obj, FormRecognizerClientOptions options, CancellationToken cancellationToken)
         {
             var memory = new MemoryStream();
             await JsonSerializer.SerializeAsync(memory, obj, options.SerializationOptions, cancellationToken).ConfigureAwait(false);
