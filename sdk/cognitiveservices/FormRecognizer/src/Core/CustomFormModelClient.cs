@@ -37,6 +37,8 @@ namespace Azure.AI.FormRecognizer.Core
             : base(pipeline, options, GetModelPath(modelId))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
+            Throw.IfMissing(pipeline, nameof(pipeline));
+            Throw.IfMissing(options, nameof(options));
             _modelId = modelId;
         }
 
@@ -100,7 +102,7 @@ namespace Azure.AI.FormRecognizer.Core
 
         internal static string GetModelPath(string modelId)
         {
-            Throw.IfMissing(modelId, nameof(modelId));
+            Throw.IfNullOrEmpty(modelId, nameof(modelId));
             return $"{CustomFormClient.BasePath}/{modelId}";
         }
     }
