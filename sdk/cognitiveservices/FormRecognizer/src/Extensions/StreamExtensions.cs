@@ -20,85 +20,61 @@ namespace Azure.AI.FormRecognizer.Extensions
 
         public static bool TryGetContentType(this Stream stream, out FormContentType? contentType)
         {
-            var maxBytes = PdfHeader.Length;
+            contentType = new Nullable<FormContentType>();
+            var maxBytes = Math.Min(stream.Length, PdfHeader.Length);
             var isPdf = true;
             var isPng = true;
             var isJpeg = true;
             var isTiff = true;
             var originalPosition = stream.Position;
 
-            if (stream.Length >= maxBytes)
+            byte b;
+            Func<byte[], int, bool> isAtEnd = (array, i) => i == array.Length - 1;
+            Func<byte[], int, bool> isBeyond = (array, i) => i >= array.Length;
+            for (var i = 0; i < maxBytes; i += 1, stream.Position = i)
             {
-                byte b;
-                Func<byte[], int, bool> isAtEnd = (array, i) => i == array.Length - 1;
-                Func<byte[], int, bool> isBeyond = (array, i) => i >= array.Length;
-                for (var i = 0; i < maxBytes; i += 1, stream.Position = i)
+                b = (byte)stream.ReadByte();
+
+                var endOfPdf = isAtEnd(PdfHeader, i);
+                var beyondPdf = isBeyond(PdfHeader, i);
+                isPdf &= !beyondPdf && PdfHeader[i] == b;
+                if (isPdf && endOfPdf)
                 {
-                    b = (byte)stream.ReadByte();
-
-                    var endOfPdf = isAtEnd(PdfHeader, i);
-                    var beyondPdf = isBeyond(PdfHeader, i);
-                    isPdf &= !beyondPdf && PdfHeader[i] == b;
-                    if (isPdf && endOfPdf)
-                    {
-                        break;
-                    }
-
-                    var endOfPng = isAtEnd(PngHeader, i);
-                    var beyondPng = isBeyond(PngHeader, i);
-                    isPng &= !beyondPng && PngHeader[i] == b;
-                    if (isPng && isAtEnd(PngHeader, i))
-                    {
-                        break;
-                    }
-
-                    var endOfJpeg = isAtEnd(JpegHeader, i);
-                    var beyondJpeg = isBeyond(JpegHeader, i);
-                    isJpeg &= !beyondJpeg && JpegHeader[i] == b;
-                    if (isJpeg && isAtEnd(JpegHeader, i))
-                    {
-                        break;
-                    }
-
-                    var endOfTiffLE = isAtEnd(TiffHeaderLE, i);
-                    var endOfTiffBE = isAtEnd(TiffHeaderBE, i);
-                    var beyondTiffLE = isBeyond(TiffHeaderLE, i);
-                    var beyondTiffBE = isBeyond(TiffHeaderBE, i);
-                    isTiff &= ((!beyondTiffLE && TiffHeaderLE[i] == b) || (!beyondTiffBE && TiffHeaderBE[i] == b));
-                    if (isTiff && (endOfTiffLE || endOfTiffBE))
-                    {
-                        break;
-                    }
+                    contentType = FormContentType.Pdf;
+                    break;
                 }
-            }
-            else
-            {
-                isPdf = isPng = isJpeg = isTiff = false;
+
+                var endOfPng = isAtEnd(PngHeader, i);
+                var beyondPng = isBeyond(PngHeader, i);
+                isPng &= !beyondPng && PngHeader[i] == b;
+                if (isPng && endOfPng)
+                {
+                    contentType = FormContentType.Png;
+                    break;
+                }
+
+                var endOfJpeg = isAtEnd(JpegHeader, i);
+                var beyondJpeg = isBeyond(JpegHeader, i);
+                isJpeg &= !beyondJpeg && JpegHeader[i] == b;
+                if (isJpeg && endOfJpeg)
+                {
+                    contentType = FormContentType.Jpeg;
+                    break;
+                }
+
+                var endOfTiffLE = isAtEnd(TiffHeaderLE, i);
+                var endOfTiffBE = isAtEnd(TiffHeaderBE, i);
+                var beyondTiffLE = isBeyond(TiffHeaderLE, i);
+                var beyondTiffBE = isBeyond(TiffHeaderBE, i);
+                isTiff &= ((!beyondTiffLE && TiffHeaderLE[i] == b) || (!beyondTiffBE && TiffHeaderBE[i] == b));
+                if (isTiff && (endOfTiffLE || endOfTiffBE))
+                {
+                    contentType = FormContentType.Tiff;
+                    break;
+                }
             }
 
             stream.Position = originalPosition;
-
-            if (isPdf)
-            {
-                contentType = FormContentType.Pdf;
-            }
-            else if (isPng)
-            {
-                contentType = FormContentType.Png;
-            }
-            else if (isJpeg)
-            {
-                contentType = FormContentType.Jpeg;
-            }
-            else if (isTiff)
-            {
-                contentType = FormContentType.Tiff;
-            }
-            else
-            {
-                contentType = new Nullable<FormContentType>();
-            }
-
             return contentType.HasValue;
         }
 
