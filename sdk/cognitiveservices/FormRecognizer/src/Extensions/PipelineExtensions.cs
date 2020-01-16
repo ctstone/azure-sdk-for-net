@@ -17,6 +17,8 @@ namespace Azure.AI.FormRecognizer.Extensions
         #region CustomModel
         public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, FormRecognizerClientOptions options)
         {
+            Throw.IfMissing(trainRequest, nameof(trainRequest));
+            Throw.IfNullOrEmpty(trainRequest.Source, nameof(TrainingRequest.Source));
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Post;
             request.Uri.Path = CustomFormClient.BasePath;

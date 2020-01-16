@@ -44,9 +44,13 @@ namespace Azure.AI.FormRecognizer.Core
         /// </summary>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
-        internal TrainingOperation(HttpPipeline pipeline, string id, FormRecognizerClientOptions options)
+        internal TrainingOperation(HttpPipeline pipeline, string operationId, FormRecognizerClientOptions options)
         {
-            _id = id;
+            Throw.IfMissing(pipeline, nameof(pipeline));
+            Throw.IfMissing(operationId, nameof(operationId));
+            Throw.IfMissing(options, nameof(options));
+            Throw.IfNullOrEmpty(operationId, nameof(operationId));
+            _id = operationId;
             _pipeline = pipeline;
             _options = options;
         }
