@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Core;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Tests.TestUtilities;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.Testing;
@@ -24,24 +25,17 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         public async Task AsPages_ReturnsAllPages_On200(string finalNextLink)
         {
             // Arrange
-            var responses = new[] {
-                @"{ ""modelList"": [
-                    { ""modelInfo"": { ""modelId"": ""1"" } },
-                    { ""modelInfo"": { ""modelId"": ""2"" } } ],
-                    ""nextLink"": ""http://localhost/fake-next-page""}",
-                @"{ ""modelList"": [
-                    { ""modelInfo"": { ""modelId"": ""3"" } },
-                    { ""modelInfo"": { ""modelId"": ""4"" } },
-                    { ""modelInfo"": { ""modelId"": ""5"" } } ],
-                    ""nextLink"": {finalNextLink} }".Replace("{finalNextLink}", finalNextLink == null ? "null" : $"\"{finalNextLink}\""),
-            }.Select((content) =>
-            {
-                var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-                mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-                mockResponse.SetContent(content);
-                return mockResponse;
-            }).ToArray();
+            var pagesInfo = new[]
+                {
+                    new { models = 3, nextLink = "http://localhost/fake-next"},
+                    new { models = 4, nextLink = finalNextLink },
+                };
+            var responses = pagesInfo
+                .Select((x) => MockFormResponses.GetPageResponse(x.models, x.nextLink))
+                .ToArray();
             var client = GetClient(responses);
+            var totalPages = pagesInfo.Length;
+            var totalModels = pagesInfo.Sum((x) => x.models);
             var pageCount = 0;
             var modelCount = 0;
 
@@ -54,18 +48,15 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             }
 
             // Assert
-            Assert.Equal(responses.Length, pageCount);
-            Assert.Equal(5, modelCount);
+            Assert.Equal(totalPages, pageCount);
+            Assert.Equal(totalModels, modelCount);
         }
 
         [Fact]
         public async Task AsPages_Throws_On404()
         {
             // Arrange
-            var content = @"{ ""error"": { ""code"": ""123"", ""message"": ""foo"" } }";
-            var mockResponse = new MockResponse((int)HttpStatusCode.NotFound);
-            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-            mockResponse.SetContent(content);
+            var mockResponse = MockFormResponses.GetErrorResponse(HttpStatusCode.NotFound, "123", "foo");
             var client = GetClient(mockResponse);
 
             // Act / Assert
@@ -79,13 +70,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         {
             // Arrange
             var continuationToken = "http://localhost/fake-next-page";
-            var content = @"{ ""modelList"": [
-                { ""modelInfo"": { ""modelId"": ""1"" } },
-                { ""modelInfo"": { ""modelId"": ""2"" } } ],
-                ""nextLink"": ""{continuationToken}""}".Replace("{continuationToken}", continuationToken);
-            var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-            mockResponse.SetContent(content);
+            var mockResponse = MockFormResponses.GetPageResponse(2, continuationToken);
             var client = GetClient(mockResponse);
 
             // Act
@@ -103,10 +88,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         public async Task GetPage_Throws_On200()
         {
             // Arrange
-            var content = @"{ ""error"": { ""code"": ""123"", ""message"": ""foo"" } }";
-            var mockResponse = new MockResponse((int)HttpStatusCode.NotFound);
-            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-            mockResponse.SetContent(content);
+            var mockResponse = MockFormResponses.GetErrorResponse(HttpStatusCode.NotFound, "123", "foo");
             var client = GetClient(mockResponse);
 
             // Act / Assert
@@ -121,24 +103,16 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         public async Task GetAsyncEnumerator_ReturnsAllModels_On200(string finalNextLink)
         {
             // Arrange
-            var responses = new[] {
-                @"{ ""modelList"": [
-                    { ""modelInfo"": { ""modelId"": ""1"" } },
-                    { ""modelInfo"": { ""modelId"": ""2"" } } ],
-                    ""nextLink"": ""http://localhost/fake-next-page""}",
-                @"{ ""modelList"": [
-                    { ""modelInfo"": { ""modelId"": ""3"" } },
-                    { ""modelInfo"": { ""modelId"": ""4"" } },
-                    { ""modelInfo"": { ""modelId"": ""5"" } } ],
-                    ""nextLink"": {finalNextLink} }".Replace("{finalNextLink}", finalNextLink == null ? "null" : $"\"{finalNextLink}\""),
-            }.Select((content) =>
-            {
-                var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-                mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-                mockResponse.SetContent(content);
-                return mockResponse;
-            }).ToArray();
+            var pagesInfo = new[]
+                {
+                    new { models = 3, nextLink = "http://localhost/fake-next"},
+                    new { models = 4, nextLink = finalNextLink },
+                };
+            var responses = pagesInfo
+                .Select((x) => MockFormResponses.GetPageResponse(x.models, x.nextLink))
+                .ToArray();
             var client = GetClient(responses);
+            var totalModels = pagesInfo.Sum((x) => x.models);
             var modelCount = 0;
 
             // Act
@@ -148,17 +122,14 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             }
 
             // Assert
-            Assert.Equal(5, modelCount);
+            Assert.Equal(totalModels, modelCount);
         }
 
         [Fact]
         public async Task GetAsyncEnumerator_Throws_On404()
         {
             // Arrange
-            var content = @"{ ""error"": { ""code"": ""123"", ""message"": ""foo"" } }";
-            var mockResponse = new MockResponse((int)HttpStatusCode.NotFound);
-            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
-            mockResponse.SetContent(content);
+            var mockResponse = MockFormResponses.GetErrorResponse(HttpStatusCode.NotFound, "123", "foo");
             var client = GetClient(mockResponse);
 
             // Act / Assert
