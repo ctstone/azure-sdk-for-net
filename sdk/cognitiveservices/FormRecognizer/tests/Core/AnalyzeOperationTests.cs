@@ -89,9 +89,9 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         }
 
         [Theory(Timeout = 2000)]
-        [InlineData("succeeded", AnalysisStatus.Succeeded)]
-        [InlineData("failed", AnalysisStatus.Failed)]
-        public async Task WaitForCompletion_ReturnsAnalysis_On200(string finalStatus, AnalysisStatus expectStatus)
+        [InlineData("succeeded", OperationStatus.Succeeded)]
+        [InlineData("failed", OperationStatus.Failed)]
+        public async Task WaitForCompletion_ReturnsAnalysis_On200(string finalStatus, OperationStatus expectStatus)
         {
             // Arrange
             var responses = new[] {

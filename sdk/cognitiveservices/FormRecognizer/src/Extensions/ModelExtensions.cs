@@ -19,12 +19,12 @@ namespace Azure.AI.FormRecognizer
 
         public static bool IsAnalysisComplete(this Analysis analysis)
         {
-            return analysis.Status == AnalysisStatus.Succeeded || analysis.Status == AnalysisStatus.Failed;
+            return analysis.Status == OperationStatus.Succeeded || analysis.Status == OperationStatus.Failed;
         }
 
         public static bool IsAnalysisSuccess(this Analysis analysis)
         {
-            return analysis.Status == AnalysisStatus.Succeeded;
+            return analysis.Status == OperationStatus.Succeeded;
         }
     }
 }

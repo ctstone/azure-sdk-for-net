@@ -40,7 +40,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             // Assert
             Assert.NotNull(response);
             Assert.NotNull(response.Value);
-            Assert.Equal(AnalysisStatus.Running, response.Value.Status);
+            Assert.Equal(OperationStatus.Running, response.Value.Status);
         }
 
         [Theory]

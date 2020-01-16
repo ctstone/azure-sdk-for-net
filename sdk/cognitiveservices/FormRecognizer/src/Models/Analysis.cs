@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Status of the operation.
         /// </summary>
-        public AnalysisStatus Status { get; internal set; }
+        public OperationStatus Status { get; internal set; }
 
         /// <summary>
         /// Date and time when the analysis operation was submitted.

@@ -56,11 +56,11 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         }
 
         [Theory]
-        [InlineData(AnalysisStatus.NotStarted, false)]
-        [InlineData(AnalysisStatus.Running, false)]
-        [InlineData(AnalysisStatus.Succeeded, true)]
-        [InlineData(AnalysisStatus.Failed, true)]
-        public void IsAnalysisComplete_ReturnsTrue_WhenComplete(AnalysisStatus testStatus, bool expectComplete)
+        [InlineData(OperationStatus.NotStarted, false)]
+        [InlineData(OperationStatus.Running, false)]
+        [InlineData(OperationStatus.Succeeded, true)]
+        [InlineData(OperationStatus.Failed, true)]
+        public void IsAnalysisComplete_ReturnsTrue_WhenComplete(OperationStatus testStatus, bool expectComplete)
         {
             // Arrange
             var analysis = Analysis.Create();
@@ -74,11 +74,11 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         }
 
         [Theory]
-        [InlineData(AnalysisStatus.NotStarted, false)]
-        [InlineData(AnalysisStatus.Running, false)]
-        [InlineData(AnalysisStatus.Succeeded, true)]
-        [InlineData(AnalysisStatus.Failed, false)]
-        public void IsAnalysisSuccess_ReturnsTrue_WhenReady(AnalysisStatus testStatus, bool expectSuccess)
+        [InlineData(OperationStatus.NotStarted, false)]
+        [InlineData(OperationStatus.Running, false)]
+        [InlineData(OperationStatus.Succeeded, true)]
+        [InlineData(OperationStatus.Failed, false)]
+        public void IsAnalysisSuccess_ReturnsTrue_WhenReady(OperationStatus testStatus, bool expectSuccess)
         {
             // Arrange
             var analysis = Analysis.Create();

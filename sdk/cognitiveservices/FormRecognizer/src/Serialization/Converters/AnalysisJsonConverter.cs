@@ -37,7 +37,7 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
         {
             if (property.NameEquals("status"))
             {
-                analyzedForm.Status = (AnalysisStatus)Enum.Parse(typeof(AnalysisStatus), property.Value.GetString(), ignoreCase: true);
+                analyzedForm.Status = (OperationStatus)Enum.Parse(typeof(OperationStatus), property.Value.GetString(), ignoreCase: true);
             }
             else if (property.NameEquals("createdDateTime"))
             {
