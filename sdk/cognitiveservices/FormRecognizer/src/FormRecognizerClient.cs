@@ -59,7 +59,7 @@ namespace Azure.AI.FormRecognizer
             get => _authentication.Endpoint;
             set
             {
-                Throw.IfUriNotWellFormed(value, nameof(Endpoint));
+                Throw.IfInvalidUri(value, nameof(Endpoint));
                 _authentication.Endpoint = value;
             }
         }
@@ -91,7 +91,7 @@ namespace Azure.AI.FormRecognizer
             Throw.IfMissing(apiKey, nameof(apiKey));
             Throw.IfNullOrEmpty(apiKey, nameof(apiKey));
             Throw.IfMissing(options, nameof(options));
-            Throw.IfUriNotWellFormed(endpoint, nameof(endpoint));
+            Throw.IfInvalidUri(endpoint, nameof(endpoint));
             _authentication = new FormHttpPolicy(endpoint, apiKey, options);
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 

@@ -24,9 +24,21 @@ namespace Azure.AI.FormRecognizer.Core
             }
         }
 
-        public static void IfUriNotWellFormed(Uri uri, string name)
+        public static void IfInvalidUri(Uri uri, string name)
         {
-            if (!uri.IsWellFormedOriginalString())
+            Throw.IfMissing(uri, name);
+
+            if (!uri.IsAbsoluteUri)
+            {
+                throw new ArgumentException("Uri must be absolute.", name);
+            }
+
+            if (uri.Scheme != "http" && uri.Scheme != "https")
+            {
+                throw new ArgumentException("Uri scheme must be http or https.", name);
+            }
+
+            if (!uri.IsWellFormedOriginalString() || !uri.IsAbsoluteUri)
             {
                 throw new ArgumentException("Uri must be well formed.", name);
             }
