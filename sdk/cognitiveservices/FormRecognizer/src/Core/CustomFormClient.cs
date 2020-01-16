@@ -209,8 +209,8 @@ namespace Azure.AI.FormRecognizer.Core
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var summary = response.GetJsonContent<ModelsSummary>(_options);
-                return Response.FromValue(summary, response);
+                var listing = response.GetJsonContent<ModelListing>(_options);
+                return Response.FromValue(listing.Summary, response);
             }
         }
 
