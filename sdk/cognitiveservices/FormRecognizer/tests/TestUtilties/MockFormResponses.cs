@@ -43,5 +43,14 @@ namespace Azure.AI.FormRecognizer.Tests.TestUtilities
             mockResponse.SetContent(content);
             return mockResponse;
         }
+
+        public static MockResponse GetModelResponse(string status)
+        {
+            var content = @"{ ""modelInfo"": { ""status"": ""{status}"" } }".Replace("{status}", status);
+            var mockResponse = new MockResponse((int)HttpStatusCode.OK);
+            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
+            mockResponse.SetContent(content);
+            return mockResponse;
+        }
     }
 }
