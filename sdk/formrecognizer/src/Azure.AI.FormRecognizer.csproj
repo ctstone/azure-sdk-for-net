@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>This is the Microsoft Azure Cognitive Services Form Recognizer Service client library</Description>
+    <AssemblyTitle>Microsoft Azure.AI.FormRecognizer client library</AssemblyTitle>
+    <Version>2.0.0-preview.1</Version>
+    <PackageTags>Microsoft Azure Form Recognizer</PackageTags>
     <TargetFramework>$(RequiredTargetFrameworks)</TargetFramework>
   </PropertyGroup>
 
