@@ -38,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("language"))
             {
-                textLine.Language = EnumJson.Read<Language>(property.Value);
+                textLine.Language = property.Value.GetString();
             }
             else if (property.NameEquals("words"))
             {

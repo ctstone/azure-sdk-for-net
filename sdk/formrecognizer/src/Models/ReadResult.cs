@@ -40,7 +40,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// The detected language on the page overall.
         /// </summary>
-        public Language? Language { get; internal set; }
+        public string Language { get; internal set; }
 
         /// <summary>
         /// When includeTextDetails is set to true, a list of recognized text lines. The maximum number of lines returned is 300 per page.
