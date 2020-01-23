@@ -12,9 +12,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static TextWord Read(JsonElement root)
         {
             var textWord = TextWord.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref textWord, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref textWord, property);
+                }
             }
             return textWord;
         }

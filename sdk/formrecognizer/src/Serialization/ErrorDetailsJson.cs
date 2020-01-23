@@ -11,9 +11,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static ErrorDetails Read(JsonElement root)
         {
             var dataTable = new ErrorDetails();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref dataTable, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref dataTable, property);
+                }
             }
             return dataTable;
         }

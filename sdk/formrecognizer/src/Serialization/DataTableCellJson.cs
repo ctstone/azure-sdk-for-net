@@ -11,9 +11,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static DataTableCell Read(JsonElement root)
         {
             var dataTableCell = DataTableCell.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref dataTableCell, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref dataTableCell, property);
+                }
             }
             return dataTableCell;
         }

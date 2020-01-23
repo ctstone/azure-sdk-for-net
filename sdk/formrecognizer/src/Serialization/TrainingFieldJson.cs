@@ -11,9 +11,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static TrainingField Read(JsonElement root)
         {
             var trainingField = TrainingField.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref trainingField, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref trainingField, property);
+                }
             }
             return trainingField;
         }

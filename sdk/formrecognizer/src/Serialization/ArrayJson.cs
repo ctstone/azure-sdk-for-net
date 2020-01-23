@@ -18,12 +18,21 @@ namespace Azure.AI.FormRecognizer.Serialization
         }
         public static T[] Read<T>(JsonElement root, Func<JsonElement, T> factory)
         {
-            var array = new T[root.GetArrayLength()];
-            var i = 0;
-            foreach (var json in root.EnumerateArray())
+            T[] array;
+
+            if (root.ValueKind == JsonValueKind.Array)
             {
-                array[i] = factory(json);
-                i += 1;
+                array = new T[root.GetArrayLength()];
+                var i = 0;
+                foreach (var json in root.EnumerateArray())
+                {
+                    array[i] = factory(json);
+                    i += 1;
+                }
+            }
+            else
+            {
+                array = Array.Empty<T>();
             }
 
             return array;

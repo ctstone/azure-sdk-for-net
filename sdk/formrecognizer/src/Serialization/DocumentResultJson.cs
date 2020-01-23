@@ -12,9 +12,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static DocumentResult Read(JsonElement root)
         {
             var documentResult = DocumentResult.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref documentResult, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref documentResult, property);
+                }
             }
             if (documentResult.Fields == default)
             {

@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
@@ -18,13 +19,15 @@ namespace Azure.AI.FormRecognizer.Samples
             {
                 // Default user agent looks like: azsdk-net-AI.FormRecognizer/1.0.0-dev.20200114.1+e5a3b85bb6f85c29ef8e3dc47b2e89165ce5a98d,(.NET Core 4.6.28008.01; Darwin 19.2.0 Darwin Kernel Version 19.2.0: Sat Nov  9 03:47:04 PST 2019; root:xnu-6153.61.1~20/RELEASE_X86_64)
                 // https://github.com/Azure/azure-sdk-for-net/blob/d99777ef4a7d75dd5f9482c84c0240a900e15f9c/sdk/core/Azure.Core/samples/Configuration.md
-                using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
+                // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
                 var op = args.Length > 0 ? args[0] : String.Empty;
                 var options = new FormRecognizerClientOptions(extraHeaders: new[] { new HttpHeader("apim-subscription-id", "123") });
                 options.Diagnostics.IsLoggingContentEnabled = true;
                 options.Diagnostics.IsLoggingEnabled = true;
-                var client = new FormRecognizerClient(new Uri("http://192.168.1.4:5000"), "key", options);
+                var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
+                // var endpoint = new Uri("http://192.168.1.4:5000");
+                var client = new FormRecognizerClient(endpoint, "key", options);
 
                 await (op switch
                 {
@@ -241,18 +244,16 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task AnalyzeFileAsync(FormRecognizerClient client, string modelId, string[] args)
         {
-            var model = client.Custom.UseModel("...");
-            var m = await model.GetAsync();
-
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
             var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(stream, null, true);
-            Console.WriteLine($"Created request with id {op.Id}");
-            Console.WriteLine("Waiting for completion...");
+            Console.Error.WriteLine($"Created request with id {op.Id}");
+            Console.Error.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                Console.WriteLine($"Status: {op.Value.Status}");
+                // Console.WriteLine($"Status: {op.Value.Status}");
+                PrintResponse(op.GetRawResponse());
             }
             else
             {
@@ -264,12 +265,13 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var url = new Uri(args[3]);
             var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(url);
-            Console.WriteLine($"Created request with id {op.Id}");
-            Console.WriteLine("Waiting for completion...");
+            Console.Error.WriteLine($"Created request with id {op.Id}");
+            Console.Error.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                Console.WriteLine($"Status: {op.Value.Status}");
+                // Console.WriteLine($"Status: {op.Value.Status}");
+                PrintResponse(op.GetRawResponse());
             }
             else
             {
@@ -277,11 +279,29 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
+        private static void PrintResponse<T>(Response<T> response)
+        {
+            var mem = new MemoryStream();
+            response.GetRawResponse().ContentStream.Position = 0;
+            response.GetRawResponse().ContentStream.CopyTo(mem);
+            var body = Encoding.UTF8.GetString(mem.ToArray());
+            Console.WriteLine(body);
+        }
+
+        private static void PrintResponse(Response response)
+        {
+            var mem = new MemoryStream();
+            response.ContentStream.Position = 0;
+            response.ContentStream.CopyTo(mem);
+            var body = Encoding.UTF8.GetString(mem.ToArray());
+            Console.WriteLine(body);
+        }
+
         private static async Task GetModelAsync(FormRecognizerClient client, string[] args)
         {
             var modelId = args[1];
             var model = await client.Custom.UseModel(modelId).GetAsync();
-            Console.WriteLine(model.Value.ModelInfo.Status);
+            PrintResponse(model);
         }
 
         private static async Task TrainAsync(FormRecognizerClient client, string[] args)
@@ -296,7 +316,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             Console.WriteLine($"Created model with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
-            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(2));
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
                 Console.WriteLine($"Status: {op.Value.ModelInfo.Status}");

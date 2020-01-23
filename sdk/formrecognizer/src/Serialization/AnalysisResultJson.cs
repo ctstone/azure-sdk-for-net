@@ -3,7 +3,6 @@
 
 using System;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
@@ -13,10 +12,15 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static AnalysisResult Read(JsonElement root)
         {
             var analysisResult = AnalysisResult.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref analysisResult, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref analysisResult, property);
+                }
             }
+
             if (analysisResult.ReadResults == default)
             {
                 analysisResult.ReadResults = Array.Empty<ReadResult>();
@@ -37,8 +41,14 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 foreach (var keyValuePair in page.KeyValuePairs)
                 {
-                    keyValuePair.Key.ResolveTextReferences(analysisResult.ReadResults);
-                    keyValuePair.Value.ResolveTextReferences(analysisResult.ReadResults);
+                    if (keyValuePair.Key != default)
+                    {
+                        keyValuePair.Key.ResolveTextReferences(analysisResult.ReadResults);
+                    }
+                    if (keyValuePair.Value != default)
+                    {
+                        keyValuePair.Value.ResolveTextReferences(analysisResult.ReadResults);
+                    }
                 }
                 foreach (var table in page.Tables)
                 {
@@ -52,7 +62,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 foreach (var field in documentResult.Fields)
                 {
-                    field.Value.ResolveTextReferences(analysisResult.ReadResults);
+                    if (field.Value != default)
+                    {
+                        field.Value.ResolveTextReferences(analysisResult.ReadResults);
+                    }
                 }
             }
             return analysisResult;

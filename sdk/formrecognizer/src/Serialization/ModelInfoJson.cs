@@ -11,9 +11,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static ModelInfo Read(JsonElement root)
         {
             var modelInfo = ModelInfo.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref modelInfo, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref modelInfo, property);
+                }
             }
             return modelInfo;
         }

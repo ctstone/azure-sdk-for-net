@@ -26,10 +26,14 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
         public static Analysis ReadAnalyzedForm(JsonElement root)
         {
             var analyzedForm = Analysis.Create();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref analyzedForm, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref analyzedForm, property);
+                }
             }
+
             return analyzedForm;
         }
 

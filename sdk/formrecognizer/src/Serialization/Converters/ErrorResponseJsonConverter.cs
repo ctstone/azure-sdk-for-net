@@ -26,9 +26,12 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
         public static ErrorResponse Read(JsonElement root)
         {
             var errorResponse = new ErrorResponse();
-            foreach (JsonProperty property in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                ReadPropertyValue(ref errorResponse, property);
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    ReadPropertyValue(ref errorResponse, property);
+                }
             }
             return errorResponse;
         }

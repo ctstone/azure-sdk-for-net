@@ -12,9 +12,12 @@ namespace Azure.AI.FormRecognizer.Serialization
         public static IDictionary<string, T> Read<T>(JsonElement root, Func<JsonElement, T> factory)
         {
             var dictionary = new Dictionary<string, T>();
-            foreach (var json in root.EnumerateObject())
+            if (root.ValueKind == JsonValueKind.Object)
             {
-                dictionary[json.Name] = factory(json.Value);
+                foreach (var json in root.EnumerateObject())
+                {
+                    dictionary[json.Name] = factory(json.Value);
+                }
             }
             return dictionary;
         }
