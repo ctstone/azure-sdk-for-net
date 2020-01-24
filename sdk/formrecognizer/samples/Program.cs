@@ -5,9 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
-using Azure.Core.Diagnostics;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
@@ -23,12 +21,13 @@ namespace Azure.AI.FormRecognizer.Samples
 
                 var op = args.Length > 0 ? args[0] : String.Empty;
                 var options = new FormRecognizerClientOptions();
-                options.ExtraHeaders.Add(new HttpHeader("apim-subscription-id", "123"));
+                var endpoint = new Uri("http://192.168.1.4:5000");
+                // var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
+                var credential = new CognitiveCredential(endpoint, new HttpHeader("apim-subscription-id", "123"));
                 options.Diagnostics.IsLoggingContentEnabled = true;
                 options.Diagnostics.IsLoggingEnabled = true;
-                var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
-                // var endpoint = new Uri("http://192.168.1.4:5000");
-                var client = new FormRecognizerClient(endpoint, "key", options);
+                options.Diagnostics.ApplicationId = "chstone";
+                var client = new FormRecognizerClient(credential, options);
 
                 await (op switch
                 {

@@ -37,7 +37,6 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Get the extra headers sent by the client to the service on each request.
         /// </summary>
-        public IList<HttpHeader> ExtraHeaders { get; }
 
         internal JsonSerializerOptions SerializationOptions { get; }
         internal Encoding Encoding { get; }
@@ -49,7 +48,6 @@ namespace Azure.AI.FormRecognizer
         public FormRecognizerClientOptions(ServiceVersion version = LatestVersion)
         {
             Version = version;
-            ExtraHeaders = new List<HttpHeader>();
             Encoding = Encoding.UTF8;
             SerializationOptions = new JsonSerializerOptions();
             SerializationOptions.Converters.Add(new AnalysisJsonConverter());
@@ -58,15 +56,6 @@ namespace Azure.AI.FormRecognizer
             SerializationOptions.Converters.Add(new AnalysisRequestJsonConverter());
             SerializationOptions.Converters.Add(new ErrorResponseJsonConverter());
             SerializationOptions.Converters.Add(new ModelListingJsonConverter());
-        }
-
-        internal string GetVersionString()
-        {
-            return Version switch
-            {
-                ServiceVersion.V2_0_Preview => "v2.0-preview",
-                _ => throw new NotSupportedException($"The service version {Version} is not supported."),
-            };
         }
     }
 }

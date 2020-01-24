@@ -3,6 +3,7 @@
 
 using System;
 using System.Text;
+using Azure.AI.FormRecognizer.Http;
 using Azure.Core;
 using Xunit;
 using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
@@ -20,8 +21,7 @@ namespace Azure.AI.FormRecognizer.Tests
             // Assert
             Assert.Equal(Encoding.UTF8, options.Encoding);
             Assert.Equal(FormRecognizerClientOptions.LatestVersion, options.Version);
-            Assert.NotNull(options.ExtraHeaders);
-            Assert.NotNull(options.GetVersionString());
+            Assert.NotNull(FormHttpPolicy.GetVersionString(options.Version));
         }
 
         [Fact]

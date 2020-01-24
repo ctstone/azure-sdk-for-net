@@ -2,67 +2,64 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
+using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
 
 namespace Azure.AI.FormRecognizer.Http
 {
     internal class FormHttpPolicy : HttpPipelinePolicy
     {
-        private const string ApimAuthenticationHeader = "Ocp-Apim-Subscription-Key";
         private const string FormRecognizerPathRoot = "formrecognizer";
 
-        private readonly string _basePath;
-        private readonly IList<HttpHeader> _extraHeaders;
+        private readonly string _basePath; // TODO: Uri?
+        private readonly CognitiveCredential _credential;
 
-        public string ApiKey { get; set; }
+        public CognitiveCredential Credential => _credential;
 
-        public Uri Endpoint { get; set; }
-
-        public FormHttpPolicy(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
+        public FormHttpPolicy(CognitiveCredential credential, ServiceVersion serviceVersion)
         {
-            ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
-            Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
-            var versionSegment = options.GetVersionString();
+            _credential = credential ?? throw new ArgumentNullException(nameof(credential));
+            var versionSegment = GetVersionString(serviceVersion);
             _basePath = $"/{FormRecognizerPathRoot}/{versionSegment}";
-            _extraHeaders = options.ExtraHeaders;
         }
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
+            _credential.Authorize(message.Request);
             UpdateMessage(message);
             ProcessNext(message, pipeline);
         }
 
-        public override ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
+        public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
+            await _credential.AuthorizeAsync(message.Request, default).ConfigureAwait(false);
             UpdateMessage(message);
-            return ProcessNextAsync(message, pipeline);
+            await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
         }
 
         private void UpdateMessage(HttpMessage message)
         {
-            message.Request.Headers.SetValue(ApimAuthenticationHeader, ApiKey);
             message.Request.Headers.SetValue(FormHttpHeader.Names.ClientRequestId, Guid.NewGuid().ToString());
 
             if (string.IsNullOrEmpty(message.Request.Uri.Host))
             {
                 var sep = message.Request.Uri.Path.Length > 0 && message.Request.Uri.Path[0] == '/' ? String.Empty : "/";
-                message.Request.Uri.Scheme = Endpoint.Scheme;
-                message.Request.Uri.Host = Endpoint.Host;
-                message.Request.Uri.Port = Endpoint.Port;
+                message.Request.Uri.Scheme = _credential.Endpoint.Scheme;
+                message.Request.Uri.Host = _credential.Endpoint.Host;
+                message.Request.Uri.Port = _credential.Endpoint.Port;
                 message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
             }
+        }
 
-            if (_extraHeaders != default)
+        internal static string GetVersionString(ServiceVersion version)
+        {
+            return version switch
             {
-                foreach (var header in _extraHeaders)
-                {
-                    message.Request.Headers.Add(header);
-                }
-            }
+                ServiceVersion.V2_0_Preview => "v2.0-preview",
+                _ => throw new NotSupportedException($"The service version {version} is not supported."),
+            };
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Azure.AI.FormRecognizer.Http
         public static class Names
         {
             public static string ClientRequestId => "client-request-id";
+            public static string SubscriptionKey => "Ocp-Apim-Subscription-Key";
         }
 
         public static class Common
@@ -17,6 +18,11 @@ namespace Azure.AI.FormRecognizer.Http
             public static HttpHeader ForContentType(FormContentType contentType)
             {
                 return new HttpHeader(HttpHeader.Names.ContentType, contentType.ToString());
+            }
+
+            public static HttpHeader Authorize(string value)
+            {
+                return new HttpHeader(FormHttpHeader.Names.SubscriptionKey, value);
             }
         }
     }

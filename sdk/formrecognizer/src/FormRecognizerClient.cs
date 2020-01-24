@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using Azure.AI.FormRecognizer.Core;
 using Azure.AI.FormRecognizer.Http;
 using Azure.Core.Pipeline;
@@ -18,7 +17,12 @@ namespace Azure.AI.FormRecognizer
         private readonly PrebuiltFormClient _prebuiltFormClient;
         private readonly FormLayoutClient _layoutClient;
         private readonly FormHttpPolicy _authentication;
+        private readonly CognitiveCredential _credential;
 
+        /// <summary>
+        /// Get the Cognitive Credential for this client.
+        /// </summary>
+        public virtual CognitiveCredential Credential => _credential;
 
         /// <summary>
         /// Access custom form models.
@@ -36,63 +40,25 @@ namespace Azure.AI.FormRecognizer
         public virtual FormLayoutClient Layout => _layoutClient;
 
         /// <summary>
-        /// Get or set the api key. This value can be updated at any time.
-        /// </summary>
-        public virtual string ApiKey
-        {
-            get => _authentication.ApiKey;
-            set
-            {
-                Throw.IfMissing(value, nameof(ApiKey));
-                Throw.IfNullOrEmpty(value, nameof(ApiKey));
-                _authentication.ApiKey = value;
-            }
-        }
-
-        /// <summary>
-        /// Get or set the base URI. For example, `https://eastus.cognitiveservices.com/`.
-        ///
-        /// This value can can be updated at any time.
-        /// </summary>
-        public virtual Uri Endpoint
-        {
-            get => _authentication.Endpoint;
-            set
-            {
-                Throw.IfInvalidUri(value, nameof(Endpoint));
-                _authentication.Endpoint = value;
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="endpoint">
-        /// The base URI of the Form Recognizer Service. For example, `https://eastus.cognitiveservices.com/`.
-        /// </param>
-        /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
-        public FormRecognizerClient(Uri endpoint, string apiKey)
-        : this(endpoint, apiKey, new FormRecognizerClientOptions())
+        /// <param name="credential">A Cognitive Services credential object.</param>
+        public FormRecognizerClient(CognitiveCredential credential)
+        : this(credential, new FormRecognizerClientOptions())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
+        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class with options.
         /// </summary>
-        /// <param name="endpoint">
-        /// The base url of the Form Recognizer Service. For example,
-        /// <code>https://eastus.cognitiveservices.com/</code>
-        /// </param>
-        /// <param name="apiKey">The service key, copied from the Azure Portal.</param>
-        /// <param name="options">General service options for the Form Recognizer client.</param>
-        public FormRecognizerClient(Uri endpoint, string apiKey, FormRecognizerClientOptions options)
+        /// <param name="credential">A Cognitive Services credential object.</param>
+        /// <param name="options">Optional service parameters.</param>
+        public FormRecognizerClient(CognitiveCredential credential, FormRecognizerClientOptions options)
         {
-            Throw.IfMissing(endpoint, nameof(endpoint));
-            Throw.IfMissing(apiKey, nameof(apiKey));
-            Throw.IfNullOrEmpty(apiKey, nameof(apiKey));
+            Throw.IfMissing(credential, nameof(credential));
             Throw.IfMissing(options, nameof(options));
-            Throw.IfInvalidUri(endpoint, nameof(endpoint));
-            _authentication = new FormHttpPolicy(endpoint, apiKey, options);
+            _credential = credential;
+            _authentication = new FormHttpPolicy(credential, options.Version);
             var pipeline = HttpPipelineBuilder.Build(options, _authentication);
 
             _customFormClient = new CustomFormClient(pipeline, options);
