@@ -11,6 +11,7 @@ namespace Azure.AI.FormRecognizer
     /// </summary>
     public readonly struct FormContentType : IEquatable<FormContentType>
     {
+        internal const string DefaultContentType = "application/octet-stream";
         private readonly string _value;
 
         /// <summary>
@@ -19,7 +20,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="value">MIME type of form document.</param>
         public FormContentType(string value)
         {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
+            _value = value ?? DefaultContentType;
         }
 
         /// <summary>
