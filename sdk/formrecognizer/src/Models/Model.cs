@@ -9,7 +9,6 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Custom Form Recognizer model.
     /// </summary>
-    [JsonConverter(typeof(ModelJsonConverter))]
     public class Model
     {
         /// <summary>
