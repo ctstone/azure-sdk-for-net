@@ -34,11 +34,6 @@ namespace Azure.AI.FormRecognizer
 
 
         /// <summary>
-        /// Get the user agent string sent by the client to the service on each request.
-        /// </summary>
-        public string UserAgent { get; }
-
-        /// <summary>
         /// Get the extra headers sent by the client to the service on each request.
         /// </summary>
         public HttpHeader[] ExtraHeaders { get; }
@@ -50,12 +45,10 @@ namespace Azure.AI.FormRecognizer
         /// Initializes a new instance of the <see cref="FormRecognizerClientOptions"/> class.
         /// </summary>
         /// <param name="version">Set the service version to use for all requests.</param>
-        /// <param name="userAgent">Set the user agent string to send to the service for all requests.</param>
         /// <param name="extraHeaders">Set extra HTTP headers that will be sent to the service for all requests.</param>
-        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, string userAgent = default, HttpHeader[] extraHeaders = default)
+        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, HttpHeader[] extraHeaders = default)
         {
             Version = version;
-            UserAgent = userAgent;
             ExtraHeaders = extraHeaders;
             Encoding = Encoding.UTF8;
             SerializationOptions = new JsonSerializerOptions();

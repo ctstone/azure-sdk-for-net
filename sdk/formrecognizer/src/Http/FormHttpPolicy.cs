@@ -14,7 +14,6 @@ namespace Azure.AI.FormRecognizer.Http
         private const string FormRecognizerPathRoot = "formrecognizer";
 
         private readonly string _basePath;
-        private readonly string _userAgent;
         private readonly HttpHeader[] _extraHeaders;
 
         public string ApiKey { get; set; }
@@ -27,7 +26,6 @@ namespace Azure.AI.FormRecognizer.Http
             Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
             var versionSegment = options.GetVersionString();
             _basePath = $"/{FormRecognizerPathRoot}/{versionSegment}";
-            _userAgent = options.UserAgent;
             _extraHeaders = options.ExtraHeaders;
         }
 
@@ -55,11 +53,6 @@ namespace Azure.AI.FormRecognizer.Http
                 message.Request.Uri.Host = Endpoint.Host;
                 message.Request.Uri.Port = Endpoint.Port;
                 message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
-            }
-
-            if (_userAgent != default)
-            {
-                message.Request.Headers.SetValue(HttpHeader.Names.UserAgent, _userAgent);
             }
 
             if (_extraHeaders != default)
