@@ -22,7 +22,8 @@ namespace Azure.AI.FormRecognizer.Samples
                 // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
                 var op = args.Length > 0 ? args[0] : String.Empty;
-                var options = new FormRecognizerClientOptions(extraHeaders: new[] { new HttpHeader("apim-subscription-id", "123") });
+                var options = new FormRecognizerClientOptions();
+                options.ExtraHeaders.Add(new HttpHeader("apim-subscription-id", "123"));
                 options.Diagnostics.IsLoggingContentEnabled = true;
                 options.Diagnostics.IsLoggingEnabled = true;
                 var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");

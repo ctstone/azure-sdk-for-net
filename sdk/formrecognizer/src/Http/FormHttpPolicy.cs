@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -14,7 +15,7 @@ namespace Azure.AI.FormRecognizer.Http
         private const string FormRecognizerPathRoot = "formrecognizer";
 
         private readonly string _basePath;
-        private readonly HttpHeader[] _extraHeaders;
+        private readonly IList<HttpHeader> _extraHeaders;
 
         public string ApiKey { get; set; }
 

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Serialization.Converters;
@@ -36,7 +37,7 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Get the extra headers sent by the client to the service on each request.
         /// </summary>
-        public HttpHeader[] ExtraHeaders { get; }
+        public IList<HttpHeader> ExtraHeaders { get; }
 
         internal JsonSerializerOptions SerializationOptions { get; }
         internal Encoding Encoding { get; }
@@ -45,11 +46,10 @@ namespace Azure.AI.FormRecognizer
         /// Initializes a new instance of the <see cref="FormRecognizerClientOptions"/> class.
         /// </summary>
         /// <param name="version">Set the service version to use for all requests.</param>
-        /// <param name="extraHeaders">Set extra HTTP headers that will be sent to the service for all requests.</param>
-        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion, HttpHeader[] extraHeaders = default)
+        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion)
         {
             Version = version;
-            ExtraHeaders = extraHeaders;
+            ExtraHeaders = new List<HttpHeader>();
             Encoding = Encoding.UTF8;
             SerializationOptions = new JsonSerializerOptions();
             SerializationOptions.Converters.Add(new AnalysisJsonConverter());
