@@ -124,8 +124,8 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var result = await client.Layout.GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
-            Console.WriteLine(result.Value.CreatedDateTime);
-            Console.WriteLine(result.Value.LastUpdatedDateTime);
+            Console.WriteLine(result.Value.CreatedOn);
+            Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
         private static async Task UseReceipt(FormRecognizerClient client, string[] args)
@@ -201,8 +201,8 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var result = await client.Prebuilt.Receipt.GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
-            Console.WriteLine(result.Value.CreatedDateTime);
-            Console.WriteLine(result.Value.LastUpdatedDateTime);
+            Console.WriteLine(result.Value.CreatedOn);
+            Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
         private static async Task DeleteModelAsync(FormRecognizerClient client, string[] args)
@@ -239,8 +239,8 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var result = await client.Custom.UseModel(modelId).GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
-            Console.WriteLine(result.Value.CreatedDateTime);
-            Console.WriteLine(result.Value.LastUpdatedDateTime);
+            Console.WriteLine(result.Value.CreatedOn);
+            Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
         private static async Task AnalyzeFileAsync(FormRecognizerClient client, string modelId, string[] args)
@@ -333,7 +333,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var resp = await client.Custom.GetSummaryAsync();
             Console.WriteLine($"Count: {resp.Value.Count}");
             Console.WriteLine($"Limit: {resp.Value.Limit}");
-            Console.WriteLine($"Last Updated: {resp.Value.LastUpdatedDateTime}");
+            Console.WriteLine($"Last Updated: {resp.Value.LastUpdatedOn}");
         }
 
         private static void ListModels(FormRecognizerClient client)

@@ -23,12 +23,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Date and time when the model was created.
         /// </summary>
-        public DateTimeOffset CreatedDateTime { get; internal set; }
+        public DateTimeOffset CreatedOn { get; internal set; }
 
         /// <summary>
         /// Date and time when the status was last updated.
         /// </summary>
-        public DateTimeOffset LastUpdatedDateTime { get; internal set; }
+        public DateTimeOffset LastUpdatedOn { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelInfo"/> class.

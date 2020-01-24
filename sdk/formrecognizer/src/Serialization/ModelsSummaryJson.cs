@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("lastUpdatedDateTime"))
             {
-                modelsSummary.LastUpdatedDateTime = property.Value.GetDateTimeOffset();
+                modelsSummary.LastUpdatedOn = property.Value.GetDateTimeOffset();
             }
         }
     }

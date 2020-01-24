@@ -45,11 +45,11 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
             }
             else if (property.NameEquals("createdDateTime"))
             {
-                analyzedForm.CreatedDateTime = property.Value.GetDateTimeOffset();
+                analyzedForm.CreatedOn = property.Value.GetDateTimeOffset();
             }
             else if (property.NameEquals("lastUpdatedDateTime"))
             {
-                analyzedForm.LastUpdatedDateTime = property.Value.GetDateTimeOffset();
+                analyzedForm.LastUpdatedOn = property.Value.GetDateTimeOffset();
             }
             else if (property.NameEquals("analyzeResult"))
             {

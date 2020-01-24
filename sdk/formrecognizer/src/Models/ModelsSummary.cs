@@ -23,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Last updated date.
         /// </summary>
-        public DateTimeOffset LastUpdatedDateTime { get; internal set; }
+        public DateTimeOffset LastUpdatedOn { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelsSummary"/> class.
