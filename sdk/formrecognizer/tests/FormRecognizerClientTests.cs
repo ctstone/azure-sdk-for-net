@@ -14,15 +14,9 @@ namespace Azure.AI.FormRecognizer.Tests
         [Fact]
         public void Constructor_Throws_OnInvalidParams()
         {
-            // Arrange
-            // TODO: move these tests to CognitiveCredential / CognitiveEndpoint
-            // var validEndpoint = new Uri("http://localhost");
-            // var invalidEndpointNotAbsolute = new Uri("/", UriKind.Relative);
-            // var validKey = "fake-key";
-            // var invalidKeyEmpty = String.Empty;
-
             // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(default, default));
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(default, default(FormRecognizerClientOptions)));
+            Assert.Throws<ArgumentException>(() => new FormRecognizerClient(default, default(string)));
             Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(default));
         }
 

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Core;
 using Azure.Core;
 
 namespace Azure.AI.FormRecognizer.Http
@@ -22,6 +23,7 @@ namespace Azure.AI.FormRecognizer.Http
 
             public static HttpHeader Authorize(string value)
             {
+                Throw.IfNullOrEmpty(value, nameof(value));
                 return new HttpHeader(FormHttpHeader.Names.SubscriptionKey, value);
             }
         }
