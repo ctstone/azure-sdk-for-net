@@ -32,10 +32,6 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         public ServiceVersion Version { get; }
 
-        /// <summary>
-        /// Get the <see cref="JsonSerializerOptions" /> used by the client when processing JSON messages.
-        /// </summary>
-        public JsonSerializerOptions SerializationOptions { get; }
 
         /// <summary>
         /// Get the user agent string sent by the client to the service on each request.
@@ -47,6 +43,7 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         public HttpHeader[] ExtraHeaders { get; }
 
+        internal JsonSerializerOptions SerializationOptions { get; }
         internal Encoding Encoding { get; }
 
         /// <summary>
