@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Tests.Http
 
         public FormHttpPolicyTests()
         {
-            _options = new FormRecognizerClientOptions(userAgent: "foo/bar", extraHeaders: new[] { new HttpHeader("Foo", "Bar") });
+            _options = new FormRecognizerClientOptions();
             _transport = new MockTransport(new MockResponse(200));
             _endpoint = new Uri(Endopint);
             _policy = new FormHttpPolicy(_endpoint, ApiKey, _options);
@@ -146,35 +146,11 @@ namespace Azure.AI.FormRecognizer.Tests.Http
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task Process_SetsUserAgent(bool isAsync)
-        {
-            // Arrange
-            var request = _pipeline.CreateRequest();
-
-            // Act
-            if (isAsync)
-            {
-                await _pipeline.SendRequestAsync(request, CancellationToken.None);
-            }
-            else
-            {
-                _pipeline.SendRequest(request, CancellationToken.None);
-            }
-
-            // Assert
-            string userAgent;
-            var isValid = request.Headers.TryGetValue("User-Agent", out userAgent);
-            Assert.True(isValid);
-            Assert.Equal("foo/bar", userAgent);
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
         public async Task Process_SetsExtraHeaders(bool isAsync)
         {
             // Arrange
             var request = _pipeline.CreateRequest();
+            _options.ExtraHeaders.Add(new HttpHeader("Foo", "Bar"));
 
             // Act
             if (isAsync)

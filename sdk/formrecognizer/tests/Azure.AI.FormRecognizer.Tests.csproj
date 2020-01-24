@@ -24,11 +24,11 @@
   </ItemGroup>
 
   <!-- Import the TestFramework to use ClientTestBase -->
-  <Import Project="..\..\..\core\Azure.Core\tests\TestFramework.props" />
+  <Import Project="..\..\core\Azure.Core\tests\TestFramework.props" />
 
   <!-- Include a missing file required by the TestFramework -->
   <ItemGroup>
-    <Compile Include="..\..\..\core\Azure.Core\src\Shared\ArrayBufferWriter.cs" Link="Shared\Core\%(RecursiveDir)\%(Filename)%(Extension)" />
+    <Compile Include="..\..\core\Azure.Core\src\Shared\ArrayBufferWriter.cs" Link="Shared\Core\%(RecursiveDir)\%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

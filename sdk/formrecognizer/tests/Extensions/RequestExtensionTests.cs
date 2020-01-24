@@ -69,18 +69,18 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         }
 
         [Theory]
-        [InlineData(FormContentType.Pdf, "application/pdf")]
-        [InlineData(FormContentType.Png, "image/png")]
-        [InlineData(FormContentType.Jpeg, "image/jpeg")]
-        [InlineData(FormContentType.Tiff, "image/tiff")]
-        public void AddBinaryContent_UpdatesRequest(FormContentType testContentType, string expectContentTypeHeader)
+        [InlineData("application/pdf")]
+        [InlineData("image/png")]
+        [InlineData("image/jpeg")]
+        [InlineData("image/tiff")]
+        public void AddBinaryContent_UpdatesRequest(string expectContentTypeHeader)
         {
             // Arrange
             var request = new MockRequest();
             var stream = new MemoryStream(new byte[] { 1, 2, 3 });
 
             // Act
-            request.AddBinaryContent(testContentType, stream);
+            request.AddBinaryContent(new FormContentType(expectContentTypeHeader), stream);
 
             // Assert
             long requestSize;

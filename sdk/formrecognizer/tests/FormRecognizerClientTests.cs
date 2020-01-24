@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             // Arrange
             var validEndpoint = new Uri("http://localhost");
-            var invalidEndpointNotAbsolute = new Uri("/");
+            var invalidEndpointNotAbsolute = new Uri("/", UriKind.Relative);
             var validKey = "fake-key";
             var invalidKeyEmpty = String.Empty;
 

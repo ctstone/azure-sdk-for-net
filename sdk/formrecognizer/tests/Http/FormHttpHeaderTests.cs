@@ -21,14 +21,14 @@ namespace Azure.AI.FormRecognizer.Tests.Http
     public class FormHttpHeaderTests
     {
         [Theory]
-        [InlineData(FormContentType.Pdf, "application/pdf")]
-        [InlineData(FormContentType.Png, "image/png")]
-        [InlineData(FormContentType.Jpeg, "image/jpeg")]
-        [InlineData(FormContentType.Tiff, "image/tiff")]
-        public void FormHttpHeader_ContentTypes(FormContentType testContentType, string expectContentType)
+        [InlineData("application/pdf")]
+        [InlineData("image/png")]
+        [InlineData("image/jpeg")]
+        [InlineData("image/tiff")]
+        public void FormHttpHeader_ContentTypes(string expectContentType)
         {
             // Act
-            var header = FormHttpHeader.Common.ForContentType(testContentType);
+            var header = FormHttpHeader.Common.ForContentType(new FormContentType(expectContentType));
 
             // Assert
             Assert.Equal("Content-Type", header.Name, ignoreCase: true);
