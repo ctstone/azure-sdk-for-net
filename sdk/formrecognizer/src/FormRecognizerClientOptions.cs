@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer
     /// </summary>
     public class FormRecognizerClientOptions : ClientOptions
     {
-        internal const ServiceVersion LatestVersion = ServiceVersion.V2_0_preview;
+        internal const ServiceVersion LatestVersion = ServiceVersion.V2_0_Preview;
 
         /// <summary>
         /// The versions of Form Recognizer supported by this client library.
@@ -23,7 +23,7 @@ namespace Azure.AI.FormRecognizer
         {
 #pragma warning disable CA1707 // Identifiers should not contain underscores
             /// <summary>Form Recognizer v2.0-preview</summary>
-            V2_0_preview = 1,
+            V2_0_Preview = 1,
 #pragma warning restore CA1707 // Identifiers should not contain underscores
         }
 
@@ -77,7 +77,7 @@ namespace Azure.AI.FormRecognizer
         {
             return Version switch
             {
-                ServiceVersion.V2_0_preview => "v2.0-preview",
+                ServiceVersion.V2_0_Preview => "v2.0-preview",
                 _ => throw new NotSupportedException($"The service version {Version} is not supported."),
             };
         }
