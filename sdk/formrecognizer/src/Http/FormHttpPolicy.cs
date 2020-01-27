@@ -3,6 +3,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Core;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
@@ -13,28 +14,28 @@ namespace Azure.AI.FormRecognizer.Http
     {
         private const string FormRecognizerPathRoot = "formrecognizer";
 
-        private readonly string _basePath; // TODO: Uri?
-        private readonly CognitiveCredential _credential;
+        private readonly Uri _basePath;
+        private readonly FormAuthenticator _authenticator;
 
-        public CognitiveCredential Credential => _credential;
-
-        public FormHttpPolicy(CognitiveCredential credential, ServiceVersion serviceVersion)
+        public FormHttpPolicy(Uri endpoint, FormAuthenticator authenticator, ServiceVersion serviceVersion)
         {
-            _credential = credential ?? throw new ArgumentNullException(nameof(credential));
+            Throw.IfMissing(endpoint, nameof(endpoint));
+            Throw.IfMissing(authenticator, nameof(authenticator));
+            _authenticator = authenticator;
             var versionSegment = GetVersionString(serviceVersion);
-            _basePath = $"/{FormRecognizerPathRoot}/{versionSegment}";
+            _basePath = new Uri(endpoint, $"/{FormRecognizerPathRoot}/{versionSegment}");
         }
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-            _credential.Authorize(message.Request);
+            _authenticator.Authenticate(message.Request);
             UpdateMessage(message);
             ProcessNext(message, pipeline);
         }
 
         public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-            await _credential.AuthorizeAsync(message.Request, default).ConfigureAwait(false);
+            await _authenticator.AuthenticateAsync(message.Request).ConfigureAwait(false);
             UpdateMessage(message);
             await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
         }
@@ -46,10 +47,10 @@ namespace Azure.AI.FormRecognizer.Http
             if (string.IsNullOrEmpty(message.Request.Uri.Host))
             {
                 var sep = message.Request.Uri.Path.Length > 0 && message.Request.Uri.Path[0] == '/' ? String.Empty : "/";
-                message.Request.Uri.Scheme = _credential.Endpoint.Scheme;
-                message.Request.Uri.Host = _credential.Endpoint.Host;
-                message.Request.Uri.Port = _credential.Endpoint.Port;
-                message.Request.Uri.Path = _basePath + sep + message.Request.Uri.Path;
+                message.Request.Uri.Scheme = _basePath.Scheme;
+                message.Request.Uri.Host = _basePath.Host;
+                message.Request.Uri.Port = _basePath.Port;
+                message.Request.Uri.Path = _basePath.AbsolutePath + sep + message.Request.Uri.Path;
             }
         }
 

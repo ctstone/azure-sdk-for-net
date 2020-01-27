@@ -4,6 +4,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Core;
 using Azure.AI.FormRecognizer.Http;
 using Azure.Core.Pipeline;
 using Azure.Core.Testing;
@@ -13,31 +14,23 @@ namespace Azure.AI.FormRecognizer.Tests.Http
 {
     public class FormHttpPolicyTests
     {
-        private const string Endpoint = "http://localhost";
+        private const string EndpointText = "http://localhost";
         private const string ApiKey = "fake-key";
 
-        private readonly FormHttpPolicy _policy;
-        private readonly CognitiveCredential _credential;
-        private readonly MockTransport _transport;
+
+        private readonly Uri _endpoint;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
 
 
         public FormHttpPolicyTests()
         {
-            var endpoint = new Uri(Endpoint);
+            _endpoint = new Uri(EndpointText);
             _options = new FormRecognizerClientOptions();
-            _transport = new MockTransport(new MockResponse(200));
-            _credential = new CognitiveCredential(endpoint, ApiKey);
-            _policy = new FormHttpPolicy(_credential, _options.Version);
-            _pipeline = new HttpPipeline(_transport, new[] { _policy });
-        }
-
-        [Fact]
-        public void Constructor_Sets_Parameters()
-        {
-            Assert.NotNull(_policy.Credential.Endpoint);
-            Assert.Equal(_credential, _policy.Credential);
+            var transport = new MockTransport(new MockResponse(200));
+            var credential = new CognitiveKeyCredential(ApiKey);
+            var policy = new FormHttpPolicy(_endpoint, new FormAuthenticator(credential), _options.Version);
+            _pipeline = new HttpPipeline(transport, new[] { policy });
         }
 
         [Theory]
@@ -88,9 +81,9 @@ namespace Azure.AI.FormRecognizer.Tests.Http
             }
 
             // Assert
-            Assert.Equal(_credential.Endpoint.Scheme, request.Uri.Scheme);
-            Assert.Equal(_credential.Endpoint.Host, request.Uri.Host);
-            Assert.Equal(_credential.Endpoint.Port, request.Uri.Port);
+            Assert.Equal(_endpoint.Scheme, request.Uri.Scheme);
+            Assert.Equal(_endpoint.Host, request.Uri.Host);
+            Assert.Equal(_endpoint.Port, request.Uri.Port);
             Assert.Equal($"/formrecognizer/{FormHttpPolicy.GetVersionString(_options.Version)}/foo?x=1", request.Uri.PathAndQuery);
         }
     }

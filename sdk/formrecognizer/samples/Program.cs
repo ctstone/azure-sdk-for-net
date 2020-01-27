@@ -23,11 +23,11 @@ namespace Azure.AI.FormRecognizer.Samples
                 var options = new FormRecognizerClientOptions();
                 var endpoint = new Uri("http://192.168.1.4:5000");
                 // var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
-                var credential = new CognitiveCredential(endpoint, new HttpHeader("apim-subscription-id", "123"));
+                var credential = new CognitiveHeaderCredential(new HttpHeader("apim-subscription-id", "123"));
                 options.Diagnostics.IsLoggingContentEnabled = true;
                 options.Diagnostics.IsLoggingEnabled = true;
                 options.Diagnostics.ApplicationId = "chstone";
-                var client = new FormRecognizerClient(credential, options);
+                var client = new FormRecognizerClient(endpoint, credential, options);
 
                 await (op switch
                 {

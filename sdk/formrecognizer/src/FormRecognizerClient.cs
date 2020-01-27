@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using Azure.AI.FormRecognizer.Core;
 using Azure.AI.FormRecognizer.Http;
+using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer
@@ -16,13 +18,6 @@ namespace Azure.AI.FormRecognizer
         private readonly CustomFormClient _customFormClient;
         private readonly PrebuiltFormClient _prebuiltFormClient;
         private readonly FormLayoutClient _layoutClient;
-        private readonly FormHttpPolicy _authentication;
-        private readonly CognitiveCredential _credential;
-
-        /// <summary>
-        /// Get the Cognitive Credential for this client.
-        /// </summary>
-        public virtual CognitiveCredential Credential => _credential;
 
         /// <summary>
         /// Access custom form models.
@@ -42,57 +37,71 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="endpoint">
-        /// The assigned endpoint for your subscriptionKey. E.g. for `eastus`:
-        ///
-        /// ```csharp
-        /// var endpoint = CognitiveEndpoint.EastUnitedStates;
-        /// ```
-        /// </param>
-        /// <param name="subscriptionKey">Your assigned subscription key, copied from https://portal.azure.com/</param>
-        public FormRecognizerClient(CognitiveEndpoint endpoint, string subscriptionKey)
-            : this(new CognitiveCredential(endpoint, subscriptionKey))
+        /// <param name="endpoint">Endpoint.</param>
+        /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
+        public FormRecognizerClient(Uri endpoint, CognitiveKeyCredential credential)
+            : this(endpoint, credential, new FormRecognizerClientOptions())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="endpoint">
-        /// The assigned endpoint for your subscriptionKey. E.g. for `eastus`:
-        ///
-        /// ```csharp
-        /// var endpoint = CognitiveEndpoint.EastUnitedStates;
-        /// ```
-        /// </param>
-        /// <param name="subscriptionKey">Your assigned subscription key, copied from https://portal.azure.com/</param>
+        /// <param name="endpoint">Endpoint.</param>
+        /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormRecognizerClient(CognitiveEndpoint endpoint, string subscriptionKey, FormRecognizerClientOptions options)
-            : this(new CognitiveCredential(endpoint, subscriptionKey), options)
+        public FormRecognizerClient(Uri endpoint, CognitiveKeyCredential credential, FormRecognizerClientOptions options)
+            : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="credential">A Cognitive Services credential object.</param>
-        public FormRecognizerClient(CognitiveCredential credential)
-        : this(credential, new FormRecognizerClientOptions())
+        /// <param name="endpoint">Endpoint.</param>
+        /// <param name="credential">Azure Active Directory credential.</param>
+        public FormRecognizerClient(Uri endpoint, TokenCredential credential)
+            : this(endpoint, credential, new FormRecognizerClientOptions())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class with options.
+        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
         /// </summary>
-        /// <param name="credential">A Cognitive Services credential object.</param>
+        /// <param name="endpoint">Endpoint.</param>
+        /// <param name="credential">Azure Active Directory credential.</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormRecognizerClient(CognitiveCredential credential, FormRecognizerClientOptions options)
+        public FormRecognizerClient(Uri endpoint, TokenCredential credential, FormRecognizerClientOptions options)
+            : this(endpoint, new FormAuthenticator(credential), options)
         {
-            Throw.IfMissing(credential, nameof(credential));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
+        /// </summary>
+        /// <param name="endpoint">Endpoint.</param>
+        /// <param name="credential">User-defined credential.</param>
+        public FormRecognizerClient(Uri endpoint, CognitiveHeaderCredential credential)
+            : this(endpoint, credential, new FormRecognizerClientOptions())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class.
+        /// </summary>
+        /// <param name="endpoint">Endpoint.</param>
+        /// <param name="credential">User-defined credential</param>
+        /// <param name="options">Optional service parameters.</param>
+        public FormRecognizerClient(Uri endpoint, CognitiveHeaderCredential credential, FormRecognizerClientOptions options)
+            : this(endpoint, new FormAuthenticator(credential), options)
+        {
+        }
+
+        internal FormRecognizerClient(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
+        {
             Throw.IfMissing(options, nameof(options));
-            _credential = credential;
-            _authentication = new FormHttpPolicy(credential, options.Version);
-            var pipeline = HttpPipelineBuilder.Build(options, _authentication);
+            var authentication = new FormHttpPolicy(endpoint, authenticator, options.Version);
+            var pipeline = HttpPipelineBuilder.Build(options, authentication);
 
             _customFormClient = new CustomFormClient(pipeline, options);
             _prebuiltFormClient = new PrebuiltFormClient(pipeline, options);

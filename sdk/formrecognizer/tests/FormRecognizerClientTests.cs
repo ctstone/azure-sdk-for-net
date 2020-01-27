@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using Azure.Core;
 using Xunit;
 
 // TestFramework:
@@ -12,12 +13,27 @@ namespace Azure.AI.FormRecognizer.Tests
     public class FormRecognizerClientTests
     {
         [Fact]
-        public void Constructor_Throws_OnInvalidParams()
+        public void KeyConstructor_Throws_OnInvalidParams()
         {
             // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(default, default(FormRecognizerClientOptions)));
-            Assert.Throws<ArgumentException>(() => new FormRecognizerClient(default, default(string)));
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(default));
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveKeyCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveKeyCredential)null, null));
+        }
+
+        [Fact]
+        public void HeaderConstructor_Throws_OnInvalidParams()
+        {
+            // Act / assert
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveHeaderCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveHeaderCredential)null, null));
+        }
+
+        [Fact]
+        public void TokenConstructor_Throws_OnInvalidParams()
+        {
+            // Act / assert
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (TokenCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (TokenCredential)null, null));
         }
 
         [Fact]
@@ -26,14 +42,13 @@ namespace Azure.AI.FormRecognizer.Tests
             // Act
             var apiKey = "fake-key";
             var endpoint = new Uri("http://localhost");
-            var credential = new CognitiveCredential(endpoint, apiKey);
-            var client = new FormRecognizerClient(credential);
+            var credential = new CognitiveKeyCredential(apiKey);
+            var client = new FormRecognizerClient(endpoint, credential);
 
             // Assert
             Assert.NotNull(client.Custom);
             Assert.NotNull(client.Prebuilt);
             Assert.NotNull(client.Layout);
-            Assert.Equal(credential, client.Credential);
         }
     }
 }
