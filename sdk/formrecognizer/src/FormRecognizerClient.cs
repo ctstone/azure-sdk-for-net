@@ -89,8 +89,13 @@ namespace Azure.AI.FormRecognizer
         }
 
         internal FormRecognizerClient(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
+            : this(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options)
         {
-            _pipeline = FormHttpPipelineBuilder.Build(endpoint, authenticator, options);
+        }
+
+        internal FormRecognizerClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
+        {
+            _pipeline = pipeline;
             _options = options;
         }
 

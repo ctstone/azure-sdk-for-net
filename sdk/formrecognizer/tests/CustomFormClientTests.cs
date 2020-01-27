@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
@@ -12,7 +11,7 @@ using Azure.Core.Pipeline;
 using Azure.Core.Testing;
 using Xunit;
 
-namespace Azure.AI.FormRecognizer.Tests.Core
+namespace Azure.AI.FormRecognizer.Tests.Custom
 {
     public class CustomFormClientTests
     {
@@ -194,11 +193,10 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 
         private FormRecognizerClient GetClient(params MockResponse[] responses)
         {
-            var options = new FormRecognizerClientOptions
-            {
-                Transport = new MockTransport(responses)
-            };
-            return new FormRecognizerClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"), options);
+            var mockTransport = new MockTransport(responses);
+            var pipeline = new HttpPipeline(mockTransport);
+            var options = new FormRecognizerClientOptions();
+            return new FormRecognizerClient(pipeline, options);
         }
     }
 }

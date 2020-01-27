@@ -6,6 +6,8 @@ using Azure.AI.FormRecognizer.Http;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core;
 
+#pragma warning disable AZC0007 // Receipt client shares options with FormRecognizerClient
+
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
