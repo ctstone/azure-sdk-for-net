@@ -212,12 +212,12 @@ namespace Azure.AI.FormRecognizer.Tests.Prediction
             Assert.Equal(operationId, operation.Id);
         }
 
-        private AnalyzeClient<AnalyzeOptions> GetClient(params MockResponse[] responses)
+        private AnalyzeClient GetClient(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormRecognizerClientOptions();
-            return new AnalyzeClient<AnalyzeOptions>(pipeline, options, "/fake-path");
+            return new AnalyzeClient(pipeline, options, "/fake-path");
         }
     }
 }

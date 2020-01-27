@@ -14,6 +14,7 @@ namespace Azure.AI.FormRecognizer.Extensions
     internal static class PipelineExtensions
     {
         private const string OperatorQueryKey = "op";
+        private const string IncludeTextDetailsQueryKey = "includeTextDetails";
 
         #region CustomModel
         public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, FormRecognizerClientOptions options)
@@ -64,30 +65,27 @@ namespace Azure.AI.FormRecognizer.Extensions
         #endregion
 
         #region Analyze
-        public static Request CreateAnalyzeStreamRequest<TOptions>(this HttpPipeline pipeline, string basePath, Stream stream, FormContentType? contentType, TOptions? analyzeOptions, Action<TOptions, Request> applyOptions)
-            where TOptions : struct
+        public static Request CreateAnalyzeStreamRequest(this HttpPipeline pipeline, string basePath, Stream stream, FormContentType? contentType, bool? includeTextDetails)
         {
             Throw.IfMissing(stream, nameof(stream));
-            return CreateAnalyzeRequest(pipeline, basePath, analyzeOptions, applyOptions, contentType: contentType, stream: stream);
+            return CreateAnalyzeRequest(pipeline, basePath, includeTextDetails, contentType: contentType, stream: stream);
         }
 
-        public static Request CreateAnalyzeUriRequest<TOptions>(this HttpPipeline pipeline, string basePath, Uri uri, FormRecognizerClientOptions options, TOptions? analyzeOptions, Action<TOptions, Request> applyOptions)
-            where TOptions : struct
+        public static Request CreateAnalyzeUriRequest(this HttpPipeline pipeline, string basePath, Uri uri, bool? includeTextDetails, FormRecognizerClientOptions options)
         {
             Throw.IfMissing(uri, nameof(uri));
-            return CreateAnalyzeRequest(pipeline, basePath, analyzeOptions, applyOptions, options: options, uri: uri);
+            return CreateAnalyzeRequest(pipeline, basePath, includeTextDetails, options: options, uri: uri);
         }
 
-        private static Request CreateAnalyzeRequest<TOptions>(HttpPipeline pipeline, string basePath, TOptions? analyzeOptions, Action<TOptions, Request> applyOptions, FormRecognizerClientOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
-            where TOptions : struct
+        private static Request CreateAnalyzeRequest(HttpPipeline pipeline, string basePath, bool? includeTextDetails, FormRecognizerClientOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Post;
             request.Uri.Path = $"{basePath}/analyze";
 
-            if (analyzeOptions != null)
+            if (includeTextDetails.HasValue)
             {
-                applyOptions(analyzeOptions.Value, request);
+                request.Uri.AppendQuery(IncludeTextDetailsQueryKey, includeTextDetails.Value ? "true" : "false");
             }
 
             if (uri != default)

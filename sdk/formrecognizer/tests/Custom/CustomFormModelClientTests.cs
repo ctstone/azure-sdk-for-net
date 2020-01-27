@@ -41,7 +41,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var client = GetClient();
 
             // Assert
-            Assert.True(client is AnalyzeClient<AnalyzeOptions>);
+            Assert.True(client is AnalyzeClient);
         }
 
         [Fact]

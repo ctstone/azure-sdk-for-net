@@ -117,10 +117,9 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var basePath = "/fake/base/path";
             var stream = new MemoryStream(new byte[] { 1, 2, 3 });
             var contentType = FormContentType.Pdf;
-            var options = new MockOptions { Foo = "foo" };
 
             // Act
-            var request = _pipeline.CreateAnalyzeStreamRequest<MockOptions>(basePath, stream, contentType, options, SetOption);
+            var request = _pipeline.CreateAnalyzeStreamRequest(basePath, stream, contentType, default);
 
             // Assert
             long requestSize;
@@ -138,10 +137,9 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             // Arrange
             var basePath = "/fake/base/path";
             var uri = new Uri("http://localhost/fake-file.pdf");
-            var options = new MockOptions { Foo = "foo" };
 
             // Act
-            var request = _pipeline.CreateAnalyzeUriRequest<MockOptions>(basePath, uri, _options, options, SetOption);
+            var request = _pipeline.CreateAnalyzeUriRequest(basePath, uri, default, _options);
 
             // Assert
             Assert.Equal(RequestMethod.Post, request.Method);
@@ -152,15 +150,5 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var requestContentType = request.Headers.FirstOrDefault((x) => x.Name == "Content-Type");
             Assert.Equal("application/json", requestContentType.Value);
         }
-
-        private static void SetOption(MockOptions options, Request request)
-        {
-            request.Uri.AppendQuery(FakeOptionQuery, options.Foo);
-        }
-    }
-
-    public struct MockOptions
-    {
-        public string Foo { get; set; }
     }
 }

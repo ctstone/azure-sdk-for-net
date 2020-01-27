@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             var client = GetClient();
 
             // Assert
-            Assert.True(client is AnalyzeClient<AnalyzeOptions>);
+            Assert.True(client is AnalyzeClient);
         }
 
         private FormReceiptClient GetClient(params MockResponse[] responses)

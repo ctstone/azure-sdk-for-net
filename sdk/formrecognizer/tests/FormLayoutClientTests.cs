@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             var client = GetClient();
 
             // Assert
-            Assert.True(client is AnalyzeClient<AnalyzeLayoutOptions>);
+            Assert.True(client is AnalyzeClient);
         }
 
         private FormLayoutClient GetClient(params MockResponse[] responses)
