@@ -2,15 +2,8 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure.AI.FormRecognizer.Core;
-using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.Testing;

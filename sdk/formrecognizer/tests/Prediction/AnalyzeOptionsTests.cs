@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.AI.FormRecognizer.Core;
+using Azure.AI.FormRecognizer.Prediction;
 using NUnit.Framework;
 
-namespace Azure.AI.FormRecognizer.Tests.Core
+namespace Azure.AI.FormRecognizer.Tests.Prediction
 {
     public class AnalyzeOptionsTests
     {

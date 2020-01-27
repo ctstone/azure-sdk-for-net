@@ -9,7 +9,7 @@ using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 using System.Net;
 
-namespace Azure.AI.FormRecognizer.Core
+namespace Azure.AI.FormRecognizer.Custom
 {
     /// <summary>
     /// A collection of custom form models that may take multiple service requests to synchronously iterate over.

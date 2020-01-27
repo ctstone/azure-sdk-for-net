@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using System.Threading.Tasks;
-using System.Threading;
 using Azure.Core;
 
 namespace Azure.AI.FormRecognizer

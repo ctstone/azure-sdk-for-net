@@ -5,18 +5,18 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Azure.AI.FormRecognizer.Core;
 using Azure.AI.FormRecognizer.Models;
-using Azure.AI.FormRecognizer.Tests.TestUtilities;
+using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.Testing;
 using Xunit;
 
-namespace Azure.AI.FormRecognizer.Tests.Core
+namespace Azure.AI.FormRecognizer.Tests.Prediction
 {
-    public class TrainingOperationTests
+    public class AnalyzeOperationTests
     {
+        private const string FakeBasePath = "/fake-path";
         private const string FakeOperationId = "123";
 
         [Fact]
@@ -31,16 +31,21 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         }
 
         [Theory]
-        [InlineData(true, "creating", false, false)]
-        [InlineData(false, "creating", false, false)]
-        [InlineData(true, "ready", true, true)]
-        [InlineData(false, "ready", true, true)]
-        [InlineData(true, "invalid", true, false)]
-        [InlineData(false, "invalid", true, false)]
+        [InlineData(true, "running", false, false)]
+        [InlineData(false, "running", false, false)]
+        [InlineData(true, "succeeded", true, true)]
+        [InlineData(false, "succeeded", true, true)]
+        [InlineData(true, "notStarted", false, false)]
+        [InlineData(false, "notStarted", false, false)]
+        [InlineData(true, "failed", true, false)]
+        [InlineData(false, "failed", true, false)]
         public async Task UpdateStatus_Completes_On200(bool isAsync, string testStatus, bool expectCompleted, bool expectValue)
         {
             // Arrange
-            var mockResponse = MockFormResponses.GetModelResponse(testStatus);
+            var content = @"{ ""status"": ""{testStatus}"" }".Replace("{testStatus}", testStatus);
+            var mockResponse = new MockResponse((int)HttpStatusCode.OK);
+            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
+            mockResponse.SetContent(content);
             var op = GetOperation(mockResponse);
 
             // Act
@@ -69,7 +74,10 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         public async Task UpdateStatus_Throws_On400(bool isAsync)
         {
             // Arrange
-            var mockResponse = MockFormResponses.GetErrorResponse(HttpStatusCode.BadRequest, "123", "foo");
+            var content = @"{ ""error"": { ""code"": ""123"", ""message"": ""foo"" } }";
+            var mockResponse = new MockResponse((int)HttpStatusCode.BadRequest);
+            mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
+            mockResponse.SetContent(content);
             var op = GetOperation(mockResponse);
 
             // Act / Assert
@@ -81,17 +89,22 @@ namespace Azure.AI.FormRecognizer.Tests.Core
         }
 
         [Theory(Timeout = 2000)]
-        [InlineData("ready", ModelStatus.Ready)]
-        [InlineData("invalid", ModelStatus.Invalid)]
-        public async Task WaitForCompletion_ReturnsAnalysis_On200(string finalStatus, ModelStatus expectStatus)
+        [InlineData("succeeded", OperationStatus.Succeeded)]
+        [InlineData("failed", OperationStatus.Failed)]
+        public async Task WaitForCompletion_ReturnsAnalysis_On200(string finalStatus, OperationStatus expectStatus)
         {
-            var responses = new[]
-                {
-                    MockFormResponses.GetModelResponse("creating"),
-                    MockFormResponses.GetModelResponse("creating"),
-                    MockFormResponses.GetModelResponse(finalStatus),
-                }
-                .ToArray();
+            // Arrange
+            var responses = new[] {
+                @"{ ""status"": ""notStarted"" }",
+                @"{ ""status"": ""running"" }",
+                @"{ ""status"": ""{finalStatus}"" }".Replace("{finalStatus}", finalStatus),
+            }.Select((content) =>
+            {
+                var mockResponse = new MockResponse((int)HttpStatusCode.OK);
+                mockResponse.AddHeader(HttpHeader.Common.JsonContentType);
+                mockResponse.SetContent(content);
+                return mockResponse;
+            }).ToArray();
             var op = GetOperation(responses);
 
             // Act
@@ -100,16 +113,15 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             // Assert
             Assert.NotNull(response);
             Assert.NotNull(response.Value);
-            Assert.NotNull(response.Value.ModelInfo);
-            Assert.Equal(expectStatus, response.Value.ModelInfo.Status);
+            Assert.Equal(expectStatus, response.Value.Status);
         }
 
-        private TrainingOperation GetOperation(params MockResponse[] responses)
+        private AnalyzeOperation GetOperation(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormRecognizerClientOptions();
-            return new TrainingOperation(pipeline, FakeOperationId, options);
+            return new AnalyzeOperation(pipeline, FakeBasePath, FakeOperationId, options);
         }
     }
 }

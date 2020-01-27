@@ -35,20 +35,5 @@ namespace Azure.AI.FormRecognizer.Tests
             Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (TokenCredential)null));
             Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (TokenCredential)null, null));
         }
-
-        [Fact]
-        public void Constructor_Creates_Properties()
-        {
-            // Act
-            var apiKey = "fake-key";
-            var endpoint = new Uri("http://localhost");
-            var credential = new CognitiveKeyCredential(apiKey);
-            var client = new FormRecognizerClient(endpoint, credential);
-
-            // Assert
-            Assert.NotNull(client.Custom);
-            Assert.NotNull(client.Prebuilt);
-            Assert.NotNull(client.Layout);
-        }
     }
 }

@@ -28,6 +28,8 @@ namespace Azure.AI.FormRecognizer.Samples
                 options.Diagnostics.IsLoggingEnabled = true;
                 options.Diagnostics.ApplicationId = "chstone";
                 var client = new FormRecognizerClient(endpoint, credential, options);
+                var layoutClient = new FormLayoutClient(endpoint, credential, options);
+                var receiptClient = new FormReceiptClient(endpoint, credential, options);
 
                 await (op switch
                 {
@@ -39,8 +41,8 @@ namespace Azure.AI.FormRecognizer.Samples
                     "summary" => GetModelsSummaryAsync(client),
                     "delete" => DeleteModelAsync(client, args),
                     "list" => ListModelsAsync(client),
-                    "receipt" => UseReceipt(client, args),
-                    "layout" => UseLayout(client, args),
+                    "receipt" => UseReceipt(receiptClient, args),
+                    "layout" => UseLayout(layoutClient, args),
                     _ => throw new NotSupportedException(),
                 });
             }
@@ -50,7 +52,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task UseLayout(FormRecognizerClient client, string[] args)
+        private static async Task UseLayout(FormLayoutClient client, string[] args)
         {
             var op = args[1];
             await (op switch
@@ -62,7 +64,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeLayoutAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeLayoutAsync(FormLayoutClient client, string[] args)
         {
             var type = args[2];
             await (type switch
@@ -73,11 +75,11 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeLayoutFileAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeLayoutFileAsync(FormLayoutClient client, string[] args)
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
-            var op = await client.Layout.StartAnalyzeAsync(stream);
+            var op = await client.StartAnalyzeAsync(stream);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -91,10 +93,10 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task AnalyzeLayoutUrlAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeLayoutUrlAsync(FormLayoutClient client, string[] args)
         {
             var url = new Uri(args[3]);
-            var op = await client.Layout.StartAnalyzeAsync(url);
+            var op = await client.StartAnalyzeAsync(url);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -108,26 +110,26 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task GetLayoutAnalysisAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetLayoutAnalysisAsync(FormLayoutClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
-            var op = client.Layout.StartAnalyze(resultId);
+            var op = client.StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
             Console.WriteLine(result.Value.Status);
         }
 
-        private static async Task GetLayoutAnalysisResultAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetLayoutAnalysisResultAsync(FormLayoutClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
-            var result = await client.Layout.GetAnalysisResultAsync(resultId);
+            var result = await client.GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
             Console.WriteLine(result.Value.CreatedOn);
             Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
-        private static async Task UseReceipt(FormRecognizerClient client, string[] args)
+        private static async Task UseReceipt(FormReceiptClient client, string[] args)
         {
             var op = args[1];
             await (op switch
@@ -139,7 +141,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeReceiptAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeReceiptAsync(FormReceiptClient client, string[] args)
         {
             var type = args[2];
             await (type switch
@@ -150,11 +152,11 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeReceiptFileAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeReceiptFileAsync(FormReceiptClient client, string[] args)
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
-            var op = await client.Prebuilt.Receipt.StartAnalyzeAsync(stream, null, true);
+            var op = await client.StartAnalyzeAsync(stream, null, true);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -168,10 +170,10 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task AnalyzeReceiptUrlAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeReceiptUrlAsync(FormReceiptClient client, string[] args)
         {
             var url = new Uri(args[3]);
-            var op = await client.Prebuilt.Receipt.StartAnalyzeAsync(url);
+            var op = await client.StartAnalyzeAsync(url);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -185,20 +187,20 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task GetReceiptAnalysisAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetReceiptAnalysisAsync(FormReceiptClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
-            var op = client.Prebuilt.Receipt.StartAnalyze(resultId);
+            var op = client.StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
             Console.WriteLine(result.Value.Status);
         }
 
-        private static async Task GetReceiptAnalysisResultAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetReceiptAnalysisResultAsync(FormReceiptClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
-            var result = await client.Prebuilt.Receipt.GetAnalysisResultAsync(resultId);
+            var result = await client.GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
             Console.WriteLine(result.Value.CreatedOn);
             Console.WriteLine(result.Value.LastUpdatedOn);
@@ -207,7 +209,7 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task DeleteModelAsync(FormRecognizerClient client, string[] args)
         {
             var modelId = args[1];
-            await client.Custom.UseModel(modelId).DeleteAsync();
+            await client.GetModelReference(modelId).DeleteAsync();
             Console.WriteLine("Deleted!");
         }
 
@@ -227,7 +229,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var modelId = args[1];
             var resultId = args[2];
-            var op = client.Custom.UseModel(modelId).StartAnalyze(resultId);
+            var op = client.GetModelReference(modelId).StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
             Console.WriteLine(result.Value.Status);
         }
@@ -236,7 +238,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var modelId = args[1];
             var resultId = args[2];
-            var result = await client.Custom.UseModel(modelId).GetAnalysisResultAsync(resultId);
+            var result = await client.GetModelReference(modelId).GetAnalysisResultAsync(resultId);
             Console.WriteLine(result.Value.Status);
             Console.WriteLine(result.Value.CreatedOn);
             Console.WriteLine(result.Value.LastUpdatedOn);
@@ -246,7 +248,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
-            var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(stream, null, true);
+            var op = await client.GetModelReference(modelId).StartAnalyzeAsync(stream, null, true);
             Console.Error.WriteLine($"Created request with id {op.Id}");
             Console.Error.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -264,7 +266,7 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task AnalyzeUrlAsync(FormRecognizerClient client, string modelId, string[] args)
         {
             var url = new Uri(args[3]);
-            var op = await client.Custom.UseModel(modelId).StartAnalyzeAsync(url);
+            var op = await client.GetModelReference(modelId).StartAnalyzeAsync(url);
             Console.Error.WriteLine($"Created request with id {op.Id}");
             Console.Error.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
@@ -300,7 +302,7 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task GetModelAsync(FormRecognizerClient client, string[] args)
         {
             var modelId = args[1];
-            var model = await client.Custom.UseModel(modelId).GetAsync();
+            var model = await client.GetModelReference(modelId).GetAsync();
             PrintResponse(model);
         }
 
@@ -308,7 +310,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var source = args[1];
             var prefix = args.Length == 3 ? args[2] : default;
-            var op = await client.Custom.StartTrainAsync(new TrainingRequest
+            var op = await client.StartTrainingAsync(new TrainingRequest
             {
                 Source = source,
                 SourceFilter = new SourceFilter { Prefix = prefix },
@@ -329,7 +331,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task GetModelsSummaryAsync(FormRecognizerClient client)
         {
-            var resp = await client.Custom.GetSummaryAsync();
+            var resp = await client.GetSummaryAsync();
             Console.WriteLine($"Count: {resp.Value.Count}");
             Console.WriteLine($"Limit: {resp.Value.Limit}");
             Console.WriteLine($"Last Updated: {resp.Value.LastUpdatedOn}");
@@ -337,7 +339,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static void ListModels(FormRecognizerClient client)
         {
-            foreach (var modelInfo in client.Custom.ListModels())
+            foreach (var modelInfo in client.ListModels())
             {
 
             }
@@ -345,7 +347,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task ListModelsAsync(FormRecognizerClient client)
         {
-            await foreach (var foo in client.Custom.ListModelsAsync())
+            await foreach (var foo in client.ListModelsAsync())
             {
                 Console.WriteLine(foo.ModelId);
             }

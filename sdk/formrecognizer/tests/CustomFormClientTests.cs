@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Azure.AI.FormRecognizer.Core;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -31,8 +30,8 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 
             // Act
             var operation = isAsync
-                ? await client.StartTrainAsync(trainingRequest)
-                : client.StartTrain(trainingRequest);
+                ? await client.StartTrainingAsync(trainingRequest)
+                : client.StartTraining(trainingRequest);
 
             // Assert
             Assert.NotNull(operation);
@@ -54,8 +53,8 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 
             // Act / Assert
             var ex = isAsync
-                ? await Assert.ThrowsAsync<ArgumentNullException>(() => client.StartTrainAsync(trainingRequest))
-                : Assert.Throws<ArgumentNullException>(() => client.StartTrain(trainingRequest));
+                ? await Assert.ThrowsAsync<ArgumentNullException>(() => client.StartTrainingAsync(trainingRequest))
+                : Assert.Throws<ArgumentNullException>(() => client.StartTraining(trainingRequest));
             Assert.NotNull(ex.ParamName);
         }
 
@@ -72,8 +71,8 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 
             // Act / Assert
             var ex = isAsync
-                ? await Assert.ThrowsAsync<ArgumentException>(() => client.StartTrainAsync(trainingRequest))
-                : Assert.Throws<ArgumentException>(() => client.StartTrain(trainingRequest));
+                ? await Assert.ThrowsAsync<ArgumentException>(() => client.StartTrainingAsync(trainingRequest))
+                : Assert.Throws<ArgumentException>(() => client.StartTraining(trainingRequest));
             Assert.NotNull(ex.ParamName);
         }
 
@@ -85,7 +84,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             var client = GetClient();
 
             // Act
-            var operation = client.StartTrain(operationId);
+            var operation = client.StartTraining(operationId);
 
             // Assert
             Assert.NotNull(operation);
@@ -101,7 +100,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             var client = GetClient();
 
             // Act / Assert
-            var ex = Assert.Throws(expectType, () => client.StartTrain(operationId));
+            var ex = Assert.Throws(expectType, () => client.StartTraining(operationId));
             Assert.IsAssignableFrom<ArgumentException>(ex);
             ArgumentException argEx = ex as ArgumentException;
 
@@ -186,19 +185,20 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             var client = GetClient();
 
             // Act
-            var modelClient = client.UseModel(modelId);
+            var modelRef = client.GetModelReference(modelId);
 
             // Assert
-            Assert.NotNull(modelClient);
-            Assert.Equal(modelId, modelClient.ModelId);
+            Assert.NotNull(modelRef);
+            Assert.Equal(modelId, modelRef.ModelId);
         }
 
-        private CustomFormClient GetClient(params MockResponse[] responses)
+        private FormRecognizerClient GetClient(params MockResponse[] responses)
         {
-            var mockTransport = new MockTransport(responses);
-            var pipeline = new HttpPipeline(mockTransport);
-            var options = new FormRecognizerClientOptions();
-            return new CustomFormClient(pipeline, options);
+            var options = new FormRecognizerClientOptions
+            {
+                Transport = new MockTransport(responses)
+            };
+            return new FormRecognizerClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"), options);
         }
     }
 }

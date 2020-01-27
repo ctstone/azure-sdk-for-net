@@ -3,10 +3,11 @@
 
 using System;
 using System.IO;
-using Azure.AI.FormRecognizer.Core;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Arguments;
+using Azure.AI.FormRecognizer.Custom;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {
@@ -21,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             Throw.IfNullOrEmpty(trainRequest.Source, nameof(TrainingRequest.Source));
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Post;
-            request.Uri.Path = CustomFormClient.BasePath;
+            request.Uri.Path = FormRecognizerClient.BasePath;
             request.AddJsonContent(trainRequest, options);
             return request;
         }
@@ -30,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Extensions
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Get;
-            request.Uri.Path = CustomFormModelClient.GetModelPath(modelId);
+            request.Uri.Path = CustomFormModelReference.GetModelPath(modelId);
             return request;
         }
 
@@ -44,7 +45,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             }
             if (string.IsNullOrEmpty(nextLink))
             {
-                request.Uri.Path = CustomFormClient.BasePath;
+                request.Uri.Path = FormRecognizerClient.BasePath;
             }
             else
             {
@@ -57,7 +58,7 @@ namespace Azure.AI.FormRecognizer.Extensions
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Delete;
-            request.Uri.Path = CustomFormModelClient.GetModelPath(modelId);
+            request.Uri.Path = CustomFormModelReference.GetModelPath(modelId);
             return request;
         }
         #endregion

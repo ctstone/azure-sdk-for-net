@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.AI.FormRecognizer.Core
+namespace Azure.AI.FormRecognizer.Arguments
 {
     internal static class Throw
     {

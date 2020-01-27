@@ -3,7 +3,7 @@
 
 using System;
 using System.Threading.Tasks;
-using Azure.AI.FormRecognizer.Core;
+using Azure.AI.FormRecognizer.Arguments;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
@@ -15,27 +15,22 @@ namespace Azure.AI.FormRecognizer.Http
         private const string FormRecognizerPathRoot = "formrecognizer";
 
         private readonly Uri _basePath;
-        private readonly FormAuthenticator _authenticator;
 
-        public FormHttpPolicy(Uri endpoint, FormAuthenticator authenticator, ServiceVersion serviceVersion)
+        public FormHttpPolicy(Uri endpoint, ServiceVersion serviceVersion)
         {
             Throw.IfMissing(endpoint, nameof(endpoint));
-            Throw.IfMissing(authenticator, nameof(authenticator));
-            _authenticator = authenticator;
             var versionSegment = GetVersionString(serviceVersion);
             _basePath = new Uri(endpoint, $"/{FormRecognizerPathRoot}/{versionSegment}");
         }
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-            _authenticator.Authenticate(message.Request);
             UpdateMessage(message);
             ProcessNext(message, pipeline);
         }
 
         public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-            await _authenticator.AuthenticateAsync(message.Request).ConfigureAwait(false);
             UpdateMessage(message);
             await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
         }

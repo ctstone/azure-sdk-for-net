@@ -6,19 +6,20 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
-using Azure.Core;
+using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Core
+namespace Azure.AI.FormRecognizer.Custom
 {
     /// <summary>
-    /// The custom form model client provides syncronous and asynchronous methods to manage a custom form model. The client
+    /// The custom form model provides syncronous and asynchronous methods to manage a custom form model. The client
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelClient : AnalyzeClient
+    public class CustomFormModelReference : AnalyzeClient
     {
         private readonly string _modelId;
 
@@ -28,12 +29,12 @@ namespace Azure.AI.FormRecognizer.Core
         public string ModelId => _modelId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomFormClient"/> class for mocking.
+        /// Initializes a new instance of the <see cref="CustomFormModelReference"/> class for mocking.
         /// </summary>
-        protected CustomFormModelClient()
+        protected CustomFormModelReference()
         { }
 
-        internal CustomFormModelClient(string modelId, HttpPipeline pipeline, FormRecognizerClientOptions options)
+        internal CustomFormModelReference(string modelId, HttpPipeline pipeline, FormRecognizerClientOptions options)
             : base(pipeline, options, GetModelPath(modelId))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
@@ -103,7 +104,7 @@ namespace Azure.AI.FormRecognizer.Core
         internal static string GetModelPath(string modelId)
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
-            return $"{CustomFormClient.BasePath}/{modelId}";
+            return $"{FormRecognizerClient.BasePath}/{modelId}";
         }
     }
 }

@@ -9,7 +9,7 @@ using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Core
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Represents a long-running analysis operation.

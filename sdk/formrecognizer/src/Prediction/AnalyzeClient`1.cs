@@ -6,12 +6,13 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Core
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Defines the synchronous and asynchronous operations to analyze forms and retrieve results.

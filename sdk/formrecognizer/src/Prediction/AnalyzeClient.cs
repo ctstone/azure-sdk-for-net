@@ -6,7 +6,7 @@ using System.IO;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Core
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Defines the synchronous and asynchronous operations to analyze forms and retrieve results.
