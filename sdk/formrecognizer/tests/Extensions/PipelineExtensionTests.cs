@@ -14,8 +14,6 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
 {
     public class PipelineExtensionTests
     {
-        private const string FakeOptionQuery = "fake-option";
-
         private readonly MockTransport _mockTransport;
         private readonly HttpPipeline _pipeline;
         private readonly FormRecognizerClientOptions _options;
@@ -124,7 +122,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             // Assert
             long requestSize;
             Assert.Equal(RequestMethod.Post, request.Method);
-            Assert.Equal($"{basePath}/analyze?fake-option=foo", request.Uri.PathAndQuery);
+            Assert.Equal($"{basePath}/analyze", request.Uri.PathAndQuery);
             Assert.True(request.Content.TryComputeLength(out requestSize));
             Assert.Equal(stream.Length, requestSize);
             var requestContentType = request.Headers.FirstOrDefault((x) => x.Name == "Content-Type");
@@ -143,7 +141,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
 
             // Assert
             Assert.Equal(RequestMethod.Post, request.Method);
-            Assert.Equal($"{basePath}/analyze?fake-option=foo", request.Uri.PathAndQuery);
+            Assert.Equal($"{basePath}/analyze", request.Uri.PathAndQuery);
             long requestSize;
             Assert.True(request.Content.TryComputeLength(out requestSize));
             Assert.True(requestSize > 0);
