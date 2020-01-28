@@ -5,9 +5,6 @@ using System;
 using Azure.AI.FormRecognizer.Http;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core;
-using Azure.Core.Pipeline;
-
-#pragma warning disable AZC0007 // Layout client shares options with FormRecognizerClient
 
 namespace Azure.AI.FormRecognizer
 {
