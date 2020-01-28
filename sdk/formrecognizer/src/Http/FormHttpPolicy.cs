@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
 using Azure.Core;
 using Azure.Core.Pipeline;
-using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
 
 namespace Azure.AI.FormRecognizer.Http
 {
@@ -16,10 +15,24 @@ namespace Azure.AI.FormRecognizer.Http
 
         private readonly Uri _basePath;
 
-        public FormHttpPolicy(Uri endpoint, ServiceVersion serviceVersion)
+        public FormHttpPolicy(Uri endpoint, FormRecognizerClientOptions.ServiceVersion serviceVersion)
+            : this(endpoint, FormRecognizerClientOptions.GetVersionString(serviceVersion))
+        {
+        }
+
+        public FormHttpPolicy(Uri endpoint, FormLayoutClientOptions.ServiceVersion serviceVersion)
+            : this(endpoint, FormLayoutClientOptions.GetVersionString(serviceVersion))
+        {
+        }
+
+        public FormHttpPolicy(Uri endpoint, FormReceiptClientOptions.ServiceVersion serviceVersion)
+            : this(endpoint, FormReceiptClientOptions.GetVersionString(serviceVersion))
+        {
+        }
+
+        private FormHttpPolicy(Uri endpoint, string versionSegment)
         {
             Throw.IfMissing(endpoint, nameof(endpoint));
-            var versionSegment = GetVersionString(serviceVersion);
             _basePath = new Uri(endpoint, $"/{FormRecognizerPathRoot}/{versionSegment}");
         }
 
@@ -47,15 +60,6 @@ namespace Azure.AI.FormRecognizer.Http
                 message.Request.Uri.Port = _basePath.Port;
                 message.Request.Uri.Path = _basePath.AbsolutePath + sep + message.Request.Uri.Path;
             }
-        }
-
-        internal static string GetVersionString(ServiceVersion version)
-        {
-            return version switch
-            {
-                ServiceVersion.V2_0_Preview => "v2.0-preview",
-                _ => throw new NotSupportedException($"The service version {version} is not supported."),
-            };
         }
     }
 }

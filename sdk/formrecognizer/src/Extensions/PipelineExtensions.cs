@@ -8,6 +8,7 @@ using Azure.Core.Pipeline;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Custom;
+using System.Text.Json;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {
@@ -17,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Extensions
         private const string IncludeTextDetailsQueryKey = "includeTextDetails";
 
         #region CustomModel
-        public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, FormRecognizerClientOptions options)
+        public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, JsonSerializerOptions options)
         {
             Throw.IfMissing(trainRequest, nameof(trainRequest));
             Throw.IfNullOrEmpty(trainRequest.Source, nameof(TrainingRequest.Source));
@@ -71,13 +72,13 @@ namespace Azure.AI.FormRecognizer.Extensions
             return CreateAnalyzeRequest(pipeline, basePath, includeTextDetails, contentType: contentType, stream: stream);
         }
 
-        public static Request CreateAnalyzeUriRequest(this HttpPipeline pipeline, string basePath, Uri uri, bool? includeTextDetails, FormRecognizerClientOptions options)
+        public static Request CreateAnalyzeUriRequest(this HttpPipeline pipeline, string basePath, Uri uri, bool? includeTextDetails, JsonSerializerOptions options)
         {
             Throw.IfMissing(uri, nameof(uri));
             return CreateAnalyzeRequest(pipeline, basePath, includeTextDetails, options: options, uri: uri);
         }
 
-        private static Request CreateAnalyzeRequest(HttpPipeline pipeline, string basePath, bool? includeTextDetails, FormRecognizerClientOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
+        private static Request CreateAnalyzeRequest(HttpPipeline pipeline, string basePath, bool? includeTextDetails, JsonSerializerOptions options = default, Uri uri = default, Stream stream = default, FormContentType? contentType = default)
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Post;

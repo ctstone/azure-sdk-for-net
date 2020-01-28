@@ -82,7 +82,7 @@ namespace Azure.AI.FormRecognizer
         }
 
         internal FormReceiptClient(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
-            : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options, BaseReceiptPath)
+            : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseReceiptPath)
         {
         }
 

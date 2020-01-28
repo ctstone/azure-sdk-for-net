@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var trainRequest = new TrainingRequest { Source = "http://localhost" };
 
             // Act
-            var request = _pipeline.CreateTrainRequest(trainRequest, _options);
+            var request = _pipeline.CreateTrainRequest(trainRequest, _options.SerializationOptions);
 
             // Assert
             long requestSize;
@@ -137,7 +137,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var uri = new Uri("http://localhost/fake-file.pdf");
 
             // Act
-            var request = _pipeline.CreateAnalyzeUriRequest(basePath, uri, default, _options);
+            var request = _pipeline.CreateAnalyzeUriRequest(basePath, uri, default, _options.SerializationOptions);
 
             // Assert
             Assert.Equal(RequestMethod.Post, request.Method);

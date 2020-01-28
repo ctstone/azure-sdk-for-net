@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
@@ -21,8 +22,9 @@ namespace Azure.AI.FormRecognizer.Prediction
     public class AnalyzeClient
     {
         private readonly HttpPipeline _pipeline;
-        private readonly FormRecognizerClientOptions _options;
+        // private readonly FormRecognizerClientOptions _options;
         private readonly string _basePath;
+        private readonly JsonSerializerOptions _options;
 
         /// <summary>
         /// Get the HTTP pipeline.
@@ -30,14 +32,14 @@ namespace Azure.AI.FormRecognizer.Prediction
         protected HttpPipeline Pipeline => _pipeline;
 
         /// <summary>
-        /// Get the Form Recognizer options.
-        /// </summary>
-        protected FormRecognizerClientOptions Options => _options;
-
-        /// <summary>
         /// Get the base path.
         /// </summary>
         protected string BasePath => _basePath;
+
+        /// <summary>
+        /// Get the JSON serializer options.
+        /// </summary>
+        protected JsonSerializerOptions Options => _options;
 
 
         /// <summary>
@@ -46,11 +48,11 @@ namespace Azure.AI.FormRecognizer.Prediction
         protected AnalyzeClient()
         { }
 
-        internal AnalyzeClient(HttpPipeline pipeline, FormRecognizerClientOptions options, string basePath)
+        internal AnalyzeClient(HttpPipeline pipeline, JsonSerializerOptions options, string basePath)
         {
             _pipeline = pipeline;
-            _options = options;
             _basePath = basePath;
+            _options = options;
         }
 
         /// <summary>

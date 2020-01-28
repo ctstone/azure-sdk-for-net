@@ -139,7 +139,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormRecognizerClientOptions();
-            return new ModelsAsyncPageable(pipeline, options, CancellationToken.None);
+            return new ModelsAsyncPageable(pipeline, options.SerializationOptions, CancellationToken.None);
         }
     }
 }

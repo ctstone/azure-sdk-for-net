@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var obj = new { Foo = "Bar" };
 
             // Act
-            request.AddJsonContent(obj, _options);
+            request.AddJsonContent(obj, _options.SerializationOptions);
 
             // Assert
             long requestSize;

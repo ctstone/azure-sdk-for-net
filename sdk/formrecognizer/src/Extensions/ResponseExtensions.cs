@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +14,12 @@ namespace Azure.AI.FormRecognizer.Extensions
 {
     internal static class ResponseExtensions
     {
-        public static async Task<T> GetJsonContentAsync<T>(this Response response, FormRecognizerClientOptions options, CancellationToken cancellationToken)
+        public static async Task<T> GetJsonContentAsync<T>(this Response response, JsonSerializerOptions options, CancellationToken cancellationToken)
         {
-            return await JsonSerializer.DeserializeAsync<T>(response.ContentStream, options.SerializationOptions, cancellationToken);
+            return await JsonSerializer.DeserializeAsync<T>(response.ContentStream, options, cancellationToken);
         }
 
-        public static T GetJsonContent<T>(this Response response, FormRecognizerClientOptions options)
+        public static T GetJsonContent<T>(this Response response, JsonSerializerOptions options)
         {
             MemoryStream stream;
             if (response.ContentStream is MemoryStream)
@@ -32,11 +33,11 @@ namespace Azure.AI.FormRecognizer.Extensions
                 stream.Position = 0;
             }
 
-            var json = options.Encoding.GetString(stream.ToArray());
-            return JsonSerializer.Deserialize<T>(json, options.SerializationOptions);
+            var json = Encoding.UTF8.GetString(stream.ToArray());
+            return JsonSerializer.Deserialize<T>(json, options);
         }
 
-        public static void ExpectStatus(this Response response, HttpStatusCode statusCode, FormRecognizerClientOptions options)
+        public static void ExpectStatus(this Response response, HttpStatusCode statusCode, JsonSerializerOptions options)
         {
             if (response.Status != (int)statusCode)
             {

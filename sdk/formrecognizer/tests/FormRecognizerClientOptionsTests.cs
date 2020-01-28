@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Tests
             // Assert
             Assert.Equal(Encoding.UTF8, options.Encoding);
             Assert.Equal(FormRecognizerClientOptions.LatestVersion, options.Version);
-            Assert.NotNull(FormHttpPolicy.GetVersionString(options.Version));
+            Assert.NotNull(FormRecognizerClientOptions.GetVersionString(options.Version));
         }
 
         [Fact]

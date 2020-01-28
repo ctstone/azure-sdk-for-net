@@ -108,7 +108,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormRecognizerClientOptions();
-            return new TrainingOperation(pipeline, FakeOperationId, options);
+            return new TrainingOperation(pipeline, FakeOperationId, options.SerializationOptions);
         }
     }
 }

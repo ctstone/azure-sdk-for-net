@@ -217,7 +217,7 @@ namespace Azure.AI.FormRecognizer.Tests.Prediction
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormRecognizerClientOptions();
-            return new AnalyzeClient(pipeline, options, "/fake-path");
+            return new AnalyzeClient(pipeline, options.SerializationOptions, "/fake-path");
         }
     }
 }

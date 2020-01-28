@@ -28,8 +28,8 @@ namespace Azure.AI.FormRecognizer.Samples
                 options.Diagnostics.IsLoggingEnabled = true;
                 options.Diagnostics.ApplicationId = "chstone";
                 var client = new FormRecognizerClient(endpoint, credential, options);
-                var layoutClient = new FormLayoutClient(endpoint, credential, options);
-                var receiptClient = new FormReceiptClient(endpoint, credential, options);
+                var layoutClient = new FormLayoutClient(endpoint, credential);
+                var receiptClient = new FormReceiptClient(endpoint, credential);
 
                 await (op switch
                 {

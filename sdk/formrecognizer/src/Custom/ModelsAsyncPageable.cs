@@ -9,6 +9,7 @@ using Azure.AI.FormRecognizer.Models;
 using Azure.Core.Pipeline;
 using System.Net;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Azure.AI.FormRecognizer.Custom
 {
@@ -18,9 +19,9 @@ namespace Azure.AI.FormRecognizer.Custom
     public class ModelsAsyncPageable : AsyncPageable<ModelInfo>
     {
         private HttpPipeline _pipeline;
-        private FormRecognizerClientOptions _options;
+        private JsonSerializerOptions _options;
 
-        internal ModelsAsyncPageable(HttpPipeline pipeline, FormRecognizerClientOptions options, CancellationToken cancellationToken)
+        internal ModelsAsyncPageable(HttpPipeline pipeline, JsonSerializerOptions options, CancellationToken cancellationToken)
         : base(cancellationToken)
         {
             _pipeline = pipeline;

@@ -111,7 +111,7 @@ namespace Azure.AI.FormRecognizer
         /// Access a model to perform analysis, retrieve metadata or delete it.
         /// </summary>
         /// <param name="modelId">Model identifier</param>
-        public virtual CustomFormModelReference GetModelReference(string modelId) => new CustomFormModelReference(modelId, _pipeline, _options);
+        public virtual CustomFormModelReference GetModelReference(string modelId) => new CustomFormModelReference(modelId, _pipeline, _options.SerializationOptions);
 
         /// <summary>
         /// Asynchronously create and train a custom model.
@@ -143,12 +143,12 @@ namespace Azure.AI.FormRecognizer
         /// <param name="cancellationToken">Optional cancellation token.</param>
         public async virtual Task<TrainingOperation> StartTrainingAsync(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
+            using (var request = _pipeline.CreateTrainRequest(trainRequest, _options.SerializationOptions))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
-                response.ExpectStatus(HttpStatusCode.Created, _options);
+                response.ExpectStatus(HttpStatusCode.Created, _options.SerializationOptions);
                 var id = TrainingOperation.GetTrainingOperationId(response);
-                return new TrainingOperation(_pipeline, id, _options);
+                return new TrainingOperation(_pipeline, id, _options.SerializationOptions);
             }
         }
 
@@ -191,12 +191,12 @@ namespace Azure.AI.FormRecognizer
         /// <param name="cancellationToken">Optional cancellation token.</param>
         public virtual TrainingOperation StartTraining(TrainingRequest trainRequest, CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateTrainRequest(trainRequest, _options))
+            using (var request = _pipeline.CreateTrainRequest(trainRequest, _options.SerializationOptions))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
-                response.ExpectStatus(HttpStatusCode.Created, _options);
+                response.ExpectStatus(HttpStatusCode.Created, _options.SerializationOptions);
                 var id = TrainingOperation.GetTrainingOperationId(response);
-                return new TrainingOperation(_pipeline, id, _options);
+                return new TrainingOperation(_pipeline, id, _options.SerializationOptions);
             }
         }
 
@@ -207,7 +207,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="cancellationToken">Optional cancellation token.</param>
         public virtual TrainingOperation StartTraining(string operationId, CancellationToken cancellationToken = default)
         {
-            return new TrainingOperation(_pipeline, operationId, _options);
+            return new TrainingOperation(_pipeline, operationId, _options.SerializationOptions);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         public virtual AsyncPageable<ModelInfo> ListModelsAsync(CancellationToken cancellationToken = default)
         {
-            return new ModelsAsyncPageable(_pipeline, _options, cancellationToken);
+            return new ModelsAsyncPageable(_pipeline, _options.SerializationOptions, cancellationToken);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         public virtual Pageable<ModelInfo> ListModels(CancellationToken cancellationToken = default)
         {
-            return new ModelsPageable(_pipeline, _options, cancellationToken);
+            return new ModelsPageable(_pipeline, _options.SerializationOptions, cancellationToken);
         }
 
         /// <summary>
@@ -271,8 +271,8 @@ namespace Azure.AI.FormRecognizer
             using (var request = _pipeline.CreateListModelsRequest(op: "summary"))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
-                response.ExpectStatus(HttpStatusCode.OK, _options);
-                var listing = await response.GetJsonContentAsync<ModelListing>(_options, cancellationToken).ConfigureAwait(false);
+                response.ExpectStatus(HttpStatusCode.OK, _options.SerializationOptions);
+                var listing = await response.GetJsonContentAsync<ModelListing>(_options.SerializationOptions, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(listing.Summary, response);
             }
         }
@@ -286,8 +286,8 @@ namespace Azure.AI.FormRecognizer
             using (var request = _pipeline.CreateListModelsRequest(op: "summary"))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
-                response.ExpectStatus(HttpStatusCode.OK, _options);
-                var listing = response.GetJsonContent<ModelListing>(_options);
+                response.ExpectStatus(HttpStatusCode.OK, _options.SerializationOptions);
+                var listing = response.GetJsonContent<ModelListing>(_options.SerializationOptions);
                 return Response.FromValue(listing.Summary, response);
             }
         }

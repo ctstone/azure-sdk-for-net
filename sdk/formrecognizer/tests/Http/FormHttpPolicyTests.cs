@@ -83,7 +83,7 @@ namespace Azure.AI.FormRecognizer.Tests.Http
             Assert.Equal(_endpoint.Scheme, request.Uri.Scheme);
             Assert.Equal(_endpoint.Host, request.Uri.Host);
             Assert.Equal(_endpoint.Port, request.Uri.Port);
-            Assert.Equal($"/formrecognizer/{FormHttpPolicy.GetVersionString(_options.Version)}/foo?x=1", request.Uri.PathAndQuery);
+            Assert.Equal($"/formrecognizer/{FormRecognizerClientOptions.GetVersionString(_options.Version)}/foo?x=1", request.Uri.PathAndQuery);
         }
     }
 }

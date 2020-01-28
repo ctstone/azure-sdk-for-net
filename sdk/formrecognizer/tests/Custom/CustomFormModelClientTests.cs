@@ -23,9 +23,9 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var validModelId = "fake-model-id";
             var validPipeline = new HttpPipeline(new MockTransport());
             var validOptions = new FormRecognizerClientOptions();
-            var ex1 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(null, validPipeline, validOptions));
-            var ex2 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(String.Empty, validPipeline, validOptions));
-            var ex3 = Assert.Throws<ArgumentNullException>(() => new CustomFormModelReference(validModelId, null, validOptions));
+            var ex1 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(null, validPipeline, validOptions.SerializationOptions));
+            var ex2 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(String.Empty, validPipeline, validOptions.SerializationOptions));
+            var ex3 = Assert.Throws<ArgumentNullException>(() => new CustomFormModelReference(validModelId, null, validOptions.SerializationOptions));
             var ex4 = Assert.Throws<ArgumentNullException>(() => new CustomFormModelReference(validModelId, validPipeline, null));
 
             Assert.NotNull(ex1.ParamName);
@@ -103,7 +103,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormRecognizerClientOptions();
-            return new CustomFormModelReference(ModelId, pipeline, options);
+            return new CustomFormModelReference(ModelId, pipeline, options.SerializationOptions);
         }
     }
 }

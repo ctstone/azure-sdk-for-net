@@ -3,6 +3,7 @@
 
 using System;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Extensions;
@@ -22,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         private readonly string _basePath;
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
-        private readonly FormRecognizerClientOptions _options;
+        private readonly JsonSerializerOptions _options;
         private Analysis _value;
         private Response _response;
 
@@ -46,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
-        internal AnalyzeOperation(HttpPipeline pipeline, string basePath, string id, FormRecognizerClientOptions options)
+        internal AnalyzeOperation(HttpPipeline pipeline, string basePath, string id, JsonSerializerOptions options)
         {
             _basePath = basePath;
             _id = id;
@@ -134,7 +135,7 @@ namespace Azure.AI.FormRecognizer.Prediction
             return location.Substring(i + 1);
         }
 
-        internal static AnalyzeOperation FromResponse(HttpPipeline pipeline, string basePath, Response response, FormRecognizerClientOptions options)
+        internal static AnalyzeOperation FromResponse(HttpPipeline pipeline, string basePath, Response response, JsonSerializerOptions options)
         {
             response.ExpectStatus(HttpStatusCode.Accepted, options);
             var id = AnalyzeOperation.GetAnalysisOperationId(response);

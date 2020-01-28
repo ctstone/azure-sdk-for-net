@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
@@ -34,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Custom
         protected CustomFormModelReference()
         { }
 
-        internal CustomFormModelReference(string modelId, HttpPipeline pipeline, FormRecognizerClientOptions options)
+        internal CustomFormModelReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
             : base(pipeline, options, GetModelPath(modelId))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));

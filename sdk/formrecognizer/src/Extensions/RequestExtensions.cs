@@ -8,15 +8,16 @@ using System.Threading;
 using Azure.Core;
 using Azure.AI.FormRecognizer.Http;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace Azure.AI.FormRecognizer.Extensions
 {
     internal static class RequestExtensions
     {
-        public static void AddJsonContent<T>(this Request request, T obj, FormRecognizerClientOptions options)
+        public static void AddJsonContent<T>(this Request request, T obj, JsonSerializerOptions options)
         {
-            var json = JsonSerializer.Serialize(obj, options.SerializationOptions);
-            request.Content = RequestContent.Create(options.Encoding.GetBytes(json));
+            var json = JsonSerializer.Serialize(obj, options);
+            request.Content = RequestContent.Create(Encoding.UTF8.GetBytes(json));
             request.Headers.Add(HttpHeader.Common.JsonContentType);
         }
 

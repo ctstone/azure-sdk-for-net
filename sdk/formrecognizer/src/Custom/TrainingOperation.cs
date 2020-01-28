@@ -3,6 +3,7 @@
 
 using System;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
@@ -21,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Custom
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
-        private readonly FormRecognizerClientOptions _options;
+        private readonly JsonSerializerOptions _options;
         private Model _value;
         private Response _response;
 
@@ -45,7 +46,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
-        internal TrainingOperation(HttpPipeline pipeline, string operationId, FormRecognizerClientOptions options)
+        internal TrainingOperation(HttpPipeline pipeline, string operationId, JsonSerializerOptions options)
         {
             Throw.IfMissing(pipeline, nameof(pipeline));
             Throw.IfMissing(operationId, nameof(operationId));
