@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Serialization
         {
             if (property.NameEquals("docType"))
             {
-                documentResult.DocType = property.Value.GetString();
+                documentResult.DocumentType = property.Value.GetString();
             }
             else if (property.NameEquals("pageRange"))
             {

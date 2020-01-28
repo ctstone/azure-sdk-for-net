@@ -13,7 +13,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Document type.
         /// </summary>
-        public string DocType { get; internal set; }
+        public string DocumentType { get; internal set; }
 
         /// <summary>
         /// First and last page number where the document is found.
