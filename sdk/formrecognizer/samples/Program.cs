@@ -11,46 +11,46 @@ namespace Azure.AI.FormRecognizer.Samples
 {
     public class Program
     {
-        private static async Task Main(string[] args)
-        {
-            try
-            {
-                // Default user agent looks like: azsdk-net-AI.FormRecognizer/1.0.0-dev.20200114.1+e5a3b85bb6f85c29ef8e3dc47b2e89165ce5a98d,(.NET Core 4.6.28008.01; Darwin 19.2.0 Darwin Kernel Version 19.2.0: Sat Nov  9 03:47:04 PST 2019; root:xnu-6153.61.1~20/RELEASE_X86_64)
-                // https://github.com/Azure/azure-sdk-for-net/blob/d99777ef4a7d75dd5f9482c84c0240a900e15f9c/sdk/core/Azure.Core/samples/Configuration.md
-                // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
+        //private static async Task Main(string[] args)
+        //{
+        //    try
+        //    {
+        //        // Default user agent looks like: azsdk-net-AI.FormRecognizer/1.0.0-dev.20200114.1+e5a3b85bb6f85c29ef8e3dc47b2e89165ce5a98d,(.NET Core 4.6.28008.01; Darwin 19.2.0 Darwin Kernel Version 19.2.0: Sat Nov  9 03:47:04 PST 2019; root:xnu-6153.61.1~20/RELEASE_X86_64)
+        //        // https://github.com/Azure/azure-sdk-for-net/blob/d99777ef4a7d75dd5f9482c84c0240a900e15f9c/sdk/core/Azure.Core/samples/Configuration.md
+        //        // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
-                var op = args.Length > 0 ? args[0] : String.Empty;
-                var options = new FormRecognizerClientOptions();
-                var endpoint = new Uri("http://192.168.1.4:5000");
-                // var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
-                var credential = new CognitiveHeaderCredential(new HttpHeader("apim-subscription-id", "123"));
-                options.Diagnostics.IsLoggingContentEnabled = true;
-                options.Diagnostics.IsLoggingEnabled = true;
-                options.Diagnostics.ApplicationId = "chstone";
-                var client = new FormRecognizerClient(endpoint, credential, options);
-                var layoutClient = new FormLayoutClient(endpoint, credential);
-                var receiptClient = new FormReceiptClient(endpoint, credential);
+        //        var op = args.Length > 0 ? args[0] : String.Empty;
+        //        var options = new FormRecognizerClientOptions();
+        //        var endpoint = new Uri("http://192.168.1.4:5000");
+        //        // var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
+        //        var credential = new CognitiveHeaderCredential(new HttpHeader("apim-subscription-id", "123"));
+        //        options.Diagnostics.IsLoggingContentEnabled = true;
+        //        options.Diagnostics.IsLoggingEnabled = true;
+        //        options.Diagnostics.ApplicationId = "chstone";
+        //        var client = new FormRecognizerClient(endpoint, credential, options);
+        //        var layoutClient = new FormLayoutClient(endpoint, credential);
+        //        var receiptClient = new FormReceiptClient(endpoint, credential);
 
-                await (op switch
-                {
-                    "train" => TrainAsync(client, args),
-                    "model" => GetModelAsync(client, args),
-                    "analyze" => AnalyzeAsync(client, args),
-                    "analysis" => GetAnalysisAsync(client, args),
-                    "analysisResult" => GetAnalysisResultAsync(client, args),
-                    "summary" => GetModelsSummaryAsync(client),
-                    "delete" => DeleteModelAsync(client, args),
-                    "list" => ListModelsAsync(client),
-                    "receipt" => UseReceipt(receiptClient, args),
-                    "layout" => UseLayout(layoutClient, args),
-                    _ => throw new NotSupportedException(),
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
+        //        await (op switch
+        //        {
+        //            "train" => TrainAsync(client, args),
+        //            "model" => GetModelAsync(client, args),
+        //            "analyze" => AnalyzeAsync(client, args),
+        //            "analysis" => GetAnalysisAsync(client, args),
+        //            "analysisResult" => GetAnalysisResultAsync(client, args),
+        //            "summary" => GetModelsSummaryAsync(client),
+        //            "delete" => DeleteModelAsync(client, args),
+        //            "list" => ListModelsAsync(client),
+        //            "receipt" => UseReceipt(receiptClient, args),
+        //            "layout" => UseLayout(layoutClient, args),
+        //            _ => throw new NotSupportedException(),
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //    }
+        //}
 
         private static async Task UseLayout(FormLayoutClient client, string[] args)
         {
