@@ -45,8 +45,6 @@ var trainingRequest = new TrainingRequest { Source = "{your_blob_container_sas_u
 
 Training may take several minutes depending on the quantity, size and complexity of your training documents. When you start a training request, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the training operation is a `Model`.
 
-The `FormRecognizerClient` will asynchronously poll for the latest training status.
-
 ```csharp
 var trainingOperation = await client.StartTrainingAsync(trainingRequest);
 Console.WriteLine($"Created model with id {trainingOperation.Id}");
@@ -55,6 +53,8 @@ Console.WriteLine($"Created model with id {trainingOperation.Id}");
 > The operation identifier is also the model identifer. You can use this value to retrieve the model information or perform analysis.
 
 ## Wait for training completion
+
+The `FormRecognizerClient` can poll for the latest training status, asynchronously blocking the current thread.
 
 ```csharp
 var trainingResponse = await trainingOperation.WaitForCompletionAsync();
