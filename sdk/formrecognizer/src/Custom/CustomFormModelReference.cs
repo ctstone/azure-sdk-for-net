@@ -47,10 +47,11 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// Asynchronously get detailed information about a custom model.
         /// </summary>
+        /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<Model>> GetAsync(CancellationToken cancellationToken = default)
+        public async virtual Task<Response<Model>> GetAsync(bool? includeKeys = default, CancellationToken cancellationToken = default)
         {
-            using (var request = Pipeline.CreateGetModelRequest(_modelId))
+            using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
             using (var response = await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
@@ -62,10 +63,11 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// Get detailed information about a custom model.
         /// </summary>
+        /// /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<Model> Get(CancellationToken cancellationToken = default)
+        public virtual Response<Model> Get(bool? includeKeys = default, CancellationToken cancellationToken = default)
         {
-            using (var request = Pipeline.CreateGetModelRequest(_modelId))
+            using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
             using (var response = Pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
