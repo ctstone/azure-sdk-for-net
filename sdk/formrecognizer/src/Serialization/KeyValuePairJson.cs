@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("value"))
             {
-                keyValuePair.Key = KeyValueElementJson.Read(property.Value);
+                keyValuePair.Value = KeyValueElementJson.Read(property.Value);
             }
             else if (property.NameEquals("confidence"))
             {
