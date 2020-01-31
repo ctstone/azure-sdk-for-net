@@ -72,7 +72,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <inheritdoc/>
         public override Response UpdateStatus(CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateGetModelRequest(Id))
+            using (var request = _pipeline.CreateGetModelRequest(Id, includeKeys: true))
             {
                 return UpdateStatus(_pipeline.SendRequest(request, cancellationToken));
             }
@@ -81,7 +81,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <inheritdoc/>
         public override async ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
         {
-            using (var request = _pipeline.CreateGetModelRequest(Id))
+            using (var request = _pipeline.CreateGetModelRequest(Id, includeKeys: true))
             {
                 return UpdateStatus(await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false));
             }

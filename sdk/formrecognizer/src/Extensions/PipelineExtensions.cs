@@ -16,6 +16,7 @@ namespace Azure.AI.FormRecognizer.Extensions
     {
         private const string OperatorQueryKey = "op";
         private const string IncludeTextDetailsQueryKey = "includeTextDetails";
+        private const string IncludeKeysQueryKey = "includeKeys";
 
         #region CustomModel
         public static Request CreateTrainRequest(this HttpPipeline pipeline, TrainingRequest trainRequest, JsonSerializerOptions options)
@@ -29,11 +30,15 @@ namespace Azure.AI.FormRecognizer.Extensions
             return request;
         }
 
-        public static Request CreateGetModelRequest(this HttpPipeline pipeline, string modelId)
+        public static Request CreateGetModelRequest(this HttpPipeline pipeline, string modelId, bool? includeKeys)
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Get;
             request.Uri.Path = CustomFormModelReference.GetModelPath(modelId);
+            if (includeKeys.HasValue)
+            {
+                request.Uri.AppendQuery(IncludeKeysQueryKey, includeKeys.Value ? "true" : "false");
+            }
             return request;
         }
 
