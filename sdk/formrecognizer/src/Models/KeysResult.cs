@@ -15,11 +15,6 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public IDictionary<string, string[]> Clusters { get; internal set; }
 
-        /// <summary>
-        /// Custom model training result.
-        /// </summary>
-        public TrainingResult TrainResult { get; internal set; }
-
         internal static KeysResult Create() => new KeysResult();
     }
 }
