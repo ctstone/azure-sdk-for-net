@@ -48,6 +48,8 @@ namespace Azure.AI.FormRecognizer.Http
             {
                 await AuthenticateTokenCredentialAsync(request).ConfigureAwait(false);
             }
+
+            await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
         }
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
@@ -65,6 +67,7 @@ namespace Azure.AI.FormRecognizer.Http
             {
                 AuthenticateTokenCredential(request);
             }
+            ProcessNext(message, pipeline);
         }
 
         private void AuthenticateTokenCredential(Request request)
