@@ -97,7 +97,7 @@ foreach (var document in model.TrainResult.TrainingDocuments)
 ## Next Steps
 
 - [Analyze file with custom model]
-- Analyze url with custom model
+- [Analyze url with custom model]
 - List all custom models
 - Delete a custom model
 
@@ -113,3 +113,4 @@ foreach (var document in model.TrainResult.TrainingDocuments)
 [az cli]: https://docs.microsoft.com/en-us/cli/azure/storage/container?view=azure-cli-latest#az-storage-container-generate-sas
 [.NET]: https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-service-sas-create-dotnet
 [Analyze file with custom model]: ./02-Analyze-File-With-Custom-Model.md
+[Analyze url with custom model]: ./03-Analyze-Uri-With-Custom-Model.md
