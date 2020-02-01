@@ -36,11 +36,11 @@ var filePath = "/path/to/local/file.pdf";
 var stream = File.OpenRead(filePath);
 ```
 
-> All streams are supported, but if you supply a non-seekable stream (e.g. from an HTTP response) you will need to supply a `FormContentType`.
+> All streams types are supported, but if you supply a non-seekable stream (e.g. from an HTTP response) you will need to supply a `FormContentType`.
 
 ## Submit analysis request
 
-Analysis may take several seconds or several minutes depending on the size and complexity of document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `Analysis` object.
+Analysis may take several seconds or several minutes depending on the size and complexity of your document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `Analysis` object.
 
 ```csharp
 var analysisOperation = await model.StartAnalysisAsync(stream);

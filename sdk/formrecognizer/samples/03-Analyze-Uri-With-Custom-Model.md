@@ -43,7 +43,7 @@ var uri = new Uri("http://myhost/myfile.pdf");
 
 ## Submit analysis request
 
-Analysis may take several seconds or several minutes depending on the size and complexity of document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `Analysis` object.
+Analysis may take several seconds or several minutes depending on the size and complexity of your document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `Analysis` object.
 
 ```csharp
 var analysisOperation = await model.StartAnalysisAsync(uri);
