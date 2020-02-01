@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Base class for extracted text elements.
     /// </summary>
-    public abstract class ReferencingTextElement : TextElement
+    internal abstract class ReferencingTextElement : TextElement
     {
         private const string SegmentReadResults = "readResults";
         private const string SegmentLines = "lines";

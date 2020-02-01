@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.AI.FormRecognizer", "Azure.AI.FormRecognizer.csproj", "{3C2CF960-BF7F-44D2-AB3A-A2103A84888A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.AI.FormRecognizer.Samples", "..\samples\Azure.AI.FormRecognizer.Samples.csproj", "{2E5DC039-1FD7-4998-86E9-91DB70AE1671}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.AI.FormRecognizer.Tests", "..\tests\Azure.AI.FormRecognizer.Tests.csproj", "{3D686874-955C-4F28-9D9B-0394477438E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Core", "..\..\core\Azure.Core\src\Azure.Core.csproj", "{4541505B-BDED-4DF7-A858-290472272228}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C2CF960-BF7F-44D2-AB3A-A2103A84888A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C2CF960-BF7F-44D2-AB3A-A2103A84888A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C2CF960-BF7F-44D2-AB3A-A2103A84888A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2CF960-BF7F-44D2-AB3A-A2103A84888A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5DC039-1FD7-4998-86E9-91DB70AE1671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5DC039-1FD7-4998-86E9-91DB70AE1671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5DC039-1FD7-4998-86E9-91DB70AE1671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5DC039-1FD7-4998-86E9-91DB70AE1671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D686874-955C-4F28-9D9B-0394477438E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D686874-955C-4F28-9D9B-0394477438E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D686874-955C-4F28-9D9B-0394477438E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D686874-955C-4F28-9D9B-0394477438E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4541505B-BDED-4DF7-A858-290472272228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4541505B-BDED-4DF7-A858-290472272228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4541505B-BDED-4DF7-A858-290472272228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4541505B-BDED-4DF7-A858-290472272228}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD77A33F-561B-40E2-BE79-BC1532126EE3}
+	EndGlobalSection
+EndGlobal

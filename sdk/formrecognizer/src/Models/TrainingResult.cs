@@ -1,22 +1,28 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Training;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
     /// Custom model training result.
     /// </summary>
-    public class TrainingResult
+    internal class TrainingResult
     {
+        // TODO: Does training documents apply to both supervised and unsupervised learning?
+
         /// <summary>
         /// List of the documents used to train the model and any errors reported in each document.
         /// </summary>
-        public TrainingDocument[] TrainingDocuments { get; internal set; }
+        public DocumentTrainingResult[] TrainingDocumentResults { get; internal set; }
+
+        // TODO: Does Fields apply only to supervised models?  How is this different from FormClusters?
 
         /// <summary>
         /// List of fields used to train the model and the train operation error reported by each.
         /// </summary>
-        public TrainingField[] Fields { get; internal set; }
+        public FieldAccuracy[] FieldAccuracies { get; internal set; }
 
         /// <summary>
         /// Average accuracy.
@@ -26,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Errors returned during the training operation.
         /// </summary>
-        public ErrorDetails[] Errors { get; internal set; }
+        public FormRecognizerError[] Errors { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrainingResult"/> class.

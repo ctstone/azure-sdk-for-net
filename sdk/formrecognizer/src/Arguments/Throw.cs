@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Arguments
             }
         }
 
-        public static void IfNullOrEmpty(string arg, string name)
+        internal static void IfNullOrEmpty(string arg, string name)
         {
             if (string.IsNullOrEmpty(arg))
             {
@@ -24,7 +24,7 @@ namespace Azure.AI.FormRecognizer.Arguments
             }
         }
 
-        public static void IfInvalidUri(Uri uri, string name)
+        internal static void IfInvalidUri(Uri uri, string name)
         {
             Throw.IfMissing(uri, name);
 

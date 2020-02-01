@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Text extracted from a page in the input document.
     /// </summary>
-    public class ReadResult
+    internal class ReadResult
     {
         /// <summary>
         /// The 1-based page number in the input document.

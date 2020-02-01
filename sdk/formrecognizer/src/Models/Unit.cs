@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// The unit used by the width, height and boundingBox properties.
     /// </summary>
-    public enum Unit
+    internal enum Unit
     {
         /// <summary>Pixel.</summary>
         Pixel = 1,

@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted key-value pair.
     /// </summary>
-    public class KeyValuePair
+    internal class KeyValuePair
     {
         /// <summary>
         /// A user defined label for the key/value pair entry.

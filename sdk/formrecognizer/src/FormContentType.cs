@@ -9,7 +9,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Form content type for local files.
     /// </summary>
-    public readonly struct FormContentType : IEquatable<FormContentType>
+    internal readonly struct FormContentType : IEquatable<FormContentType>
     {
         internal const string DefaultContentType = "application/octet-stream";
         private readonly string _value;

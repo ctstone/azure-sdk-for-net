@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Base class for extracted text elements.
     /// </summary>
-    public abstract class TextElement
+    internal abstract class TextElement
     {
         /// <summary>
         /// The text content of the line.

@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// A set of extracted fields corresponding to the input document.
     /// </summary>
-    public class DocumentResult
+    internal class DocumentResult
     {
         /// <summary>
         /// Document type.

@@ -4,6 +4,7 @@
 using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Training;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
@@ -19,30 +20,30 @@ namespace Azure.AI.FormRecognizer.Serialization
                     ReadPropertyValue(ref trainingResult, property);
                 }
             }
-            if (trainingResult.TrainingDocuments == default)
+            //if (trainingResult.TrainingDocuments == default)
+            //{
+            //    trainingResult.TrainingDocuments = Array.Empty<DocumentTrainingResult>();
+            //}
+            if (trainingResult.FieldAccuracies == default)
             {
-                trainingResult.TrainingDocuments = Array.Empty<TrainingDocument>();
-            }
-            if (trainingResult.Fields == default)
-            {
-                trainingResult.Fields = Array.Empty<TrainingField>();
+                trainingResult.FieldAccuracies = Array.Empty<FieldAccuracy>();
             }
             if (trainingResult.Errors == default)
             {
-                trainingResult.Errors = Array.Empty<ErrorDetails>();
+                trainingResult.Errors = Array.Empty<FormRecognizerError>();
             }
             return trainingResult;
         }
 
         private static void ReadPropertyValue(ref TrainingResult trainingResult, JsonProperty property)
         {
-            if (property.NameEquals("trainingDocuments"))
+            //if (property.NameEquals("trainingDocuments"))
+            //{
+            //    trainingResult.TrainingDocuments = ArrayJson.Read(property.Value, TrainingDocumentJson.Read);
+            //}
+            if (property.NameEquals("fields"))
             {
-                trainingResult.TrainingDocuments = ArrayJson.Read(property.Value, TrainingDocumentJson.Read);
-            }
-            else if (property.NameEquals("fields"))
-            {
-                trainingResult.Fields = ArrayJson.Read(property.Value, TrainingFieldJson.Read);
+                trainingResult.FieldAccuracies = ArrayJson.Read(property.Value, TrainingFieldJson.Read);
             }
             else if (property.NameEquals("averageModelAccuracy"))
             {

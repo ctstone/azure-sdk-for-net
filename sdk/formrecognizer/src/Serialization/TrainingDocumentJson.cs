@@ -4,14 +4,15 @@
 using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Training;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class TrainingDocumentJson
     {
-        public static TrainingDocument Read(JsonElement root)
+        public static DocumentTrainingResult Read(JsonElement root)
         {
-            var trainingDocument = TrainingDocument.Create();
+            var trainingDocument = DocumentTrainingResult.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,12 +22,12 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (trainingDocument.Errors == default)
             {
-                trainingDocument.Errors = Array.Empty<ErrorDetails>();
+                trainingDocument.Errors = Array.Empty<FormRecognizerError>();
             }
             return trainingDocument;
         }
 
-        private static void ReadPropertyValue(ref TrainingDocument trainingDocument, JsonProperty property)
+        private static void ReadPropertyValue(ref DocumentTrainingResult trainingDocument, JsonProperty property)
         {
             if (property.NameEquals("documentName"))
             {
@@ -42,7 +43,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("status"))
             {
-                trainingDocument.Status = EnumJson.Read<TrainingStatus>(property.Value);
+                trainingDocument.Status = EnumJson.Read<DocumentTrainingStatus>(property.Value);
             }
         }
     }

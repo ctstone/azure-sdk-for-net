@@ -11,6 +11,7 @@ using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
+using Azure.AI.FormRecognizer.Training;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer.Custom
@@ -20,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelReference : AnalyzeClient
+    internal class CustomFormModelReference : AnalyzeClient
     {
         private readonly string _modelId;
 
@@ -49,13 +50,13 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<Model>> GetAsync(bool? includeKeys = default, CancellationToken cancellationToken = default)
+        public async virtual Task<Response<UnsupervisedModelTrainingResult>> GetAsync(bool? includeKeys = default, CancellationToken cancellationToken = default)
         {
             using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
             using (var response = await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
-                var model = await response.GetJsonContentAsync<Model>(Options, cancellationToken).ConfigureAwait(false);
+                var model = await response.GetJsonContentAsync<UnsupervisedModelTrainingResult>(Options, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(model, response);
             }
         }
@@ -65,13 +66,13 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         /// /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<Model> Get(bool? includeKeys = default, CancellationToken cancellationToken = default)
+        public virtual Response<UnsupervisedModelTrainingResult> Get(bool? includeKeys = default, CancellationToken cancellationToken = default)
         {
             using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
             using (var response = Pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
-                var model = response.GetJsonContent<Model>(Options);
+                var model = response.GetJsonContent<UnsupervisedModelTrainingResult>(Options);
                 return Response.FromValue(model, response);
             }
         }

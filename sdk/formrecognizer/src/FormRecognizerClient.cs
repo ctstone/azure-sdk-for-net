@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer
     /// The FormRecognizer client provides syncronous and asynchronous methods to manage custom forms,
     /// prebuilt models, and layout requests.
     /// </summary>
-    public class FormRecognizerClient
+    internal class FormRecognizerClient
     {
         internal const string BasePath = "/custom/models";
         private readonly HttpPipeline _pipeline;

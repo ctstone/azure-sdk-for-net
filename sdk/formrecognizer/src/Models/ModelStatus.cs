@@ -3,11 +3,12 @@
 
 namespace Azure.AI.FormRecognizer.Models
 {
+    // TODO: How is this different from OperationStatus?
     /// <summary>
     /// Model status.
     /// </summary>
 #pragma warning disable CA1717 // plural enum
-    public enum ModelStatus
+    internal enum ModelStatus
 #pragma warning restore CA1717 // plural enum
     {
         /// <summary>Creating.</summary>

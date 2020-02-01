@@ -9,7 +9,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Language information.
     /// </summary>
-    public readonly struct Language : IEquatable<Language>
+    internal readonly struct Language : IEquatable<Language>
     {
         private readonly string _value;
 

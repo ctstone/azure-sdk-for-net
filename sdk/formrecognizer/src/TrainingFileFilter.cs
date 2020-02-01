@@ -1,12 +1,12 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Training
 {
     /// <summary>
     /// Training request source filter.
     /// </summary>
-    public class SourceFilter
+    public class TrainingFileFilter
     {
         /// <summary>
         /// A case-sensitive prefix string to filter documents in the source path for training. For example, when using an Azure storage container URI, use the prefix to restrict sub folders for training.

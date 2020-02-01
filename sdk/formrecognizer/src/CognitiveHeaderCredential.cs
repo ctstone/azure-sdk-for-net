@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer
     /// A <see cref="CognitiveHeaderCredential"/> is a user-defined authentication method to supply custom credentials
     /// to the Form Recognizer service. It provides the ability to update the headers without creating a new client.
     /// </summary>
-    public class CognitiveHeaderCredential
+    internal class CognitiveHeaderCredential
     {
         private readonly object _lock = new object();
         private HttpHeader[] _headers;

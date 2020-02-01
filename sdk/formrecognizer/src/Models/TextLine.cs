@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Represents a line of extracted text.
     /// </summary>
-    public class TextLine : TextElement
+    internal class TextLine : TextElement
     {
 
         /// <summary>
