@@ -65,23 +65,37 @@ if (analysisResponse.HasValue)
 
 ## Examine the analysis results
 
-Loop over the recognized key value pairs:
+### Loop over the recognized key value pairs:
 
 ```csharp
 foreach (var page in analysis.AnalyzeResult.PageResults)
 {
     var clusterId = page.clusterId;
-    Console.WriteLine($"Cluster: {clusterId}");
+    Console.WriteLine($"Cluster({clusterId}):");
     foreach (var kvp in page.KeyValuePairs)
     {
         var keyText = kvp.Key.Text;
         var valueText = kvp.Value.Text;
-        Console.WriteLine($"{keyText} => {valueText}");
+        Console.WriteLine($"\t{keyText} => {valueText}");
     }
 }
 ```
 
-Render the recognized tables:
+```
+Cluster(0):
+    Address: => 14564 Main St. Saratoga, CA 94588
+    Invoice For: => First Up Consultants 1234 King St Redmond, WA 97624
+    Invoice Number => 7689302
+    Invoice Date => 3/09/2015
+    Invoice Due Date => 6/29/2016
+    Charges => $22,123.24
+    VAT ID => QR
+    Page => 1 of
+    __Tokens__1 => Contoso Suites
+    __Tokens__2 => 1
+```
+
+### Render the recognized tables:
 
 ```csharp
 foreach (var table in page.Tables)
@@ -91,8 +105,6 @@ foreach (var table in page.Tables)
     // table.WriteMarkdown(Console.Out);
 }
 ```
-
-ASCII-formatted table output:
 
 ```
 ┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
