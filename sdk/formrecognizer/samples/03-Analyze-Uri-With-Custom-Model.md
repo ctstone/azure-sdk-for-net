@@ -1,6 +1,6 @@
-# Analyze File with Custom Model
+# Analyze Uri with Custom Model
 
-This sample demonstrates how to analyze a new document from your local filesystem against an existing custom Form Recognizer model.
+This sample demonstrates how to analyze a new document from any internet-addressable Uri against an existing custom Form Recognizer model.
 
 ## Prerequisites
 
@@ -27,23 +27,26 @@ var modelId = "{your_model_id}";
 var model = client.GetModelReference(modelId);
 ```
 
-## Load your request file
-
-This is the file that you want to analyze (pdf, jpeg, png, or tiff). It should be separate from your training set.
+## Point to your request file
 
 ```csharp
-var filePath = "/path/to/local/file.pdf";
-var stream = File.OpenRead(filePath);
+var uri = new Uri("http://myhost/myfile.pdf");
 ```
 
-> All streams are supported, but if you supply a non-seekable stream (e.g. from an HTTP response) you will need to supply a `FormContentType`.
+> ⚠️ The Uri must be internet-addressable (or if using the container service, it must be addressable from your container). If your file is an Azure Blob, you may specify a [Shared Access Signature] url.
+
+> ⚠️ The remote endpoint must respond with a valid Form Recognizer `Content-Type`:
+> - `application/pdf`
+> - `image/jpeg`
+> - `image/png`
+> - `image/tiff`
 
 ## Submit analysis request
 
 Analysis may take several seconds or several minutes depending on the size and complexity of document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `Analysis` object.
 
 ```csharp
-var analysisOperation = await model.StartAnalysisAsync(stream);
+var analysisOperation = await model.StartAnalysisAsync(uri);
 Console.WriteLine($"Created request with id {analysisOperation.Id}");
 ```
 
@@ -119,3 +122,4 @@ foreach (var table in page.Tables)
 [first sample]: ./01-Train-Custom-Model.md
 [training sample]: ./01-Train-Custom-Model.md
 [sample data set]: https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/curl/form-recognizer/sample_data.zip
+[Shared Access Signature]: https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview
