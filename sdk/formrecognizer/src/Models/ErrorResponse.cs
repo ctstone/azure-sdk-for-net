@@ -5,6 +5,6 @@ namespace Azure.AI.FormRecognizer.Models
 {
     internal struct ErrorResponse
     {
-        public ErrorDetails Error { get; set; }
+        public FormRecognizerError Error { get; set; }
     }
 }

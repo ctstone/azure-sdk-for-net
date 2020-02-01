@@ -3,6 +3,7 @@
 
 namespace Azure.AI.FormRecognizer.Models
 {
+    // TODO: How is this different from OperationStatus?
     /// <summary>
     /// Model status.
     /// </summary>

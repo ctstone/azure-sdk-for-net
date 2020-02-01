@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (analysisResult.Errors == default)
             {
-                analysisResult.Errors = Array.Empty<ErrorDetails>();
+                analysisResult.Errors = Array.Empty<FormRecognizerError>();
             }
             foreach (var page in analysisResult.PageResults)
             {
@@ -109,7 +109,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("errors"))
             {
-                analyzedForm.Errors = new ErrorDetails[property.Value.GetArrayLength()];
+                analyzedForm.Errors = new FormRecognizerError[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {

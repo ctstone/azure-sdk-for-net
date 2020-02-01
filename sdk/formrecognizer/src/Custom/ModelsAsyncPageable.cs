@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// A collection of custom form models that may take multiple service requests to asynchronously iterate over.
     /// </summary>
-    internal class ModelsAsyncPageable : AsyncPageable<ModelInfo>
+    internal class ModelsAsyncPageable : AsyncPageable<FormRecognizerCustomModelInfo>
     {
         private HttpPipeline _pipeline;
         private JsonSerializerOptions _options;
@@ -35,9 +35,9 @@ namespace Azure.AI.FormRecognizer.Custom
         { }
 
         /// <inheritdoc />
-        public async override IAsyncEnumerable<Page<ModelInfo>> AsPages(string continuationToken = null, int? pageSizeHint = null)
+        public async override IAsyncEnumerable<Page<FormRecognizerCustomModelInfo>> AsPages(string continuationToken = null, int? pageSizeHint = null)
         {
-            Page<ModelInfo> page;
+            Page<FormRecognizerCustomModelInfo> page;
             do
             {
                 page = await GetPageAsync(continuationToken, CancellationToken).ConfigureAwait(false);
@@ -51,19 +51,19 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         /// <param name="continuationToken">Optional continuation token from a previous page result.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async Task<Page<ModelInfo>> GetPageAsync(string continuationToken = null, CancellationToken cancellationToken = default)
+        public async Task<Page<FormRecognizerCustomModelInfo>> GetPageAsync(string continuationToken = null, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateListModelsRequest(continuationToken))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
                 var listing = await response.GetJsonContentAsync<ModelListing>(_options, cancellationToken).ConfigureAwait(false);
-                return Page<ModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
+                return Page<FormRecognizerCustomModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
             }
         }
 
         /// <inheritdoc />
-        public async override IAsyncEnumerator<ModelInfo> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        public async override IAsyncEnumerator<FormRecognizerCustomModelInfo> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             string nextLink = null;
             do

@@ -16,14 +16,14 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// Represents a long-running training operation.
     /// </summary>
-    internal class TrainingOperation : Operation<Model>
+    internal class TrainingOperation : Operation<FormRecognizerCustomModel>
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly JsonSerializerOptions _options;
-        private Model _value;
+        private FormRecognizerCustomModel _value;
         private Response _response;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// The final result of the training operation, if the operation completed successfully.
         /// </summary>
-        public override Model Value => HasValue ? _value : default;
+        public override FormRecognizerCustomModel Value => HasValue ? _value : default;
 
         /// <summary>
         /// True if the training operation completed.
@@ -88,13 +88,13 @@ namespace Azure.AI.FormRecognizer.Custom
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<Model>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<FormRecognizerCustomModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<Model>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<FormRecognizerCustomModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -112,7 +112,7 @@ namespace Azure.AI.FormRecognizer.Custom
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var model = response.GetJsonContent<Model>(_options);
+            var model = response.GetJsonContent<FormRecognizerCustomModel>(_options);
             if (model.IsModelComplete())
             {
                 _value = model;

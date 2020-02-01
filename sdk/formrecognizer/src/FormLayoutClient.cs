@@ -96,6 +96,6 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Options for analyzing layout.
     /// </summary>
-    public struct AnalyzeLayoutOptions
+    internal struct AnalyzeLayoutOptions
     { }
 }

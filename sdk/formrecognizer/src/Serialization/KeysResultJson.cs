@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class KeysResultJson
     {
-        public static KeysResult Read(JsonElement root)
+        public static FormFieldNames Read(JsonElement root)
         {
-            var keysResult = KeysResult.Create();
+            var keysResult = FormFieldNames.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return keysResult;
         }
 
-        private static void ReadPropertyValue(ref KeysResult keysResult, JsonProperty property)
+        private static void ReadPropertyValue(ref FormFieldNames keysResult, JsonProperty property)
         {
             if (property.NameEquals("clusters"))
             {

@@ -8,9 +8,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class ErrorDetailsJson
     {
-        public static ErrorDetails Read(JsonElement root)
+        public static FormRecognizerError Read(JsonElement root)
         {
-            var dataTable = new ErrorDetails();
+            var dataTable = new FormRecognizerError();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return dataTable;
         }
 
-        private static void ReadPropertyValue(ref ErrorDetails errorDetails, JsonProperty property)
+        private static void ReadPropertyValue(ref FormRecognizerError errorDetails, JsonProperty property)
         {
             if (property.NameEquals("code"))
             {

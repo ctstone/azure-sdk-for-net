@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer
     /// A <see cref="CognitiveKeyCredential"/> is a subscription key used to authenticate the Form Recognizer service.
     /// It provides the ability to update the subscription key without creating a new client.
     /// </summary>
-    internal class CognitiveKeyCredential
+    public class CognitiveKeyCredential
     {
         private const string ApimKeyHeader = "Ocp-Apim-Subscription-Key";
         private volatile string _subscriptionKey;

@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Page of models.
         /// </summary>
-        public ModelInfo[] ModelList { get; internal set; }
+        public FormRecognizerCustomModelInfo[] ModelList { get; internal set; }
 
         /// <summary>
         /// Link to next page of models.

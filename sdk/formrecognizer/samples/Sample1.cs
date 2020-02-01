@@ -79,7 +79,7 @@ namespace Azure.AI.FormRecognizer.Samples
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                Models.Model model = op.Value;
+                Models.FormRecognizerCustomModel model = op.Value;
                 //var modelInfo = model.ModelInfo
                 //model.TrainResult.
 

@@ -21,15 +21,15 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (trainingResult.TrainingDocuments == default)
             {
-                trainingResult.TrainingDocuments = Array.Empty<TrainingDocument>();
+                trainingResult.TrainingDocuments = Array.Empty<TrainingDocumentResult>();
             }
-            if (trainingResult.Fields == default)
+            if (trainingResult.FieldAccuracies == default)
             {
-                trainingResult.Fields = Array.Empty<TrainingField>();
+                trainingResult.FieldAccuracies = Array.Empty<TrainingFieldAccuracy>();
             }
             if (trainingResult.Errors == default)
             {
-                trainingResult.Errors = Array.Empty<ErrorDetails>();
+                trainingResult.Errors = Array.Empty<FormRecognizerError>();
             }
             return trainingResult;
         }
@@ -42,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("fields"))
             {
-                trainingResult.Fields = ArrayJson.Read(property.Value, TrainingFieldJson.Read);
+                trainingResult.FieldAccuracies = ArrayJson.Read(property.Value, TrainingFieldJson.Read);
             }
             else if (property.NameEquals("averageModelAccuracy"))
             {

@@ -8,9 +8,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class TrainingFieldJson
     {
-        public static TrainingField Read(JsonElement root)
+        public static TrainingFieldAccuracy Read(JsonElement root)
         {
-            var trainingField = TrainingField.Create();
+            var trainingField = TrainingFieldAccuracy.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return trainingField;
         }
 
-        private static void ReadPropertyValue(ref TrainingField trainingField, JsonProperty property)
+        private static void ReadPropertyValue(ref TrainingFieldAccuracy trainingField, JsonProperty property)
         {
             if (property.NameEquals("fieldName"))
             {

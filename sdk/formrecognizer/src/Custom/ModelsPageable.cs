@@ -15,7 +15,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// A collection of custom form models that may take multiple service requests to synchronously iterate over.
     /// </summary>
-    internal class ModelsPageable : Pageable<ModelInfo>
+    internal class ModelsPageable : Pageable<FormRecognizerCustomModelInfo>
     {
         private HttpPipeline _pipeline;
         private JsonSerializerOptions _options;
@@ -34,9 +34,9 @@ namespace Azure.AI.FormRecognizer.Custom
         { }
 
         /// <inheritdoc />
-        public override IEnumerable<Page<ModelInfo>> AsPages(string continuationToken = null, int? pageSizeHint = null)
+        public override IEnumerable<Page<FormRecognizerCustomModelInfo>> AsPages(string continuationToken = null, int? pageSizeHint = null)
         {
-            Page<ModelInfo> page;
+            Page<FormRecognizerCustomModelInfo> page;
             do
             {
                 page = GetPage(continuationToken);
@@ -50,19 +50,19 @@ namespace Azure.AI.FormRecognizer.Custom
         /// Get a page of models.
         /// </summary>
         /// <param name="continuationToken"></param>
-        public Page<ModelInfo> GetPage(string continuationToken = null)
+        public Page<FormRecognizerCustomModelInfo> GetPage(string continuationToken = null)
         {
             using (var request = _pipeline.CreateListModelsRequest(continuationToken))
             using (var response = _pipeline.SendRequest(request, CancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
                 var listing = response.GetJsonContent<ModelListing>(_options);
-                return Page<ModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
+                return Page<FormRecognizerCustomModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
             }
         }
 
         /// <inheritdoc />
-        public override IEnumerator<ModelInfo> GetEnumerator()
+        public override IEnumerator<FormRecognizerCustomModelInfo> GetEnumerator()
         {
             string nextLink = null;
             do

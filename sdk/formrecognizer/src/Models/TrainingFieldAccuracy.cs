@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Azure.AI.FormRecognizer.Models
@@ -6,12 +6,15 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Report for a custom model training field.
     /// </summary>
-    internal class TrainingField
+    internal class TrainingFieldAccuracy
     {
         /// <summary>
         /// Training field name.
         /// </summary>
         public string FieldName { get; internal set; }
+
+
+        // TODO: How is Accuracy different from Confidence?
 
         /// <summary>
         /// Estimated extraction accuracy for this field.
@@ -19,11 +22,11 @@ namespace Azure.AI.FormRecognizer.Models
         public float Accuracy { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrainingField"/> class.
+        /// Initializes a new instance of the <see cref="TrainingFieldAccuracy"/> class.
         /// </summary>
-        protected TrainingField()
+        protected TrainingFieldAccuracy()
         { }
 
-        internal static TrainingField Create() => new TrainingField();
+        internal static TrainingFieldAccuracy Create() => new TrainingFieldAccuracy();
     }
 }

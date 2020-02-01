@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of errors reported during the analyze operation.
         /// </summary>
-        public ErrorDetails[] Errors { get; internal set; }
+        public FormRecognizerError[] Errors { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalysisResult"/> class.

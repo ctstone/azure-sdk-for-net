@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Training request source filter.
     /// </summary>
-    internal class SourceFilter
+    public class SourceFilter
     {
         /// <summary>
         /// A case-sensitive prefix string to filter documents in the source path for training. For example, when using an Azure storage container URI, use the prefix to restrict sub folders for training.
