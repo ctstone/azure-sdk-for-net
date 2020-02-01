@@ -51,7 +51,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var modelId = "fake-model-id";
 
             // Act
-            var request = _pipeline.CreateGetModelRequest(modelId);
+            var request = _pipeline.CreateGetModelRequest(modelId, null);
 
             // Assert
             Assert.Equal(RequestMethod.Get, request.Method);
