@@ -231,7 +231,7 @@ namespace Azure.AI.FormRecognizer
         /// var page2 = client.Custom.ListModelsAsync().GetPageAsync(page1.ContinuationToken);
         /// ```
         /// </summary>
-        public virtual AsyncPageable<FormRecognizerCustomModelInfo> ListModelsAsync(CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<ModelInfo> ListModelsAsync(CancellationToken cancellationToken = default)
         {
             return new ModelsAsyncPageable(_pipeline, _options.SerializationOptions, cancellationToken);
         }
@@ -257,7 +257,7 @@ namespace Azure.AI.FormRecognizer
         /// var page2 = client.Custom.ListModels().GetPage(page1.ContinuationToken);
         /// ```
         /// </summary>
-        public virtual Pageable<FormRecognizerCustomModelInfo> ListModels(CancellationToken cancellationToken = default)
+        public virtual Pageable<ModelInfo> ListModels(CancellationToken cancellationToken = default)
         {
             return new ModelsPageable(_pipeline, _options.SerializationOptions, cancellationToken);
         }

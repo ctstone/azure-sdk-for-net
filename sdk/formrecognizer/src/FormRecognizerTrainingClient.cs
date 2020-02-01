@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Training
 {
     /// <summary>
     /// </summary>
@@ -37,6 +37,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="options">Optional service parameters.</param>
         public FormRecognizerTrainingClient(Uri endpoint, CognitiveKeyCredential credential, FormRecognizerTrainingClientOptions options)
         {
+            var temp = options.Version;
             _formRecognizerClient = new FormRecognizerClient(endpoint, credential, new FormRecognizerClientOptions());
         }
 
@@ -45,7 +46,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="source"></param>
         /// <param name="filter"></param>
         /// <param name="cancellationToken"></param>
-        public virtual TrainCustomModelOperation StartTrainingCustomModel(string source, SourceFilter filter, CancellationToken cancellationToken = default)
+        public virtual TrainUnsupervisedModelOperation StartTrainingUnsupervisedModel(string source, TrainingFileFilter filter, CancellationToken cancellationToken = default)
         {
             var operation = _formRecognizerClient.StartTraining(new TrainingRequest()
             {
@@ -53,7 +54,7 @@ namespace Azure.AI.FormRecognizer
                 SourceFilter = filter
             });
 
-            return new TrainCustomModelOperation(operation);
+            return new TrainUnsupervisedModelOperation(operation);
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="source"></param>
         /// <param name="filter"></param>
         /// <param name="cancellationToken"></param>
-        public virtual async Task<TrainCustomModelOperation> StartTrainingCustomModelAsync(string source, SourceFilter filter, CancellationToken cancellationToken = default)
+        public virtual async Task<TrainUnsupervisedModelOperation> StartTrainingUnsupervisedModelAsync(string source, TrainingFileFilter filter, CancellationToken cancellationToken = default)
         {
             var operation = await _formRecognizerClient.StartTrainingAsync(new TrainingRequest()
             {
@@ -69,7 +70,7 @@ namespace Azure.AI.FormRecognizer
                 SourceFilter = filter
             }, cancellationToken).ConfigureAwait(false);
 
-            return new TrainCustomModelOperation(operation);
+            return new TrainUnsupervisedModelOperation(operation);
         }
 
         /// <summary>
@@ -77,10 +78,58 @@ namespace Azure.AI.FormRecognizer
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual TrainCustomModelOperation StartTrainingCustomModel(string operationId, CancellationToken cancellationToken = default)
+        public virtual TrainUnsupervisedModelOperation StartTrainingUnsupervisedModel(string operationId, CancellationToken cancellationToken = default)
         {
             var operation = _formRecognizerClient.StartTraining(operationId, cancellationToken);
-            return new TrainCustomModelOperation(operation);
+            return new TrainUnsupervisedModelOperation(operation);
+        }
+
+
+        /// <summary>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="filter"></param>
+        /// <param name="labelFile"></param>
+        /// <param name="cancellationToken"></param>
+        public virtual TrainSupervisedModelOperation StartTrainingSupervisedModel(string source, TrainingFileFilter filter, string labelFile, CancellationToken cancellationToken = default)
+        {
+            var operation = _formRecognizerClient.StartTraining(new TrainingRequest()
+            {
+                Source = source,
+                SourceFilter = filter,
+                UseLabelFile = (labelFile != null) // TODO pass through.
+            });
+
+            return new TrainSupervisedModelOperation(operation);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="filter"></param>
+        /// <param name="labelFile"></param>
+        /// <param name="cancellationToken"></param>
+        public virtual async Task<TrainSupervisedModelOperation> StartTrainingSupervisedModelAsync(string source, TrainingFileFilter filter, string labelFile, CancellationToken cancellationToken = default)
+        {
+            var operation = await _formRecognizerClient.StartTrainingAsync(new TrainingRequest()
+            {
+                Source = source,
+                SourceFilter = filter,
+                UseLabelFile = (labelFile != null) // TODO pass through.
+            }, cancellationToken).ConfigureAwait(false);
+
+            return new TrainSupervisedModelOperation(operation);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="operationId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual TrainSupervisedModelOperation StartTrainingSupervisedModel(string operationId, CancellationToken cancellationToken = default)
+        {
+            var operation = _formRecognizerClient.StartTraining(operationId, cancellationToken);
+            return new TrainSupervisedModelOperation(operation);
         }
     }
 }

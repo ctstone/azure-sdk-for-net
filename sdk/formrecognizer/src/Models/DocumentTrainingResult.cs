@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Training
 {
     /// <summary>
     /// Report for a custom model training document.
     /// </summary>
-    internal class TrainingDocumentResult
+    public class DocumentTrainingResult
     {
         /// <summary>
         /// Training document name.
@@ -23,6 +23,8 @@ namespace Azure.AI.FormRecognizer.Models
         // What are the possible values of these?  Would it be better to group these with
         // training errors?  How will customers use these errors?
 
+        // TODO: Where would it make sense to throw an exception on an error?
+
         /// <summary>
         /// List of errors.
         /// </summary>
@@ -35,14 +37,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Status of the training operation.
         /// </summary>
-        public TrainingStatus Status { get; internal set; }
+        public DocumentTrainingStatus Status { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrainingDocumentResult"/> class.
+        /// Initializes a new instance of the <see cref="DocumentTrainingResult"/> class.
         /// </summary>
-        protected TrainingDocumentResult()
+        protected DocumentTrainingResult()
         { }
 
-        internal static TrainingDocumentResult Create() => new TrainingDocumentResult();
+        internal static DocumentTrainingResult Create() => new DocumentTrainingResult();
     }
 }

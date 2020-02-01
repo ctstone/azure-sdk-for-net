@@ -7,15 +7,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Training
 {
     /// <summary>
     /// </summary>
-    public class TrainCustomModelOperation : Operation<FormRecognizerCustomModel>
+    public class TrainUnsupervisedModelOperation : Operation<UnsupervisedModelTrainingResult>
     {
         private TrainingOperation _operation;
 
-        internal TrainCustomModelOperation(TrainingOperation operation)
+        internal TrainUnsupervisedModelOperation(TrainingOperation operation)
         {
             _operation = operation;
         }
@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer
 
         /// <summary>
         /// </summary>
-        public override FormRecognizerCustomModel Value => _operation.Value;
+        public override UnsupervisedModelTrainingResult Value => _operation.Value;
 
         /// <summary>
         /// </summary>
@@ -59,7 +59,7 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<FormRecognizerCustomModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<UnsupervisedModelTrainingResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
             => _operation.WaitForCompletionAsync(cancellationToken);
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<FormRecognizerCustomModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public override ValueTask<Response<UnsupervisedModelTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
             => _operation.WaitForCompletionAsync(pollingInterval, cancellationToken);
     }
 }

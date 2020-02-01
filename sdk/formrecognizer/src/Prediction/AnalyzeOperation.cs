@@ -53,6 +53,7 @@ namespace Azure.AI.FormRecognizer.Prediction
             _id = id;
             _pipeline = pipeline;
             _options = options;
+            _value = Analysis.Create();
         }
 
         /// <summary>

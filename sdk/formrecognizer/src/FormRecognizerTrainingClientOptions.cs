@@ -5,8 +5,10 @@ using System;
 using System.Text;
 using System.Text.Json;
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Training
 {
+    /// <summary>
+    /// </summary>
     public class FormRecognizerTrainingClientOptions
     {
         internal const ServiceVersion LatestVersion = ServiceVersion.V2_0_Preview;

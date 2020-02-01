@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Training;
+using System.Diagnostics;
+
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
@@ -16,7 +19,7 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Filter to apply to the documents in the source path for training.
         /// </summary>
-        public SourceFilter SourceFilter { get; set; }
+        public TrainingFileFilter SourceFilter { get; set; }
 
         /// <summary>
         /// Use label file for training a model.

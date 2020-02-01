@@ -4,6 +4,7 @@
 using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Training;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
@@ -19,13 +20,13 @@ namespace Azure.AI.FormRecognizer.Serialization
                     ReadPropertyValue(ref trainingResult, property);
                 }
             }
-            if (trainingResult.TrainingDocuments == default)
-            {
-                trainingResult.TrainingDocuments = Array.Empty<TrainingDocumentResult>();
-            }
+            //if (trainingResult.TrainingDocuments == default)
+            //{
+            //    trainingResult.TrainingDocuments = Array.Empty<DocumentTrainingResult>();
+            //}
             if (trainingResult.FieldAccuracies == default)
             {
-                trainingResult.FieldAccuracies = Array.Empty<TrainingFieldAccuracy>();
+                trainingResult.FieldAccuracies = Array.Empty<FieldAccuracy>();
             }
             if (trainingResult.Errors == default)
             {
@@ -36,11 +37,11 @@ namespace Azure.AI.FormRecognizer.Serialization
 
         private static void ReadPropertyValue(ref TrainingResult trainingResult, JsonProperty property)
         {
-            if (property.NameEquals("trainingDocuments"))
-            {
-                trainingResult.TrainingDocuments = ArrayJson.Read(property.Value, TrainingDocumentJson.Read);
-            }
-            else if (property.NameEquals("fields"))
+            //if (property.NameEquals("trainingDocuments"))
+            //{
+            //    trainingResult.TrainingDocuments = ArrayJson.Read(property.Value, TrainingDocumentJson.Read);
+            //}
+            if (property.NameEquals("fields"))
             {
                 trainingResult.FieldAccuracies = ArrayJson.Read(property.Value, TrainingFieldJson.Read);
             }

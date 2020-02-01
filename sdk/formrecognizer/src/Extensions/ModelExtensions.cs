@@ -7,14 +7,14 @@ namespace Azure.AI.FormRecognizer
 {
     internal static class ModelExtensions
     {
-        public static bool IsModelComplete(this FormRecognizerCustomModel model)
+        public static bool IsModelComplete(this ModelStatus modelStatus)
         {
-            return model.ModelInfo.Status != ModelStatus.Creating;
+            return modelStatus != ModelStatus.Creating;
         }
 
-        public static bool IsModelSuccess(this FormRecognizerCustomModel model)
+        public static bool IsModelSuccess(this ModelStatus modelStatus)
         {
-            return model.ModelInfo.Status == ModelStatus.Ready;
+            return modelStatus == ModelStatus.Ready;
         }
 
         public static bool IsAnalysisComplete(this Analysis analysis)

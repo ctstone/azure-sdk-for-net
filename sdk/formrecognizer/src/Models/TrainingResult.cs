@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Training;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
@@ -13,14 +15,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of the documents used to train the model and any errors reported in each document.
         /// </summary>
-        public TrainingDocumentResult[] TrainingDocumentResults { get; internal set; }
+        public DocumentTrainingResult[] TrainingDocumentResults { get; internal set; }
 
         // TODO: Does Fields apply only to supervised models?  How is this different from FormClusters?
 
         /// <summary>
         /// List of fields used to train the model and the train operation error reported by each.
         /// </summary>
-        public TrainingFieldAccuracy[] FieldAccuracies { get; internal set; }
+        public FieldAccuracy[] FieldAccuracies { get; internal set; }
 
         /// <summary>
         /// Average accuracy.
