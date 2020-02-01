@@ -12,7 +12,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Set options for the Form Recognizer client.
     /// </summary>
-    public class FormRecognizerClientOptions : ClientOptions
+    internal class FormRecognizerClientOptions : ClientOptions
     {
         internal const ServiceVersion LatestVersion = ServiceVersion.V2_0_Preview;
 

@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Result of an analysis operation.
     /// </summary>
-    public class AnalysisResult
+    internal class AnalysisResult
     {
         /// <summary>
         /// Version of schema used for this result.

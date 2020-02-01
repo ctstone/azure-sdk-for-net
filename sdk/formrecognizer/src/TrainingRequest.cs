@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// Request parameter to train a new custom model.
     /// </summary>
-    public class TrainingRequest
+    internal class TrainingRequest
     {
         /// <summary>
         /// Source path containing the training documents.

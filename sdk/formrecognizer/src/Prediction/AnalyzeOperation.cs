@@ -15,7 +15,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// Represents a long-running analysis operation.
     /// </summary>
-    public class AnalyzeOperation : Operation<Analysis>
+    internal class AnalyzeOperation : Operation<Analysis>
     {
         private const int DefaultPollingIntervalSeconds = 10;
         private const string LocationHeader = "Operation-Location";

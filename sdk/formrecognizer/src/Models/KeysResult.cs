@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Keys extracted by the custom model.
     /// </summary>
-    public struct KeysResult
+    internal struct KeysResult
     {
         /// <summary>
         /// Object mapping clusterIds to a list of keys.

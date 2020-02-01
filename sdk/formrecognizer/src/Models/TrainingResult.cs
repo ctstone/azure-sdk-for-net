@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Custom model training result.
     /// </summary>
-    public class TrainingResult
+    internal class TrainingResult
     {
         /// <summary>
         /// List of the documents used to train the model and any errors reported in each document.

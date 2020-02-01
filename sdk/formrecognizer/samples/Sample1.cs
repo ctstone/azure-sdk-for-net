@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
@@ -29,9 +30,8 @@ namespace Azure.AI.FormRecognizer.Samples
                 //var layoutClient = new FormLayoutClient(new Uri(endpoint), credential);
                 //var receiptClient = new FormReceiptClient(new Uri(endpoint), credential);
 
-                await TrainModel();
-                //await Analyze();
-
+                //await TrainModel();
+                await Analyze();
 
                 //await (op switch
                 //{
@@ -70,7 +70,7 @@ namespace Azure.AI.FormRecognizer.Samples
             //var prefix = args.Length == 3 ? args[2] : default;
             TrainingOperation op = await client.StartTrainingAsync(new TrainingRequest
             {
-                Source = "https://annelostorage01.blob.core.windows.net/container-formreco?sp=rl&st=2020-01-30T22:44:59Z&se=2020-01-31T22:44:59Z&sv=2019-02-02&sr=c&sig=9wFl%2BowmNMxPPLD5ANiONunR0emDy2cZJ0LksUWigBM%3D",
+                Source = "https://annelostorage01.blob.core.windows.net/container-formreco?sp=rl&st=2020-02-01T03:54:59Z&se=2020-02-02T03:54:59Z&sv=2019-02-02&sr=c&sig=%2FlZqrmWSI%2FZ%2B9TeWdJynZfGzQmLws9zz7NB5foEjPjg%3D",
                 //SourceFilter = new SourceFilter { Prefix = "" },
             });
 
@@ -100,16 +100,22 @@ namespace Azure.AI.FormRecognizer.Samples
             var options = new FormRecognizerClientOptions();
             var credential = new CognitiveKeyCredential(subscriptionKey);
             var client = new FormRecognizerClient(new Uri(endpoint), credential, options);
-            string modelId = "dcbd0a4c-cfe1-48f4-a9ec-ab12b9d3efd0";
+            string modelId = "a36ff8a9-d7b3-4ee6-92d0-6e6eb73816c7";
 
             var filePath = @"C:\src\samples\cognitive\formrecognizer\sample_data\Test\Invoice_6.pdf";
             var stream = File.OpenRead(filePath);
-            var op = await client.GetModelReference(modelId).StartAnalyzeAsync(stream, null, true);
+            var op = await client.GetModelReference(modelId).StartAnalyzeAsync(stream, null, includeTextDetails: false);
             Console.Error.WriteLine($"Created request with id {op.Id}");
             Console.Error.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
+                var keyText = op.Value.AnalyzeResult.PageResults[0].KeyValuePairs[0].Key.Text;
+                var valueText = op.Value.AnalyzeResult.PageResults[0].KeyValuePairs[0].Value.Text;
+
+                var fieldName = op.Value.AnalyzeResult.DocumentResults[0].Fields.Keys.First();
+                var fieldValue = op.Value.AnalyzeResult.DocumentResults[0].Fields[fieldName].Text;
+
                 //Analysis analysis = op.Value;
                 //var documentResults = analysis.AnalyzeResult.DocumentResults;
                 //var pageResults = analysis.AnalyzeResult.PageResults;

@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// The form layout client extracts text and layout information from a given document.
     /// </summary>
-    public class FormLayoutClient : AnalyzeClient
+    internal class FormLayoutClient : AnalyzeClient
     {
         private const string BaseLayoutPath = "/layout";
 

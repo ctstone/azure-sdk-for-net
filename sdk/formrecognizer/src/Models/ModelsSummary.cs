@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Models summary
     /// </summary>
-    public class ModelsSummary
+    internal class ModelsSummary
     {
         /// <summary>
         /// Count.

@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted table contained in a page.
     /// </summary>
-    public class DataTable
+    internal class DataTable
     {
         /// <summary>
         /// Number of rows.

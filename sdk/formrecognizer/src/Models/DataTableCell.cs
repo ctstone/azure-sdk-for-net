@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted cell in a table.
     /// </summary>
-    public class DataTableCell : ReferencingTextElement
+    internal class DataTableCell : ReferencingTextElement
     {
         /// <summary>
         /// Row index of the cell.

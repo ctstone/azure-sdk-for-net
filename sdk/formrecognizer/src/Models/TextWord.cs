@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Represents an extracted word.
     /// </summary>
-    public class TextWord : TextElement
+    internal class TextWord : TextElement
     {
         /// <summary>
         /// Confidence value.

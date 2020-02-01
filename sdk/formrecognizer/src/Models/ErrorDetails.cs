@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Error response.
     /// </summary>
-    public struct ErrorDetails
+    internal struct ErrorDetails
     {
         /// <summary>
         /// Error status.

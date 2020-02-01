@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// The receipt client extract field text and semantic values from receipt documents.
     /// </summary>
-    public class FormReceiptClient : AnalyzeClient
+    internal class FormReceiptClient : AnalyzeClient
     {
         internal const string BaseReceiptPath = "/prebuilt/receipt";
 

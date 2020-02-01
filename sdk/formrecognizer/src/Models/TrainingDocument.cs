@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Report for a custom model training document.
     /// </summary>
-    public class TrainingDocument
+    internal class TrainingDocument
     {
         /// <summary>
         /// Training document name.

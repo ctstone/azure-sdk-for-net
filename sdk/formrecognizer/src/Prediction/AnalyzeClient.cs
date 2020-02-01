@@ -19,7 +19,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// Defines the synchronous and asynchronous operations to analyze forms and retrieve results.
     /// Supports analyzing files from both <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class AnalyzeClient
+    internal class AnalyzeClient
     {
         private readonly HttpPipeline _pipeline;
         // private readonly FormRecognizerClientOptions _options;

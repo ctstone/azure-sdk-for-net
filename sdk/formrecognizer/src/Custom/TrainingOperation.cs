@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// Represents a long-running training operation.
     /// </summary>
-    public class TrainingOperation : Operation<Model>
+    internal class TrainingOperation : Operation<Model>
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);

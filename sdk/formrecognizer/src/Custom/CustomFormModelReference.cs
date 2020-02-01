@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelReference : AnalyzeClient
+    internal class CustomFormModelReference : AnalyzeClient
     {
         private readonly string _modelId;
 

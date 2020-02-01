@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Recognized field value.
     /// </summary>
-    public class FieldValue : ReferencingTextElement
+    internal class FieldValue : ReferencingTextElement
     {
         /// <summary>
         /// Type of field value.

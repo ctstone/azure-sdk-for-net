@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Model listing.
     /// </summary>
-    public class ModelListing
+    internal class ModelListing
     {
         /// <summary>
         /// Summary of models.

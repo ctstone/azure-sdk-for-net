@@ -7,7 +7,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// Status of the training operation.
     /// </summary>
 #pragma warning disable CA1717 // plural enum
-    public enum TrainingStatus
+    internal enum TrainingStatus
 #pragma warning restore CA1717 // plural enum
     {
         /// <summary>Succeeded.</summary>

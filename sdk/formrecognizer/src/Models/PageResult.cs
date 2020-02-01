@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Extracted information from a single page.
     /// </summary>
-    public class PageResult
+    internal class PageResult
     {
         /// <summary>
         /// Page number.

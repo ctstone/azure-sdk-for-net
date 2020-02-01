@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Status and result of an analysis operation.
     /// </summary>
-    public class Analysis
+    internal class Analysis
     {
         /// <summary>
         /// Status of the operation.
