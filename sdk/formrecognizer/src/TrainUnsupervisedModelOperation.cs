@@ -67,7 +67,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<UnsupervisedModelTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public override ValueTask<Response<UnsupervisedModelTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
             => _operation.WaitForCompletionAsync(pollingInterval, cancellationToken);
     }
 }

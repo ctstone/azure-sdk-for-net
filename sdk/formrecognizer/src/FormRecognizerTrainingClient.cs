@@ -51,7 +51,7 @@ namespace Azure.AI.FormRecognizer.Training
             var operation = _formRecognizerClient.StartTraining(new TrainingRequest()
             {
                 Source = source,
-                SourceFilter = filter
+                SourceFilter = filter,
             });
 
             return new TrainUnsupervisedModelOperation(operation);
@@ -67,7 +67,7 @@ namespace Azure.AI.FormRecognizer.Training
             var operation = await _formRecognizerClient.StartTrainingAsync(new TrainingRequest()
             {
                 Source = source,
-                SourceFilter = filter
+                SourceFilter = filter,
             }, cancellationToken).ConfigureAwait(false);
 
             return new TrainUnsupervisedModelOperation(operation);
