@@ -79,9 +79,30 @@ foreach (var page in analysis.AnalyzeResult.PageResults)
         Console.WriteLine($"{keyText} => {valueText}");
     }
 }
-
-// TODO tables
 ```
+
+Render the recognized tables:
+
+```csharp
+foreach (var table in page.Tables)
+{
+    table.WriteAscii(Console.Out);
+    // table.WriteHtml(Console.Out);
+    // table.WriteMarkdown(Console.Out);
+}
+```
+
+ASCII-formatted table output:
+
+```
+┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
+│ Invoice Number│   Invoice Date│Invoice Due Dat│        Charges│         VAT ID│
+╞═══════════════╪═══════════════╪═══════════════╪═══════════════╪═══════════════╡
+│        7689302│      3/09/2015│      6/29/2016│     $22,123.24│             QR│
+└───────────────┴───────────────┴───────────────┴───────────────┴───────────────┘
+```
+
+> ASCII tables are rendered with unicode glyphs. If you require true ASCII tables, use `table.WriteAscii(Console.Out, unicode: false)`.
 
 [first sample]: ./01-Train-Custom-Model.md
 [training sample]: ./01-Train-Custom-Model.md
