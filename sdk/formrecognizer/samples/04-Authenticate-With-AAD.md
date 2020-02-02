@@ -1,4 +1,4 @@
-# Authenticate with Azure Active Directory
+# Authenticate Form Recognizer with Azure Active Directory
 
 This sample demonstrates how to authenticate with the Form Recognizer service using an OAuth token obtained from your Azure Active Directory.
 

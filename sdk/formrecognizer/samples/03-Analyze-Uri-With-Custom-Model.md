@@ -1,4 +1,4 @@
-# Analyze Uri with Custom Model
+# Analyze Uri with Form Recognizer Custom Model
 
 This sample demonstrates how to analyze a new document from any internet-addressable Uri against an existing custom Form Recognizer model.
 

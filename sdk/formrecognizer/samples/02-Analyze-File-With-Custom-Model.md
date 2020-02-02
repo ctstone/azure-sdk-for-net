@@ -1,4 +1,4 @@
-# Analyze File with Custom Model
+# Analyze File with Form Recognizer Custom Model
 
 This sample demonstrates how to analyze a new document from your local filesystem against an existing custom Form Recognizer model.
 
