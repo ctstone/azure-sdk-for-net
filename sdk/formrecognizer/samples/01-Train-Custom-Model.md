@@ -2,6 +2,8 @@
 
 This sample demonstrates how to train a custom Form Recognizer model without labels.
 
+> To train a supervised Form Recognizer model, see [Train With Labels].
+
 ## Prerequisites
 
 If you don't have an Azure subscription, create a [free account] before you begin.
@@ -114,3 +116,4 @@ foreach (var document in model.TrainResult.TrainingDocuments)
 [.NET]: https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-service-sas-create-dotnet
 [Analyze file with custom model]: ./02-Analyze-File-With-Custom-Model.md
 [Analyze url with custom model]: ./03-Analyze-Uri-With-Custom-Model.md
+[Train With Labels]: ./Train-Custom-Model-With-Labels.md
