@@ -13,21 +13,21 @@ namespace Azure.AI.FormRecognizer.Http
         {
             Throw.IfMissing(options, nameof(options));
             var endpointPolicy = new FormHttpPolicy(endpoint, options.Version);
-            return HttpPipelineBuilder.Build(options, authenticator, endpointPolicy);
+            return HttpPipelineBuilder.Build(options, endpointPolicy, authenticator);
         }
 
         public static HttpPipeline Build(Uri endpoint, FormAuthenticator authenticator, FormLayoutClientOptions options)
         {
             Throw.IfMissing(options, nameof(options));
             var endpointPolicy = new FormHttpPolicy(endpoint, options.Version);
-            return HttpPipelineBuilder.Build(options, authenticator, endpointPolicy);
+            return HttpPipelineBuilder.Build(options, endpointPolicy, authenticator);
         }
 
         public static HttpPipeline Build(Uri endpoint, FormAuthenticator authenticator, FormReceiptClientOptions options)
         {
             Throw.IfMissing(options, nameof(options));
             var endpointPolicy = new FormHttpPolicy(endpoint, options.Version);
-            return HttpPipelineBuilder.Build(options, authenticator, endpointPolicy);
+            return HttpPipelineBuilder.Build(options, endpointPolicy, authenticator);
         }
     }
 }

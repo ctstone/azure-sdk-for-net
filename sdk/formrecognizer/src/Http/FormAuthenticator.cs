@@ -11,9 +11,10 @@ namespace Azure.AI.FormRecognizer.Http
 {
     internal class FormAuthenticator : HttpPipelinePolicy
     {
+        private const string DefaultCognitiveScope = "https://cognitiveservices.azure.com/.default";
         private readonly CognitiveKeyCredential _keyCredential;
         private readonly CognitiveHeaderCredential _headerCredential;
-        private readonly TokenCredential _tokenCredential;
+        private readonly BearerTokenAuthenticationPolicy _bearerPolicy;
 
         public FormAuthenticator(CognitiveKeyCredential keyCredential)
         {
@@ -30,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Http
         public FormAuthenticator(TokenCredential tokenCredential)
         {
             Throw.IfMissing(tokenCredential, nameof(tokenCredential));
-            _tokenCredential = tokenCredential;
+            _bearerPolicy = new BearerTokenAuthenticationPolicy(tokenCredential, DefaultCognitiveScope);
         }
 
         public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
@@ -44,9 +45,10 @@ namespace Azure.AI.FormRecognizer.Http
             {
                 await _headerCredential.AuthenticateAsync(request).ConfigureAwait(false);
             }
-            else if (_tokenCredential != default)
+            else if (_bearerPolicy != default)
             {
-                await AuthenticateTokenCredentialAsync(request).ConfigureAwait(false);
+                await _bearerPolicy.ProcessAsync(message, pipeline).ConfigureAwait(false);
+                return;
             }
 
             await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
@@ -63,31 +65,12 @@ namespace Azure.AI.FormRecognizer.Http
             {
                 _headerCredential.Authenticate(request);
             }
-            else if (_tokenCredential != default)
+            else if (_bearerPolicy != default)
             {
-                AuthenticateTokenCredential(request);
+                _bearerPolicy.Process(message, pipeline);
+                return;
             }
             ProcessNext(message, pipeline);
-        }
-
-        private void AuthenticateTokenCredential(Request request)
-        {
-            var context = new TokenRequestContext(); // TODO make this static? Is it thread-safe?
-            var accessToken = _tokenCredential.GetToken(context, default); // TODO cache the token
-            UpdateRequest(accessToken, request);
-        }
-
-        private Task AuthenticateTokenCredentialAsync(Request request)
-        {
-            var context = new TokenRequestContext(); // TODO make this static? Is it thread-safe?
-            var accessToken = _tokenCredential.GetToken(context, default); // TODO cache the token
-            UpdateRequest(accessToken, request);
-            return Task.CompletedTask;
-        }
-
-        private static void UpdateRequest(AccessToken accessToken, Request request)
-        {
-            request.Headers.SetValue(HttpHeader.Names.Authorization, $"Bearer {accessToken.Token}");
         }
     }
 }
