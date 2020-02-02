@@ -30,8 +30,8 @@ namespace Azure.AI.FormRecognizer.Samples
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                // TODO: How should this actually be used?
-                UnsupervisedModelTrainingResult value = op.Value;
+                // TODO: How would this be used in a customer scenario?
+                UnsupervisedTrainingResult value = op.Value;
 
                 Console.WriteLine("Identified fields in clusters: ");
                 foreach (var cluster in value.FormClusters)

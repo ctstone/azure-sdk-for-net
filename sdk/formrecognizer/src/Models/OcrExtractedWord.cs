@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// Represents an extracted word.
     /// </summary>
-    public class ExtractedWord
+    public class OcrExtractedWord
     {
         /// <summary>
         /// Confidence value in the prediction of the word.
@@ -24,11 +24,11 @@ namespace Azure.AI.FormRecognizer.Prediction
         public float[] BoundingBox { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtractedWord"/> class.
+        /// Initializes a new instance of the <see cref="OcrExtractedWord"/> class.
         /// </summary>
-        protected ExtractedWord()
+        protected OcrExtractedWord()
         { }
 
-        internal static ExtractedWord Create() => new ExtractedWord();
+        internal static OcrExtractedWord Create() => new OcrExtractedWord();
     }
 }

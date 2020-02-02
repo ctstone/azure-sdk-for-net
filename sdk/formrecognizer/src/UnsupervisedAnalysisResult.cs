@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         public UnsupervisedExtractedPage[] PageValues { get; internal set; }
 
         /// <summary>
-        /// Raw output of the Optical Character Recognition engine, including text
+        /// Output of the Optical Character Recognition engine, including text
         /// elements with bounding boxes, as well as page geometry, and page and line languages.
         /// </summary>
         public OcrExtractedPage[] ExtractedPages { get; internal set; }

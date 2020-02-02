@@ -17,14 +17,14 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// Represents a long-running training operation.
     /// </summary>
-    internal class TrainingOperation : Operation<UnsupervisedModelTrainingResult>
+    internal class TrainingOperation : Operation<UnsupervisedTrainingResult>
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly JsonSerializerOptions _options;
-        private UnsupervisedModelTrainingResult _value;
+        private UnsupervisedTrainingResult _value;
         private Response _response;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// The final result of the training operation, if the operation completed successfully.
         /// </summary>
-        public override UnsupervisedModelTrainingResult Value => HasValue ? _value : default;
+        public override UnsupervisedTrainingResult Value => HasValue ? _value : default;
 
         /// <summary>
         /// True if the training operation completed.
@@ -56,7 +56,7 @@ namespace Azure.AI.FormRecognizer.Custom
             _id = operationId;
             _pipeline = pipeline;
             _options = options;
-            _value = UnsupervisedModelTrainingResult.Create();
+            _value = UnsupervisedTrainingResult.Create();
         }
 
         /// <summary>
@@ -90,13 +90,13 @@ namespace Azure.AI.FormRecognizer.Custom
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<UnsupervisedModelTrainingResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<UnsupervisedTrainingResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<UnsupervisedModelTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<UnsupervisedTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -114,7 +114,7 @@ namespace Azure.AI.FormRecognizer.Custom
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var model = response.GetJsonContent<UnsupervisedModelTrainingResult>(_options);
+            var model = response.GetJsonContent<UnsupervisedTrainingResult>(_options);
             if (model.Status.IsModelComplete())
             {
                 _value = model;

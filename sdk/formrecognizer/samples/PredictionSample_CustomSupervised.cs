@@ -11,7 +11,7 @@ using Azure.AI.FormRecognizer.Training;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
-    public class PredictionSample_CustomUnsupervised
+    public class PredictionSample_CustomSupervised
     {
         //public static async Task Main(string[] args)
         //{
@@ -36,25 +36,41 @@ namespace Azure.AI.FormRecognizer.Samples
 
             var filePath = @"C:\src\samples\cognitive\formrecognizer\sample_data\Test\Invoice_6.pdf";
             var stream = File.OpenRead(filePath);
+
             //var op = await client.GetModelReference(modelId).StartAnalyzeAsync(stream, null, includeTextDetails: false);
-            var op = client.StartUnsupervisedAnalysis(modelId, stream);
+
+            var op = client.StartSupervisedAnalysis(modelId, stream);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                UnsupervisedAnalysisResult value = op.Value;
+                SupervisedAnalysisResult value = op.Value;
 
                 // Print form fields
-                foreach (var page in value.PageValues)
+                foreach (var form in value.FormValues)
                 {
-                    Console.WriteLine($"On page {page.PageNumber}: ");
+                    Console.WriteLine($"In form found on pages {form.FormPageRange.Item1} - {form.FormPageRange.Item2}: ");
 
-                    foreach (var field in page.PageFields)
+                    foreach (var field in form.FormFields)
                     {
                         // TODO: Would it be better to implement ToString here, instead of making users write out "Text"?
 
-                        Console.WriteLine($"Found field {field.FieldName.Text} with value {field.FieldValue.Text}");
+                        // This is what unsupervised looked like:
+                        // Console.WriteLine($"Found field {field.FieldName.Text} with value {field.FieldValue.Text}");
+
+                        Console.WriteLine($"Found field {field.Key} with value {field.Value.Value}");
+                    }
+
+                    // Alternate way of writing this:
+                    foreach (var fieldName in form.FormFields.Keys)
+                    {
+                        // TODO: Would it be better to implement ToString here, instead of making users write out "Text"?
+
+                        // This is what unsupervised looked like:
+                        // Console.WriteLine($"Found field {field.FieldName.Text} with value {field.FieldValue.Text}");
+
+                        Console.WriteLine($"Found field {fieldName} with value {form.FormFields[fieldName]}");
                     }
                 }
 

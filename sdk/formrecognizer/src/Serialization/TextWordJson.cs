@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class TextWordJson
     {
-        public static ExtractedWord Read(JsonElement root)
+        public static OcrExtractedWord Read(JsonElement root)
         {
-            var textWord = ExtractedWord.Create();
+            var textWord = OcrExtractedWord.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return textWord;
         }
 
-        private static void ReadPropertyValue(ref ExtractedWord textWord, JsonProperty property)
+        private static void ReadPropertyValue(ref OcrExtractedWord textWord, JsonProperty property)
         {
             //if (property.NameEquals("text"))
             //{

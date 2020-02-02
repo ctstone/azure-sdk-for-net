@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// Represents a line of extracted text.
     /// </summary>
-    public class ExtractedLine
+    public class OcrExtractedLine
     {
         /// <summary>
         /// The detected language of the line, if different from the overall page language.
@@ -19,7 +19,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// List of words extracted from the line.
         /// </summary>
-        public IList<ExtractedWord> Words { get; internal set; }
+        public IList<OcrExtractedWord> Words { get; internal set; }
 
         /// <summary>
         /// The text content of the line.
@@ -34,11 +34,11 @@ namespace Azure.AI.FormRecognizer.Prediction
         public float[] BoundingBox { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtractedLine"/> class.
+        /// Initializes a new instance of the <see cref="OcrExtractedLine"/> class.
         /// </summary>
-        protected ExtractedLine()
+        protected OcrExtractedLine()
         { }
 
-        internal static ExtractedLine Create() => new ExtractedLine();
+        internal static OcrExtractedLine Create() => new OcrExtractedLine();
     }
 }

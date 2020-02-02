@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (readResult.Lines == default)
             {
-                readResult.Lines = Array.Empty<ExtractedLine>();
+                readResult.Lines = Array.Empty<OcrExtractedLine>();
             }
             return readResult;
         }

@@ -70,7 +70,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<UnsupervisedAnalysisResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public override ValueTask<Response<UnsupervisedAnalysisResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
             => throw new NotImplementedException();
     }
 }

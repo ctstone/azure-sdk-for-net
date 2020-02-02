@@ -12,7 +12,7 @@ namespace Azure.AI.FormRecognizer.Training
     /// <summary>
     /// Custom Form Recognizer model.
     /// </summary>
-    public class SupervisedModelTrainingResult
+    public class SupervisedTrainingResult
     {
         /// <summary>
         /// Model Id.
@@ -57,11 +57,11 @@ namespace Azure.AI.FormRecognizer.Training
         public FormRecognizerError[] Errors { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnsupervisedModelTrainingResult"/> class.
+        /// Initializes a new instance of the <see cref="UnsupervisedTrainingResult"/> class.
         /// </summary>
-        protected SupervisedModelTrainingResult()
+        protected SupervisedTrainingResult()
         { }
 
-        internal static SupervisedModelTrainingResult Create() => new SupervisedModelTrainingResult();
+        internal static SupervisedTrainingResult Create() => new SupervisedTrainingResult();
     }
 }

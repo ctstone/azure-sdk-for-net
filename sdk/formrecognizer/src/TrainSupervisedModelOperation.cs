@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Training
 {
     /// <summary>
     /// </summary>
-    public class TrainSupervisedModelOperation : Operation<SupervisedModelTrainingResult>
+    public class TrainSupervisedModelOperation : Operation<SupervisedTrainingResult>
     {
         private TrainingOperation _operation;
 
@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// <summary>
         /// </summary>
 #pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
-        public override SupervisedModelTrainingResult Value => throw new NotImplementedException();
+        public override SupervisedTrainingResult Value => throw new NotImplementedException();
 #pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<SupervisedModelTrainingResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<SupervisedTrainingResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
             => throw new NotImplementedException();
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<SupervisedModelTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+        public override ValueTask<Response<SupervisedTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
            => throw new NotImplementedException();
     }
 }
