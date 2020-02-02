@@ -45,6 +45,6 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// Raw output of the Optical Character Recognition engine, including text
         /// elements with bounding boxes, as well as page geometry, and page and line languages.
         /// </summary>
-        public ExtractedPageText[] RawPageText { get; internal set; }
+        public OcrExtractedPage[] ExtractedPages { get; internal set; }
     }
 }

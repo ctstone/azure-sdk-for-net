@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class ReadResultJson
     {
-        public static ExtractedPageText Read(JsonElement root)
+        public static OcrExtractedPage Read(JsonElement root)
         {
-            var readResult = ExtractedPageText.Create();
+            var readResult = OcrExtractedPage.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return readResult;
         }
 
-        private static void ReadPropertyValue(ref ExtractedPageText readResult, JsonProperty property)
+        private static void ReadPropertyValue(ref OcrExtractedPage readResult, JsonProperty property)
         {
             if (property.NameEquals("page"))
             {

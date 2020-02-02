@@ -11,6 +11,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     public class UnsupervisedExtractedField
     {
         // TODO: What is the value of label if this is only in unsupervised learning?
+        // Or is this used for supervised learning as well?
 
         /// <summary>
         /// A user defined label for the key/value pair entry.

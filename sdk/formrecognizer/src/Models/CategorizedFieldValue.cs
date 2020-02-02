@@ -5,12 +5,12 @@ namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class LabeledFieldValue
+    public class CategorizedFieldValue
     {
         /// <summary>
         /// Type of field value.
         /// </summary>
-        public FieldValueType ValueType { get; internal set; }
+        public FieldValueCategory Category { get; internal set; }
 
         /// <summary>
         /// Confidence value.

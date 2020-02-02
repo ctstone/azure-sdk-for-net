@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// for the form field specified during training time, and the FieldValue is the value
         /// read from the form field.
         /// </summary>
-        public IDictionary<string, LabeledFieldValue> FormFields { get; internal set; }
+        public IDictionary<string, CategorizedFieldValue> FormFields { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SupervisedExtractedFields"/> class.

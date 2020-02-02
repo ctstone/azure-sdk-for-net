@@ -9,7 +9,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// Raw output of the Optical Character Recognition engine, including text
     /// elements with bounding boxes, as well as page geometry, and page and line languages.
     /// </summary>
-    public class ExtractedPageText
+    public class OcrExtractedPage
     {
         /// <summary>
         /// The 1-based page number in the input document.
@@ -53,11 +53,11 @@ namespace Azure.AI.FormRecognizer.Prediction
         public ExtractedLine[] Lines { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtractedPageText"/> class.
+        /// Initializes a new instance of the <see cref="OcrExtractedPage"/> class.
         /// </summary>
-        protected ExtractedPageText()
+        protected OcrExtractedPage()
         { }
 
-        internal static ExtractedPageText Create() => new ExtractedPageText();
+        internal static OcrExtractedPage Create() => new OcrExtractedPage();
     }
 }

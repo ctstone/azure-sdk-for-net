@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Type of field value.
         /// </summary>
-        public FieldValueType Type { get; internal set; }
+        public FieldValueCategory Type { get; internal set; }
 
         /// <summary>
         /// String value.

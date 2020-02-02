@@ -5,7 +5,7 @@ namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class UnsupervisedExtractedPageFields
+    public class UnsupervisedExtractedPage
     {
         /// <summary>
         /// Page number.
