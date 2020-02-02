@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// Information extracted from each form in the input file.
         /// </summary>
-        public ExtractedLabeledFields[] FormValues { get; internal set; }
+        public SupervisedExtractedFields[] FormValues { get; internal set; }
 
         // TODO: values is by form, would it make sense to have tables by form as well?
         // Would it make sense to have tables inside of FormValues, or otherwise grouped

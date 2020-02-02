@@ -5,7 +5,7 @@ namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class FieldValue
+    public class LabeledFieldValue
     {
         /// <summary>
         /// Type of field value.

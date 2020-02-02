@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// A set of extracted fields corresponding to the input document.
     /// </summary>
-    public class ExtractedLabeledFields
+    public class SupervisedExtractedFields
     {
         // TODO: Possible values include, receipt, layout, user-specified?
         /// <summary>
@@ -26,15 +26,15 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// for the form field specified during training time, and the FieldValue is the value
         /// read from the form field.
         /// </summary>
-        public IDictionary<string, FieldValue> FormFields { get; internal set; }
+        public IDictionary<string, LabeledFieldValue> FormFields { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtractedLabeledFields"/> class.
+        /// Initializes a new instance of the <see cref="SupervisedExtractedFields"/> class.
         /// </summary>
-        protected ExtractedLabeledFields()
+        protected SupervisedExtractedFields()
         {
         }
 
-        internal static ExtractedLabeledFields Create() => new ExtractedLabeledFields();
+        internal static SupervisedExtractedFields Create() => new SupervisedExtractedFields();
     }
 }

@@ -24,10 +24,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 pageResult.KeyValuePairs = Array.Empty<KeyValuePair>();
             }
-            if (pageResult.Tables == default)
-            {
-                pageResult.Tables = Array.Empty<ExtractedTable>();
-            }
+            //if (pageResult.Tables == default)
+            //{
+            //    pageResult.Tables = Array.Empty<ExtractedTable>();
+            //}
             return pageResult;
         }
 
@@ -45,10 +45,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 readResult.KeyValuePairs = ArrayJson.Read(property.Value, KeyValuePairJson.Read);
             }
-            else if (property.NameEquals("tables"))
-            {
-                readResult.Tables = ArrayJson.Read(property.Value, DataTableJson.Read);
-            }
+            //else if (property.NameEquals("tables"))
+            //{
+            //    readResult.Tables = ArrayJson.Read(property.Value, DataTableJson.Read);
+            //}
         }
     }
 }
