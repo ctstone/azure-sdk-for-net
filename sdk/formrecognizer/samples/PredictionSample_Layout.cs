@@ -5,11 +5,12 @@ using Azure.AI.FormRecognizer.Prediction;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
-    public class PredictionSample_Receipts
+    public class PredictionSample_Layout
     {
         public static async Task Main(string[] args)
         {
@@ -34,32 +35,25 @@ namespace Azure.AI.FormRecognizer.Samples
             var filePath = @"C:\src\samples\cognitive\formrecognizer\sample_data\Test\Receipt_6.pdf";
             var stream = File.OpenRead(filePath);
 
-            var op = client.StartReceiptAnalysis(stream);
+            var op = client.StartFormInsetAnalysis(stream);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                ReceiptAnalysisResult result = op.Value;
+                FormInsetAnalysisResult result = op.Value;
 
-                Console.WriteLine($"Receipt contained the following values: ");
+                Console.WriteLine($"Form Inset Analysis found the following insets: ");
 
-                Console.WriteLine($"ReceiptType: {result.ReceiptType}");
-                Console.WriteLine($"MerchantName: {result.MerchantName}");
-                Console.WriteLine($"MerchantAddress: {result.MerchantAddress}");
-                Console.WriteLine($"MerchantPhoneNumber: {result.MerchantPhoneNumber}");
-                Console.WriteLine($"TransactionDate: {result.TransactionDate}");
-                Console.WriteLine($"TransactionTime: {result.TransactionTime}");
-
-                foreach (var item in result.Items)
+                foreach (var table in result.ExtractedTables)
                 {
-                    Console.WriteLine($"    Item: [Name: {item.Name}, Quantity: {item.Quantity}, TotalPrice: {item.TotalPrice}");
-                }
+                    Console.WriteLine($"Table on page {table.PageNumber} has {table.Rows} rows and {table.Columns} columns, and values:");
 
-                Console.WriteLine($"Subtotal: {result.Subtotal}");
-                Console.WriteLine($"Tax: {result.Tax}");
-                Console.WriteLine($"Tip: {result.Tip}");
-                Console.WriteLine($"Total: {result.Total}");
+                    foreach (var cell in table.Cells)
+                    {
+                        Console.WriteLine($"    ({cell.ColumnIndex}, {cell.RowIndex}): {cell.Text}");  // TODO: note, cell value not typed.
+                    }
+                }
 
                 // Print OCR Values
                 foreach (var page in result.ExtractedPages)

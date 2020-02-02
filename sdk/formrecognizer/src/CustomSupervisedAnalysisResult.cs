@@ -32,6 +32,12 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         public ExtractedForm[] Forms { get; internal set; }
 
+        /// <summary>
+        /// Output of the Optical Character Recognition engine, including text
+        /// elements with bounding boxes, as well as page geometry, and page and line languages.
+        /// </summary>
+        public OcrExtractedPage[] ExtractedPages { get; internal set; }
+
         // TODO: values is by form, would it make sense to have tables by form as well?
         // Would it make sense to have tables inside of FormValues, or otherwise grouped
         // together by form?  Will a table that's on two pages be split into two?
@@ -39,12 +45,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// List of data tables extracted from the form.
         /// </summary>
-        public ExtractedTable[] FormTables { get; internal set; }
+        public ExtractedTable[] ExtractedTables { get; internal set; }
 
-        /// <summary>
-        /// Output of the Optical Character Recognition engine, including text
-        /// elements with bounding boxes, as well as page geometry, and page and line languages.
-        /// </summary>
-        public OcrExtractedPage[] ExtractedPages { get; internal set; }
     }
 }

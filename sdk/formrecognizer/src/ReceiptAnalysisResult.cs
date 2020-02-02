@@ -28,47 +28,7 @@ namespace Azure.AI.FormRecognizer.Prediction
 
         /// <summary>
         /// </summary>
-        public ReceiptType ReceiptType { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue MerchantName { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue MerchantAddress { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue MerchantPhoneNumber { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue TransactionDate { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue TransactionTime { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public ReceiptItem[] Items { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue Subtotal { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue Tax { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue Tip { get; internal set; }
-
-        /// <summary>
-        /// </summary>
-        public PredefinedFieldValue Total { get; internal set; }
+        public ExtractedReceipt Receipt { get; internal set; }
 
         /// <summary>
         /// Output of the Optical Character Recognition engine, including text

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
-    /// A set of extracted fields corresponding to the input document.
+    /// A set of predefined fields extracted from a form by a supervised learning model.
     /// </summary>
     public class ExtractedForm
     {

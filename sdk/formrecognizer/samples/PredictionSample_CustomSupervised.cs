@@ -43,10 +43,10 @@ namespace Azure.AI.FormRecognizer.Samples
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                CustomSupervisedAnalysisResult value = op.Value;
+                CustomSupervisedAnalysisResult result = op.Value;
 
                 // Print form fields
-                foreach (var form in value.Forms)
+                foreach (var form in result.Forms)
                 {
                     Console.WriteLine($"In form found on pages {form.FormPageRange.Item1} - {form.FormPageRange.Item2}: ");
 
@@ -62,7 +62,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 }
 
                 // Print OCR Values
-                foreach (var page in value.ExtractedPages)
+                foreach (var page in result.ExtractedPages)
                 {
                     Console.WriteLine($"On page {page.PageNumber}: ");
 

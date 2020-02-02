@@ -9,6 +9,11 @@ namespace Azure.AI.FormRecognizer.Prediction
     public class ExtractedTable
     {
         /// <summary>
+        /// Page number.
+        /// </summary>
+        public int PageNumber { get; internal set; }
+
+        /// <summary>
         /// Number of rows.
         /// </summary>
         public int Rows { get; internal set; }

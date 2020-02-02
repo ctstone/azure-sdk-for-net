@@ -16,6 +16,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     {
         private FormRecognizerClient _formRecognizerClient;
         private FormReceiptClient _formReceiptClient;
+        private FormLayoutClient _formLayoutClient;
 
         /// <summary>
         /// </summary>
@@ -44,6 +45,7 @@ namespace Azure.AI.FormRecognizer.Prediction
             var temp = options.Version;
             _formRecognizerClient = new FormRecognizerClient(endpoint, credential, new FormRecognizerClientOptions());
             _formReceiptClient = new FormReceiptClient(endpoint, credential, new FormReceiptClientOptions());
+            _formLayoutClient = new FormLayoutClient(endpoint, credential, new FormLayoutClientOptions());
         }
 
         /// <summary>
@@ -237,6 +239,67 @@ namespace Azure.AI.FormRecognizer.Prediction
             return new ReceiptAnalysisOperation(op);
         }
 
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual FormInsetAnalysisOperation StartFormInsetAnalysis(Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation operation = _formLayoutClient.StartAnalyze(stream, contentType, includeTextDetails, cancellationToken);
+            return new FormInsetAnalysisOperation(operation);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual FormInsetAnalysisOperation StartFormInsetAnalysis(Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation operation = _formLayoutClient.StartAnalyze(uri, includeTextDetails, cancellationToken);
+            return new FormInsetAnalysisOperation(operation);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="operationId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual FormInsetAnalysisOperation StartFormInsetAnalysis(string operationId, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation operation = _formLayoutClient.StartAnalyze(operationId, cancellationToken);
+            return new FormInsetAnalysisOperation(operation);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<FormInsetAnalysisOperation> StartFormInsetAnalysisAsync(Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = await _formReceiptClient.StartAnalyzeAsync(stream, contentType, includeTextDetails, cancellationToken).ConfigureAwait(false);
+            return new FormInsetAnalysisOperation(op);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<FormInsetAnalysisOperation> StartFormInsetAnalysisAsync(Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = await _formReceiptClient.StartAnalyzeAsync(uri, includeTextDetails, cancellationToken).ConfigureAwait(false);
+            return new FormInsetAnalysisOperation(op);
+        }
 
     }
 }

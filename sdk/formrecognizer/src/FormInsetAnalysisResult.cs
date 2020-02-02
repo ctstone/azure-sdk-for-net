@@ -7,7 +7,7 @@ namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class CustomUnsupervisedAnalysisResult
+    public class FormInsetAnalysisResult
     {
         /// <summary>
         /// Status of the operation.
@@ -27,19 +27,13 @@ namespace Azure.AI.FormRecognizer.Prediction
         internal DateTimeOffset CreationTime { get; set; }
 
         /// <summary>
-        /// Page-level information extracted from the input.
-        /// </summary>
-        public ExtractedPage[] PageValues { get; internal set; }
-
-        /// <summary>
         /// Output of the Optical Character Recognition engine, including text
         /// elements with bounding boxes, as well as page geometry, and page and line languages.
         /// </summary>
         public OcrExtractedPage[] ExtractedPages { get; internal set; }
 
         /// <summary>
-        /// Output of the enhanced Optical Character Recognition engine, which identifies
-        /// tables.
+        /// Table output of the enhanced Optical Character Recognition engine.
         /// </summary>
         public ExtractedTable[] ExtractedTables { get; internal set; }
     }

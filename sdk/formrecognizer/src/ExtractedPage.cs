@@ -4,8 +4,9 @@
 namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
+    /// Page information extracted by an unsupervised model.
     /// </summary>
-    public class UnsupervisedExtractedPage
+    public class ExtractedPage
     {
         /// <summary>
         /// Page number.
@@ -21,10 +22,5 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// List of key-value pairs extracted from the page.
         /// </summary>
         public ExtractedField[] PageFields { get; internal set; }
-
-        /// <summary>
-        /// List of data tables extracted from the page.
-        /// </summary>
-        public ExtractedTable[] PageTables { get; internal set; }
     }
 }
