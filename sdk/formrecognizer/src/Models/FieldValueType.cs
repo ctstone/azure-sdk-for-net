@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// Semantic data type of the field value.
     /// </summary>
-    public enum FieldValueCategory
+    public enum FieldValueType
     {
         /// <summary>String.</summary>
         StringType = 1,

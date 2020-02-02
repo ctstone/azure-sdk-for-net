@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
-    public class PredictionSample_CustomSupervised
+    public class PredictionSample_Receipts
     {
-        //public static async Task Main(string[] args)
-        //{
-        //    try
-        //    {
-        //        await Analyze();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex);
-        //    }
-        //}
+        public static async Task Main(string[] args)
+        {
+            try
+            {
+                await Analyze();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
         private static async Task Analyze()
         {
@@ -30,36 +30,36 @@ namespace Azure.AI.FormRecognizer.Samples
             var options = new FormRecognizerAnalysisClientOptions();
             var credential = new CognitiveKeyCredential(subscriptionKey);
             var client = new FormRecognizerAnalysisClient(new Uri(endpoint), credential, options);
-            string modelId = "a36ff8a9-d7b3-4ee6-92d0-6e6eb73816c7";
 
-            var filePath = @"C:\src\samples\cognitive\formrecognizer\sample_data\Test\Invoice_6.pdf";
+            var filePath = @"C:\src\samples\cognitive\formrecognizer\sample_data\Test\Receipt_6.pdf";
             var stream = File.OpenRead(filePath);
 
-            //var op = await client.GetModelReference(modelId).StartAnalyzeAsync(stream, null, includeTextDetails: false);
-
-            var op = client.StartCustomSupervisedAnalysis(modelId, stream);
+            var op = client.StartReceiptAnalysis(stream);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                CustomSupervisedAnalysisResult value = op.Value;
+                ReceiptAnalysisResult value = op.Value;
 
-                // Print form fields
-                foreach (var form in value.Forms)
+                Console.WriteLine($"Receipt contained the following values: ");
+
+                Console.WriteLine($"ReceiptType: {value.ReceiptType}");
+                Console.WriteLine($"MerchantName: {value.MerchantName}");
+                Console.WriteLine($"MerchantAddress: {value.MerchantAddress}");
+                Console.WriteLine($"MerchantPhoneNumber: {value.MerchantPhoneNumber}");
+                Console.WriteLine($"TransactionDate: {value.TransactionDate}");
+                Console.WriteLine($"TransactionTime: {value.TransactionTime}");
+
+                foreach (var item in value.Items)
                 {
-                    Console.WriteLine($"In form found on pages {form.FormPageRange.Item1} - {form.FormPageRange.Item2}: ");
-
-                    foreach (var field in form.Fields)
-                    {
-                        // TODO: Would it be better to implement ToString here, instead of making users write out "Text"?
-
-                        // This is what unsupervised looked like:
-                        // Console.WriteLine($"Found field {field.FieldName.Text} with value {field.FieldValue.Text}");
-
-                        Console.WriteLine($"Found field {field.Name} with value {field.Value}");
-                    }
+                    Console.WriteLine($"    Item: [Name: {item.Name}, Quantity: {item.Quantity}, TotalPrice: {item.TotalPrice}");
                 }
+
+                Console.WriteLine($"Subtotal: {value.Subtotal}");
+                Console.WriteLine($"Tax: {value.Tax}");
+                Console.WriteLine($"Tip: {value.Tip}");
+                Console.WriteLine($"Total: {value.Total}");
 
                 // Print OCR Values
                 foreach (var page in value.ExtractedPages)

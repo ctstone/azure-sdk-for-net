@@ -15,6 +15,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     public class FormRecognizerAnalysisClient
     {
         private FormRecognizerClient _formRecognizerClient;
+        private FormReceiptClient _formReceiptClient;
 
         /// <summary>
         /// </summary>
@@ -42,6 +43,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         {
             var temp = options.Version;
             _formRecognizerClient = new FormRecognizerClient(endpoint, credential, new FormRecognizerClientOptions());
+            _formReceiptClient = new FormReceiptClient(endpoint, credential, new FormReceiptClientOptions());
         }
 
         /// <summary>
@@ -52,10 +54,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual SupervisedAnalysisOperation StartSupervisedAnalysis(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual CustomSupervisedAnalysisOperation StartCustomSupervisedAnalysis(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = _formRecognizerClient.GetModelReference(modelId).StartAnalyze(stream, contentType, includeTextDetails, cancellationToken);
-            return new SupervisedAnalysisOperation(op);
+            return new CustomSupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -66,10 +68,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<SupervisedAnalysisOperation> StartSupervisedAnalysisAsync(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual async Task<CustomSupervisedAnalysisOperation> StartCustomSupervisedAnalysisAsync(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = await _formRecognizerClient.GetModelReference(modelId).StartAnalyzeAsync(stream, contentType, includeTextDetails, cancellationToken).ConfigureAwait(false);
-            return new SupervisedAnalysisOperation(op);
+            return new CustomSupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -79,10 +81,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual SupervisedAnalysisOperation StartSupervisedAnalysis(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual CustomSupervisedAnalysisOperation StartCustomSupervisedAnalysis(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = _formRecognizerClient.GetModelReference(modelId).StartAnalyze(uri, includeTextDetails, cancellationToken);
-            return new SupervisedAnalysisOperation(op);
+            return new CustomSupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -92,10 +94,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<SupervisedAnalysisOperation> StartSupervisedAnalysisAsync(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual async Task<CustomSupervisedAnalysisOperation> StartCustomSupervisedAnalysisAsync(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = await _formRecognizerClient.GetModelReference(modelId).StartAnalyzeAsync(uri, includeTextDetails, cancellationToken).ConfigureAwait(false);
-            return new SupervisedAnalysisOperation(op);
+            return new CustomSupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -103,10 +105,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual SupervisedAnalysisOperation StartSupervisedAnalysis(string operationId, CancellationToken cancellationToken = default)
+        public virtual CustomSupervisedAnalysisOperation StartCustomSupervisedAnalysis(string operationId, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = _formRecognizerClient.GetModelReference("").StartAnalyze(operationId, cancellationToken);
-            return new SupervisedAnalysisOperation(op);
+            return new CustomSupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -117,10 +119,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual UnsupervisedAnalysisOperation StartUnsupervisedAnalysis(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual CustomUnsupervisedAnalysisOperation StartCustomUnsupervisedAnalysis(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = _formRecognizerClient.GetModelReference(modelId).StartAnalyze(stream, contentType, includeTextDetails, cancellationToken);
-            return new UnsupervisedAnalysisOperation(op);
+            return new CustomUnsupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -131,10 +133,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<UnsupervisedAnalysisOperation> StartUnsupervisedAnalysisAsync(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual async Task<CustomUnsupervisedAnalysisOperation> StartCustomUnsupervisedAnalysisAsync(string modelId, Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = await _formRecognizerClient.GetModelReference(modelId).StartAnalyzeAsync(stream, contentType, includeTextDetails, cancellationToken).ConfigureAwait(false);
-            return new UnsupervisedAnalysisOperation(op);
+            return new CustomUnsupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -144,10 +146,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual UnsupervisedAnalysisOperation StartUnsupervisedAnalysis(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual CustomUnsupervisedAnalysisOperation StartCustomUnsupervisedAnalysis(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = _formRecognizerClient.GetModelReference(modelId).StartAnalyze(uri, includeTextDetails, cancellationToken);
-            return new UnsupervisedAnalysisOperation(op);
+            return new CustomUnsupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -157,10 +159,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="includeTextDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<UnsupervisedAnalysisOperation> StartUnsupervisedAnalysisAsync(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        public virtual async Task<CustomUnsupervisedAnalysisOperation> StartCustomUnsupervisedAnalysisAsync(string modelId, Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = await _formRecognizerClient.GetModelReference(modelId).StartAnalyzeAsync(uri, includeTextDetails, cancellationToken).ConfigureAwait(false);
-            return new UnsupervisedAnalysisOperation(op);
+            return new CustomUnsupervisedAnalysisOperation(op);
         }
 
         /// <summary>
@@ -168,10 +170,73 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="operationId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual UnsupervisedAnalysisOperation StartUnsupervisedAnalysis(string operationId, CancellationToken cancellationToken = default)
+        public virtual CustomUnsupervisedAnalysisOperation StartCustomUnsupervisedAnalysis(string operationId, CancellationToken cancellationToken = default)
         {
             AnalyzeOperation op = _formRecognizerClient.GetModelReference("").StartAnalyze(operationId, cancellationToken);
-            return new UnsupervisedAnalysisOperation(op);
+            return new CustomUnsupervisedAnalysisOperation(op);
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual ReceiptAnalysisOperation StartReceiptAnalysis(Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = _formReceiptClient.StartAnalyze(stream, contentType, includeTextDetails, cancellationToken);
+            return new ReceiptAnalysisOperation(op);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual ReceiptAnalysisOperation StartReceiptAnalysis(Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = _formReceiptClient.StartAnalyze(uri, includeTextDetails, cancellationToken);
+            return new ReceiptAnalysisOperation(op);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="operationId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual ReceiptAnalysisOperation StartReceiptAnalysis(string operationId, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = _formReceiptClient.StartAnalyze(operationId, cancellationToken);
+            return new ReceiptAnalysisOperation(op);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<ReceiptAnalysisOperation> StartReceiptAnalysisAsync(Stream stream, FormContentType? contentType = null, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = await _formReceiptClient.StartAnalyzeAsync(stream, contentType, includeTextDetails, cancellationToken).ConfigureAwait(false);
+            return new ReceiptAnalysisOperation(op);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="includeTextDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<ReceiptAnalysisOperation> StartReceiptAnalysisAsync(Uri uri, bool includeTextDetails = false, CancellationToken cancellationToken = default)
+        {
+            AnalyzeOperation op = await _formReceiptClient.StartAnalyzeAsync(uri, includeTextDetails, cancellationToken).ConfigureAwait(false);
+            return new ReceiptAnalysisOperation(op);
+        }
+
+
     }
 }

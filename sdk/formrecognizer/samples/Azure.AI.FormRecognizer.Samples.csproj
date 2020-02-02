@@ -1,4 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp"  />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\Azure.AI.FormRecognizer.csproj" />

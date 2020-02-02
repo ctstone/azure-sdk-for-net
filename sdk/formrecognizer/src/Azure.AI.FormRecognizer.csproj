@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.BCL.AsyncInterfaces" />
+    <PackageReference Include="Microsoft.CSharp" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 

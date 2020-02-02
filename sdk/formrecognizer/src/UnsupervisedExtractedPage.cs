@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// List of key-value pairs extracted from the page.
         /// </summary>
-        public UnsupervisedExtractedField[] PageFields { get; internal set; }
+        public ExtractedField[] PageFields { get; internal set; }
 
         /// <summary>
         /// List of data tables extracted from the page.

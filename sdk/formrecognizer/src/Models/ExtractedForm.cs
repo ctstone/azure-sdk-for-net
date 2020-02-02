@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Azure.AI.FormRecognizer.Prediction
@@ -8,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// A set of extracted fields corresponding to the input document.
     /// </summary>
-    public class SupervisedExtractedFields
+    public class ExtractedForm
     {
         // TODO: Possible values include, receipt, layout, user-specified?
         /// <summary>
@@ -22,19 +24,16 @@ namespace Azure.AI.FormRecognizer.Prediction
         public (int, int) FormPageRange { get; internal set; }
 
         /// <summary>
-        /// Dictionary of named field values, where the key is the name of the label
-        /// for the form field specified during training time, and the FieldValue is the value
-        /// read from the form field.
         /// </summary>
-        public IDictionary<string, CategorizedFieldValue> FormFields { get; internal set; }
+        public PredefinedFieldCollection Fields { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisedExtractedFields"/> class.
+        /// Initializes a new instance of the <see cref="ExtractedForm"/> class.
         /// </summary>
-        protected SupervisedExtractedFields()
+        protected ExtractedForm()
         {
         }
 
-        internal static SupervisedExtractedFields Create() => new SupervisedExtractedFields();
+        internal static ExtractedForm Create() => new ExtractedForm();
     }
 }

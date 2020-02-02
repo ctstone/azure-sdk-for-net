@@ -1,14 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.AI.FormRecognizer.Models;
-using System.Dynamic;
-
 namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class UnsupervisedExtractedField
+    public class ExtractedField
     {
         // TODO: What is the value of label if this is only in unsupervised learning?
         // Or is this used for supervised learning as well?

@@ -84,7 +84,9 @@ namespace Azure.AI.FormRecognizer.Training
             return new TrainUnsupervisedModelOperation(operation);
         }
 
-
+        // TODO: Would it be good to provide an overload that lets you pass labels programmatically?  Probably not worth the cost -
+        // wait for customers to ask.
+        // TODO: Rename "source" param to something more descriptive?
         /// <summary>
         /// </summary>
         /// <param name="source"></param>

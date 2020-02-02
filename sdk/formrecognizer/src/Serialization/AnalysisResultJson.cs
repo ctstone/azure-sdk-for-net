@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (analysisResult.DocumentResults == default)
             {
-                analysisResult.DocumentResults = Array.Empty<SupervisedExtractedFields>();
+                analysisResult.DocumentResults = Array.Empty<ExtractedForm>();
             }
             if (analysisResult.Errors == default)
             {
@@ -100,7 +100,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("documentResults"))
             {
-                analyzedForm.DocumentResults = new SupervisedExtractedFields[property.Value.GetArrayLength()];
+                analyzedForm.DocumentResults = new ExtractedForm[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {

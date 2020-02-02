@@ -7,7 +7,7 @@ namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class UnsupervisedAnalysisResult
+    public class CustomUnsupervisedAnalysisResult
     {
         /// <summary>
         /// Status of the operation.

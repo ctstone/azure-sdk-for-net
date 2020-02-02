@@ -1,13 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Prediction;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.AI.FormRecognizer.Prediction;
-using Azure.AI.FormRecognizer.Training;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
@@ -37,13 +35,13 @@ namespace Azure.AI.FormRecognizer.Samples
             var filePath = @"C:\src\samples\cognitive\formrecognizer\sample_data\Test\Invoice_6.pdf";
             var stream = File.OpenRead(filePath);
             //var op = await client.GetModelReference(modelId).StartAnalyzeAsync(stream, null, includeTextDetails: false);
-            var op = client.StartUnsupervisedAnalysis(modelId, stream);
+            var op = client.StartCustomUnsupervisedAnalysis(modelId, stream);
             Console.WriteLine($"Created request with id {op.Id}");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                UnsupervisedAnalysisResult value = op.Value;
+                CustomUnsupervisedAnalysisResult value = op.Value;
 
                 // Print form fields
                 foreach (var page in value.PageValues)

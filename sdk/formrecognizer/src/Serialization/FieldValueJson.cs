@@ -28,10 +28,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 fieldValue.Type = property.Value.GetString() switch
                 {
-                    "string" => FieldValueCategory.StringType,
-                    "integer" => FieldValueCategory.IntegerType,
-                    "object" => FieldValueCategory.ObjectType,
-                    _ => EnumJson.Read<FieldValueCategory>(property.Value),
+                    "string" => FieldValueType.StringType,
+                    "integer" => FieldValueType.IntegerType,
+                    "object" => FieldValueType.ObjectType,
+                    _ => EnumJson.Read<FieldValueType>(property.Value),
                 };
             }
             else if (property.NameEquals("valueString"))

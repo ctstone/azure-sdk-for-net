@@ -31,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// Document-level information extracted from the input.
         /// </summary>
-        public SupervisedExtractedFields[] DocumentResults { get; internal set; }
+        public ExtractedForm[] DocumentResults { get; internal set; }
 
         /// <summary>
         /// List of errors reported during the analyze operation.

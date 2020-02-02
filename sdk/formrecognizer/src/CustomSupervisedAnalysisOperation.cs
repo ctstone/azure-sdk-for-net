@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
+    /// Supervised custom model analyis operation
     /// </summary>
-    public class UnsupervisedAnalysisOperation : Operation<UnsupervisedAnalysisResult>
+    public class CustomSupervisedAnalysisOperation : Operation<CustomSupervisedAnalysisResult>
     {
         private AnalyzeOperation _operation;
 
         /// <summary>
         /// </summary>
         /// <param name="operation"></param>
-        internal UnsupervisedAnalysisOperation(AnalyzeOperation operation)
+        internal CustomSupervisedAnalysisOperation(AnalyzeOperation operation)
         {
             _operation = operation;
         }
@@ -28,7 +29,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// </summary>
 #pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
-        public override UnsupervisedAnalysisResult Value => throw new NotImplementedException();
+        public override CustomSupervisedAnalysisResult Value => throw new NotImplementedException();
 #pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<UnsupervisedAnalysisResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<CustomSupervisedAnalysisResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
             => throw new NotImplementedException();
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<UnsupervisedAnalysisResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public override ValueTask<Response<CustomSupervisedAnalysisResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
             => throw new NotImplementedException();
     }
 }
