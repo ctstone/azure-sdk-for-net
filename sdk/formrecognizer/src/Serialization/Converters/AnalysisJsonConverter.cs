@@ -5,6 +5,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization.Converters
 {
@@ -41,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
         {
             if (property.NameEquals("status"))
             {
-                analyzedForm.Status = (OperationStatus)Enum.Parse(typeof(OperationStatus), property.Value.GetString(), ignoreCase: true);
+                analyzedForm.Status = (AnalysisStatus)Enum.Parse(typeof(AnalysisStatus), property.Value.GetString(), ignoreCase: true);
             }
             else if (property.NameEquals("createdDateTime"))
             {

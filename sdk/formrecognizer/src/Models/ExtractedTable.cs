@@ -1,12 +1,12 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Information about the extracted table contained in a page.
     /// </summary>
-    internal class DataTable
+    public class ExtractedTable
     {
         /// <summary>
         /// Number of rows.
@@ -21,14 +21,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of cells contained in the table.
         /// </summary>
-        public DataTableCell[] Cells { get; internal set; }
+        public ExtractedTableCell[] Cells { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataTable"/> class.
+        /// Initializes a new instance of the <see cref="ExtractedTable"/> class.
         /// </summary>
-        protected DataTable()
+        protected ExtractedTable()
         { }
 
-        internal static DataTable Create() => new DataTable();
+        internal static ExtractedTable Create() => new ExtractedTable();
     }
 }

@@ -3,14 +3,15 @@
 
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class FieldValueJson
     {
-        public static FieldValue Read(JsonElement root)
+        public static FieldValue_internal Read(JsonElement root)
         {
-            var fieldValue = FieldValue.Create();
+            var fieldValue = FieldValue_internal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return fieldValue;
         }
 
-        private static void ReadPropertyValue(ref FieldValue fieldValue, JsonProperty property)
+        private static void ReadPropertyValue(ref FieldValue_internal fieldValue, JsonProperty property)
         {
             if (property.NameEquals("type"))
             {

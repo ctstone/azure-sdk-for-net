@@ -27,14 +27,14 @@ namespace Azure.AI.FormRecognizer.Training
         internal ModelStatus Status { get; set; }
 
         /// <summary>
-        /// Date and time when the model was created.
-        /// </summary>
-        public DateTimeOffset CreatedOn { get; internal set; }
-
-        /// <summary>
         /// Date and time when the status was last updated.
         /// </summary>
-        public DateTimeOffset LastUpdatedOn { get; internal set; }
+        internal DateTimeOffset LastUpdateTime { get; set; }
+
+        /// <summary>
+        /// Date and time when the model was created.
+        /// </summary>
+        public DateTimeOffset CreationTime { get; internal set; }
 
         /// <summary>
         /// Keys extracted by the custom model.

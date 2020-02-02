@@ -4,14 +4,15 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class DocumentResultJson
     {
-        public static DocumentResult Read(JsonElement root)
+        public static ExtractedLabeledFields Read(JsonElement root)
         {
-            var documentResult = DocumentResult.Create();
+            var documentResult = ExtractedLabeledFields.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -19,18 +20,18 @@ namespace Azure.AI.FormRecognizer.Serialization
                     ReadPropertyValue(ref documentResult, property);
                 }
             }
-            if (documentResult.Fields == default)
-            {
-                documentResult.Fields = new Dictionary<string, FieldValue>();
-            }
+            //if (documentResult.FormFields == default)
+            //{
+            //    documentResult.FormFields = new Dictionary<string, FieldValue_internal>();
+            //}
             return documentResult;
         }
 
-        private static void ReadPropertyValue(ref DocumentResult documentResult, JsonProperty property)
+        private static void ReadPropertyValue(ref ExtractedLabeledFields documentResult, JsonProperty property)
         {
             if (property.NameEquals("docType"))
             {
-                documentResult.DocumentType = property.Value.GetString();
+                documentResult.FormType = property.Value.GetString();
             }
             else if (property.NameEquals("pageRange"))
             {
@@ -38,12 +39,12 @@ namespace Azure.AI.FormRecognizer.Serialization
                 var start = array.Current.GetInt32();
                 array.MoveNext();
                 var end = array.Current.GetInt32();
-                documentResult.PageRange = (start, end);
+                documentResult.FormPageRange = (start, end);
             }
-            else if (property.NameEquals("fields"))
-            {
-                documentResult.Fields = ObjectJson.Read(property.Value, FieldValueJson.Read);
-            }
+            //else if (property.NameEquals("fields"))
+            //{
+            //    documentResult.FormFields = ObjectJson.Read(property.Value, FieldValueJson.Read);
+            //}
         }
     }
 }

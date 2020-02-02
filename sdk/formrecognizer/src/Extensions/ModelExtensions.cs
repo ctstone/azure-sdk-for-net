@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer
 {
@@ -19,12 +20,12 @@ namespace Azure.AI.FormRecognizer
 
         public static bool IsAnalysisComplete(this Analysis analysis)
         {
-            return analysis.Status == OperationStatus.Succeeded || analysis.Status == OperationStatus.Failed;
+            return analysis.Status == AnalysisStatus.Succeeded || analysis.Status == AnalysisStatus.Failed;
         }
 
         public static bool IsAnalysisSuccess(this Analysis analysis)
         {
-            return analysis.Status == OperationStatus.Succeeded;
+            return analysis.Status == AnalysisStatus.Succeeded;
         }
     }
 }

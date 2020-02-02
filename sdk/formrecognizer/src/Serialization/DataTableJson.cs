@@ -4,14 +4,15 @@
 using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class DataTableJson
     {
-        public static DataTable Read(JsonElement root)
+        public static ExtractedTable Read(JsonElement root)
         {
-            var dataTable = DataTable.Create();
+            var dataTable = ExtractedTable.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -22,12 +23,12 @@ namespace Azure.AI.FormRecognizer.Serialization
 
             if (dataTable.Cells == default)
             {
-                dataTable.Cells = Array.Empty<DataTableCell>();
+                dataTable.Cells = Array.Empty<ExtractedTableCell>();
             }
             return dataTable;
         }
 
-        private static void ReadPropertyValue(ref DataTable dataTable, JsonProperty property)
+        private static void ReadPropertyValue(ref ExtractedTable dataTable, JsonProperty property)
         {
             if (property.NameEquals("rows"))
             {

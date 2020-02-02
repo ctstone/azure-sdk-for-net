@@ -3,6 +3,7 @@
 
 using System;
 using System.Text.Json.Serialization;
+using Azure.AI.FormRecognizer.Prediction;
 using Azure.AI.FormRecognizer.Serialization.Converters;
 
 namespace Azure.AI.FormRecognizer.Models
@@ -15,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Status of the operation.
         /// </summary>
-        public OperationStatus Status { get; internal set; }
+        public AnalysisStatus Status { get; internal set; }
 
         /// <summary>
         /// Date and time when the analysis operation was submitted.

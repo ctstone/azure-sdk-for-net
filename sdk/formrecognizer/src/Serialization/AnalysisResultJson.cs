@@ -4,6 +4,7 @@
 using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
@@ -23,7 +24,7 @@ namespace Azure.AI.FormRecognizer.Serialization
 
             if (analysisResult.ReadResults == default)
             {
-                analysisResult.ReadResults = Array.Empty<ReadResult>();
+                analysisResult.ReadResults = Array.Empty<ExtractedPageText>();
             }
             if (analysisResult.PageResults == default)
             {
@@ -31,43 +32,43 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (analysisResult.DocumentResults == default)
             {
-                analysisResult.DocumentResults = Array.Empty<DocumentResult>();
+                analysisResult.DocumentResults = Array.Empty<ExtractedLabeledFields>();
             }
             if (analysisResult.Errors == default)
             {
                 analysisResult.Errors = Array.Empty<FormRecognizerError>();
             }
-            foreach (var page in analysisResult.PageResults)
-            {
-                foreach (var keyValuePair in page.KeyValuePairs)
-                {
-                    if (keyValuePair.Key != default)
-                    {
-                        keyValuePair.Key.ResolveTextReferences(analysisResult.ReadResults);
-                    }
-                    if (keyValuePair.Value != default)
-                    {
-                        keyValuePair.Value.ResolveTextReferences(analysisResult.ReadResults);
-                    }
-                }
-                foreach (var table in page.Tables)
-                {
-                    foreach (var cell in table.Cells)
-                    {
-                        cell.ResolveTextReferences(analysisResult.ReadResults);
-                    }
-                }
-            }
-            foreach (var documentResult in analysisResult.DocumentResults)
-            {
-                foreach (var field in documentResult.Fields)
-                {
-                    if (field.Value != default)
-                    {
-                        field.Value.ResolveTextReferences(analysisResult.ReadResults);
-                    }
-                }
-            }
+            //foreach (var page in analysisResult.PageResults)
+            //{
+            //    foreach (var keyValuePair in page.KeyValuePairs)
+            //    {
+            //        if (keyValuePair.Key != default)
+            //        {
+            //            keyValuePair.Key.ResolveTextReferences(analysisResult.ReadResults);
+            //        }
+            //        if (keyValuePair.Value != default)
+            //        {
+            //            keyValuePair.Value.ResolveTextReferences(analysisResult.ReadResults);
+            //        }
+            //    }
+            //    foreach (var table in page.Tables)
+            //    {
+            //        foreach (var cell in table.Cells)
+            //        {
+            //            cell.ResolveTextReferences(analysisResult.ReadResults);
+            //        }
+            //    }
+            //}
+            //foreach (var documentResult in analysisResult.DocumentResults)
+            //{
+            //    foreach (var field in documentResult.FormFields)
+            //    {
+            //        if (field.Value != default)
+            //        {
+            //            field.Value.ResolveTextReferences(analysisResult.ReadResults);
+            //        }
+            //    }
+            //}
             return analysisResult;
         }
 
@@ -79,7 +80,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("readResults"))
             {
-                analyzedForm.ReadResults = new ReadResult[property.Value.GetArrayLength()];
+                analyzedForm.ReadResults = new ExtractedPageText[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {
@@ -99,7 +100,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("documentResults"))
             {
-                analyzedForm.DocumentResults = new DocumentResult[property.Value.GetArrayLength()];
+                analyzedForm.DocumentResults = new ExtractedLabeledFields[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {

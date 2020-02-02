@@ -1,46 +1,47 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System.Collections.Generic;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
-    /// Text extracted from a page in the input document.
+    /// Raw output of the Optical Character Recognition engine, including text
+    /// elements with bounding boxes, as well as page geometry, and page and line languages.
     /// </summary>
-    internal class ReadResult
+    public class ExtractedPageText
     {
         /// <summary>
         /// The 1-based page number in the input document.
         /// </summary>
-        public int Page { get; internal set; }
+        public int PageNumber { get; internal set; }
 
         /// <summary>
         /// The general orientation of the text in clockwise direction, measured in degrees between (-180, 180].
         /// </summary>
-        public float Angle { get; internal set; }
+        public float TextAngle { get; internal set; }
 
         /// <summary>
         /// The width of the image/PDF in pixels/inches, respectively.
         /// </summary>
-        public float Width { get; internal set; }
+        public float PageWidth { get; internal set; }
 
         /// <summary>
         /// The height of the image/PDF in pixels/inches, respectively.
         /// </summary>
-        public float Height { get; internal set; }
+        public float PageHeight { get; internal set; }
 
         /// <summary>
-        /// The unit used by the width, height and boundingBox properties.
+        /// The unit of length used by the width, height and boundingBox properties.
         ///
         /// For images, the unit is "pixel". For PDF, the unit is "inch".
         /// </summary>
-        public Unit Unit { get; internal set; }
+        public FormGeometryUnit Unit { get; internal set; }
 
         /// <summary>
         /// The detected language on the page overall.
         /// </summary>
-        public Language Language { get; internal set; }
+        public FormTextLanguage Language { get; internal set; }
 
         /// <summary>
         /// When includeTextDetails is set to true, a list of recognized text lines. The maximum number of lines returned is 300 per page.
@@ -49,14 +50,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// As the sorting order depends on the detected text, it may change across images and OCR version updates. Thus, business logic
         /// should be built upon the actual line location instead of order.
         /// </summary>
-        public IList<TextLine> Lines { get; internal set; }
+        public ExtractedLine[] Lines { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReadResult"/> class.
+        /// Initializes a new instance of the <see cref="ExtractedPageText"/> class.
         /// </summary>
-        protected ReadResult()
+        protected ExtractedPageText()
         { }
 
-        internal static ReadResult Create() => new ReadResult();
+        internal static ExtractedPageText Create() => new ExtractedPageText();
     }
 }

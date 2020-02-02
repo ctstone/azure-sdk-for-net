@@ -3,14 +3,15 @@
 
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class DataTableCellJson
     {
-        public static DataTableCell Read(JsonElement root)
+        public static ExtractedTableCell Read(JsonElement root)
         {
-            var dataTableCell = DataTableCell.Create();
+            var dataTableCell = ExtractedTableCell.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return dataTableCell;
         }
 
-        private static void ReadPropertyValue(ref DataTableCell dataTable, JsonProperty property)
+        private static void ReadPropertyValue(ref ExtractedTableCell dataTable, JsonProperty property)
         {
             if (property.NameEquals("rowIndex"))
             {
@@ -39,10 +40,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 dataTable.ColumnSpan = property.Value.GetInt32();
             }
-            else if (property.NameEquals("elements"))
-            {
-                dataTable.ElementReferences = ArrayJson.ReadStrings(property.Value);
-            }
+            //else if (property.NameEquals("elements"))
+            //{
+            //    dataTable.ElementReferences = ArrayJson.ReadStrings(property.Value);
+            //}
             else if (property.NameEquals("isHeader"))
             {
                 dataTable.IsHeader = property.Value.GetBoolean();
@@ -55,14 +56,14 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 dataTable.Confidence = property.Value.GetSingle();
             }
-            else if (property.NameEquals("text"))
-            {
-                TextElementJson.ReadText(dataTable, property.Value);
-            }
-            else if (property.NameEquals("boundingBox"))
-            {
-                TextElementJson.ReadBoundingBox(dataTable, property.Value);
-            }
+            //else if (property.NameEquals("text"))
+            //{
+            //    TextElementJson.ReadText(dataTable, property.Value);
+            //}
+            //else if (property.NameEquals("boundingBox"))
+            //{
+            //    TextElementJson.ReadBoundingBox(dataTable, property.Value);
+            //}
         }
     }
 }

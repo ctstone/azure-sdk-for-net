@@ -4,6 +4,7 @@
 using System;
 using System.Text.Json;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
@@ -25,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (pageResult.Tables == default)
             {
-                pageResult.Tables = Array.Empty<DataTable>();
+                pageResult.Tables = Array.Empty<ExtractedTable>();
             }
             return pageResult;
         }

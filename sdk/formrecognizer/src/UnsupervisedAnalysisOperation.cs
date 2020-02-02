@@ -1,20 +1,22 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.AI.FormRecognizer.Custom;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.AI.FormRecognizer.Training
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// </summary>
-    public class TrainSupervisedModelOperation : Operation<SupervisedModelTrainingResult>
+    public class UnsupervisedAnalysisOperation : Operation<UnsupervisedAnalysisResult>
     {
-        private TrainingOperation _operation;
+        private AnalyzeOperation _operation;
 
-        internal TrainSupervisedModelOperation(TrainingOperation operation)
+        /// <summary>
+        /// </summary>
+        /// <param name="operation"></param>
+        internal UnsupervisedAnalysisOperation(AnalyzeOperation operation)
         {
             _operation = operation;
         }
@@ -26,7 +28,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// <summary>
         /// </summary>
 #pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
-        public override SupervisedModelTrainingResult Value => throw new NotImplementedException();
+        public override UnsupervisedAnalysisResult Value => throw new NotImplementedException();
 #pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<SupervisedModelTrainingResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<UnsupervisedAnalysisResult>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
             => throw new NotImplementedException();
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace Azure.AI.FormRecognizer.Training
         /// <param name="pollingInterval"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override ValueTask<Response<SupervisedModelTrainingResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
-           => throw new NotImplementedException();
+        public override ValueTask<Response<UnsupervisedAnalysisResult>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
+            => throw new NotImplementedException();
     }
 }

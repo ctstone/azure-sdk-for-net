@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.AI.FormRecognizer.Prediction;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
@@ -26,7 +28,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of data tables extracted from the page.
         /// </summary>
-        public DataTable[] Tables { get; internal set; }
+        public ExtractedTable[] Tables { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PageResult"/> class.

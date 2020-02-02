@@ -3,15 +3,15 @@
 
 using System;
 using System.Text.Json;
-using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prediction;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class ReadResultJson
     {
-        public static ReadResult Read(JsonElement root)
+        public static ExtractedPageText Read(JsonElement root)
         {
-            var readResult = ReadResult.Create();
+            var readResult = ExtractedPageText.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,41 +21,41 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (readResult.Lines == default)
             {
-                readResult.Lines = Array.Empty<TextLine>();
+                readResult.Lines = Array.Empty<ExtractedLine>();
             }
             return readResult;
         }
 
-        private static void ReadPropertyValue(ref ReadResult readResult, JsonProperty property)
+        private static void ReadPropertyValue(ref ExtractedPageText readResult, JsonProperty property)
         {
             if (property.NameEquals("page"))
             {
-                readResult.Page = property.Value.GetInt32();
+                readResult.PageNumber = property.Value.GetInt32();
             }
             else if (property.NameEquals("angle"))
             {
-                readResult.Angle = property.Value.GetSingle();
+                readResult.TextAngle = property.Value.GetSingle();
             }
             else if (property.NameEquals("width"))
             {
-                readResult.Width = property.Value.GetSingle();
+                readResult.PageWidth = property.Value.GetSingle();
             }
             else if (property.NameEquals("height"))
             {
-                readResult.Height = property.Value.GetSingle();
+                readResult.PageHeight = property.Value.GetSingle();
             }
             else if (property.NameEquals("unit"))
             {
-                readResult.Unit = EnumJson.Read<Unit>(property.Value);
+                readResult.Unit = EnumJson.Read<FormGeometryUnit>(property.Value);
             }
             else if (property.NameEquals("language"))
             {
                 readResult.Language = property.Value.GetString();
             }
-            else if (property.NameEquals("lines"))
-            {
-                readResult.Lines = ArrayJson.Read(property.Value, TextLineJson.Read);
-            }
+            //else if (property.NameEquals("lines"))
+            //{
+            //    readResult.Lines = ArrayJson.Read(property.Value, TextLineJson.Read);
+            //}
         }
     }
 }

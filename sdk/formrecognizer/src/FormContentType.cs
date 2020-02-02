@@ -4,12 +4,12 @@
 using System;
 using System.ComponentModel;
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Form content type for local files.
     /// </summary>
-    internal readonly struct FormContentType : IEquatable<FormContentType>
+    public readonly struct FormContentType : IEquatable<FormContentType>
     {
         internal const string DefaultContentType = "application/octet-stream";
         private readonly string _value;

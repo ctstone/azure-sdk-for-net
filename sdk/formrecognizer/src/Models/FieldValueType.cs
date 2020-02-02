@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Prediction
 {
+    // TODO: Make extensible enum
+
     /// <summary>
     /// Semantic data type of the field value.
     /// </summary>
-    internal enum FieldValueType
+    public enum FieldValueType
     {
         /// <summary>String.</summary>
         StringType = 1,

@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Model Info
     /// </summary>
 #pragma warning disable CA1717 // plural enum
-    internal enum OperationStatus
+    internal enum AnalysisStatus
 #pragma warning restore CA1717 // plural enum
     {
         /// <summary>Not started.</summary>

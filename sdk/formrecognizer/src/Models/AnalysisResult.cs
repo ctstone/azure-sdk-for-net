@@ -3,9 +3,10 @@
 
 using System;
 using System.Text.Json.Serialization;
+using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Serialization;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Prediction
 {
     /// <summary>
     /// Result of an analysis operation.
@@ -20,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Text extracted from the input.
         /// </summary>
-        public ReadResult[] ReadResults { get; internal set; }
+        public ExtractedPageText[] ReadResults { get; internal set; }
 
         /// <summary>
         /// Page-level information extracted from the input.
@@ -30,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Document-level information extracted from the input.
         /// </summary>
-        public DocumentResult[] DocumentResults { get; internal set; }
+        public ExtractedLabeledFields[] DocumentResults { get; internal set; }
 
         /// <summary>
         /// List of errors reported during the analyze operation.
