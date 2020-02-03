@@ -51,11 +51,15 @@ await foreach (var page in models.AsPages())
 If you need to access a single page:
 
 ```csharp
-var page1 = models.AsPages().GetAsyncEnumerator().Current;
+var pages1 = models.AsPages().GetAsyncEnumerator();
+await pages1.MoveNextAsync();
+var page1 = pages1.Current;
 
 // return page1 to UI and wait for user to request next page...
 
-var page2 = models.AsPages(page1.ContinuationToken).GetAsyncEnumerator().Current;
+var pages2 = models.AsPages(page1.ContinuationToken).GetAsyncEnumerator();
+await pages2.MoveNextAsync();
+var page2 = pages2.Current;
 ```
 
 
