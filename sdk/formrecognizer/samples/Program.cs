@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 var key = string.Empty;
                 var credential = new CognitiveKeyCredential(key);
                 // var credential = new InteractiveBrowserCredential();
-                // var credential = new ClientSecretCredential("a37a5329-37d8-4358-a0b4-f46e2ec7479c", "b0fd01ff-866c-46ab-97c8-84e1b7a15cf6", "W?yjMhpPNz:gv6u8?LoPnf8yNh5qiIL.");
+                // var credential = new ClientSecretCredential("a37a5329-37d8-4358-a0b4-f46e2ec7479c", "b0fd01ff-866c-46ab-97c8-84e1b7a15cf6", "");
                 // options.Diagnostics.IsLoggingContentEnabled = true;
                 options.Diagnostics.IsLoggingEnabled = true;
                 // options.Diagnostics.LoggedHeaderNames.Add("apim-request-id");
