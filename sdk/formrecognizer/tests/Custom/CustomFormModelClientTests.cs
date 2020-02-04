@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
         {
             var validModelId = "fake-model-id";
             var validPipeline = new HttpPipeline(new MockTransport());
-            var validOptions = new FormRecognizerClientOptions();
+            var validOptions = new FormClientOptions();
             var ex1 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(null, validPipeline, validOptions.SerializationOptions));
             var ex2 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(String.Empty, validPipeline, validOptions.SerializationOptions));
             var ex3 = Assert.Throws<ArgumentNullException>(() => new CustomFormModelReference(validModelId, null, validOptions.SerializationOptions));
@@ -102,7 +102,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
-            var options = new FormRecognizerClientOptions();
+            var options = new FormClientOptions();
             return new CustomFormModelReference(ModelId, pipeline, options.SerializationOptions);
         }
     }

@@ -107,7 +107,7 @@ namespace Azure.AI.FormRecognizer.Custom
         internal static string GetModelPath(string modelId)
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
-            return $"{FormRecognizerClient.BasePath}/{modelId}";
+            return $"{CustomFormClient.BasePath}/{modelId}";
         }
     }
 }

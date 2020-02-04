@@ -16,24 +16,24 @@ namespace Azure.AI.FormRecognizer.Tests
         public void KeyConstructor_Throws_OnInvalidParams()
         {
             // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveKeyCredential)null));
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveKeyCredential)null, null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveKeyCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveKeyCredential)null, null));
         }
 
         [Fact]
         public void HeaderConstructor_Throws_OnInvalidParams()
         {
             // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveHeaderCredential)null));
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (CognitiveHeaderCredential)null, null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveHeaderCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveHeaderCredential)null, null));
         }
 
         [Fact]
         public void TokenConstructor_Throws_OnInvalidParams()
         {
             // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (TokenCredential)null));
-            Assert.Throws<ArgumentNullException>(() => new FormRecognizerClient(null, (TokenCredential)null, null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (TokenCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (TokenCredential)null, null));
         }
     }
 }

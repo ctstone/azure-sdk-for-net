@@ -12,97 +12,98 @@ using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
+#pragma warning disable AZC0007 // Client type should have public constructor with equivalent parameters not taking 'FormReceiptClientOptions' as last argument
+
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// The FormRecognizer client provides syncronous and asynchronous methods to manage custom forms,
-    /// prebuilt models, and layout requests.
+    /// The Custom Form client trains form recognition models using custom data. A custom moodel can can extract labeled text from new documents.
     /// </summary>
-    public class FormRecognizerClient
+    public class CustomFormClient
     {
         internal const string BasePath = "/custom/models";
         private readonly HttpPipeline _pipeline;
-        private readonly FormRecognizerClientOptions _options;
+        private readonly FormClientOptions _options;
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class using a key-based credential.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class using a key-based credential.
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
-        public FormRecognizerClient(Uri endpoint, CognitiveKeyCredential credential)
-            : this(endpoint, credential, new FormRecognizerClientOptions())
+        public CustomFormClient(Uri endpoint, CognitiveKeyCredential credential)
+            : this(endpoint, credential, new FormClientOptions())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class using a subscription key credential.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class using a subscription key credential.
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormRecognizerClient(Uri endpoint, CognitiveKeyCredential credential, FormRecognizerClientOptions options)
+        public CustomFormClient(Uri endpoint, CognitiveKeyCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class using an Azure Active Directory credential.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class using an Azure Active Directory credential.
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Azure Active Directory credential.</param>
-        public FormRecognizerClient(Uri endpoint, TokenCredential credential)
-            : this(endpoint, credential, new FormRecognizerClientOptions())
+        public CustomFormClient(Uri endpoint, TokenCredential credential)
+            : this(endpoint, credential, new FormClientOptions())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class using an Azure Active Directory credential.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class using an Azure Active Directory credential.
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Azure Active Directory credential.</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormRecognizerClient(Uri endpoint, TokenCredential credential, FormRecognizerClientOptions options)
+        public CustomFormClient(Uri endpoint, TokenCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class using a user-defined credential.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class using a user-defined credential.
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">User-defined credential.</param>
-        public FormRecognizerClient(Uri endpoint, CognitiveHeaderCredential credential)
-            : this(endpoint, credential, new FormRecognizerClientOptions())
+        public CustomFormClient(Uri endpoint, CognitiveHeaderCredential credential)
+            : this(endpoint, credential, new FormClientOptions())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class using a user-defined credential.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class using a user-defined credential.
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">User-defined credential</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormRecognizerClient(Uri endpoint, CognitiveHeaderCredential credential, FormRecognizerClientOptions options)
+        public CustomFormClient(Uri endpoint, CognitiveHeaderCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
 
-        internal FormRecognizerClient(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
+        internal CustomFormClient(Uri endpoint, FormAuthenticator authenticator, FormClientOptions options)
             : this(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options)
         {
         }
 
-        internal FormRecognizerClient(HttpPipeline pipeline, FormRecognizerClientOptions options)
+        internal CustomFormClient(HttpPipeline pipeline, FormClientOptions options)
         {
             _pipeline = pipeline;
             _options = options;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClient"/> class for mocking.
+        /// Initializes a new instance of the <see cref="CustomFormClient"/> class for mocking.
         /// </summary>
-        protected FormRecognizerClient()
+        protected CustomFormClient()
         { }
 
         #endregion

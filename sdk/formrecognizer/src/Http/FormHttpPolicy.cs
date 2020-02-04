@@ -15,8 +15,8 @@ namespace Azure.AI.FormRecognizer.Http
 
         private readonly Uri _basePath;
 
-        public FormHttpPolicy(Uri endpoint, FormRecognizerClientOptions.ServiceVersion serviceVersion)
-            : this(endpoint, FormRecognizerClientOptions.GetVersionString(serviceVersion))
+        public FormHttpPolicy(Uri endpoint, FormClientOptions.ServiceVersion serviceVersion)
+            : this(endpoint, FormClientOptions.GetVersionString(serviceVersion))
         {
         }
 

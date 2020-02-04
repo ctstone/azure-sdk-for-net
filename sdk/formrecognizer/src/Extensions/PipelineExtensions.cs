@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             Throw.IfNullOrEmpty(trainRequest.Source, nameof(TrainingRequest.Source));
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Post;
-            request.Uri.Path = FormRecognizerClient.BasePath;
+            request.Uri.Path = CustomFormClient.BasePath;
             request.AddJsonContent(trainRequest, options);
             return request;
         }
@@ -52,7 +52,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             }
             if (string.IsNullOrEmpty(nextLink))
             {
-                request.Uri.Path = FormRecognizerClient.BasePath;
+                request.Uri.Path = CustomFormClient.BasePath;
             }
             else
             {

@@ -16,13 +16,13 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
     {
         private readonly MockTransport _mockTransport;
         private readonly HttpPipeline _pipeline;
-        private readonly FormRecognizerClientOptions _options;
+        private readonly FormClientOptions _options;
 
         public RequestExtensionTests()
         {
             _mockTransport = new MockTransport();
             _pipeline = new HttpPipeline(_mockTransport);
-            _options = new FormRecognizerClientOptions();
+            _options = new FormClientOptions();
         }
 
         [Fact]

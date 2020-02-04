@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
                 var op = args.Length > 0 ? args[0] : String.Empty;
-                var options = new FormRecognizerClientOptions();
+                var options = new FormClientOptions();
                 // var endpoint = new Uri("http://192.168.1.4:5000");
                 // var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
                 var endpoint = new Uri("https://chstone-forms-westus2.cognitiveservices.azure.com/");
@@ -37,9 +37,9 @@ namespace Azure.AI.FormRecognizer.Samples
                 options.Diagnostics.IsLoggingEnabled = true;
                 // options.Diagnostics.LoggedHeaderNames.Add("apim-request-id");
                 // options.Diagnostics.ApplicationId = "chstone";
-                var client = new FormRecognizerClient(endpoint, credential, options);
+                var client = new CustomFormClient(endpoint, credential, options);
                 var layoutClient = new FormLayoutClient(endpoint, credential);
-                var receiptClient = new FormReceiptClient(endpoint, credential);
+                var receiptClient = new ReceiptClient(endpoint, credential);
 
                 await (op switch
                 {
@@ -157,7 +157,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
-        private static async Task UseReceipt(FormReceiptClient client, string[] args)
+        private static async Task UseReceipt(ReceiptClient client, string[] args)
         {
             var op = args[1];
             await (op switch
@@ -169,7 +169,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeReceiptAsync(FormReceiptClient client, string[] args)
+        private static async Task AnalyzeReceiptAsync(ReceiptClient client, string[] args)
         {
             var type = args[2];
             await (type switch
@@ -180,7 +180,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeReceiptFileAsync(FormReceiptClient client, string[] args)
+        private static async Task AnalyzeReceiptFileAsync(ReceiptClient client, string[] args)
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
@@ -198,7 +198,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task AnalyzeReceiptUrlAsync(FormReceiptClient client, string[] args)
+        private static async Task AnalyzeReceiptUrlAsync(ReceiptClient client, string[] args)
         {
             var url = new Uri(args[3]);
             var op = await client.StartAnalyzeAsync(url);
@@ -215,7 +215,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task GetReceiptAnalysisAsync(FormReceiptClient client, string[] args)
+        private static async Task GetReceiptAnalysisAsync(ReceiptClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
@@ -224,7 +224,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine(result.Value.Status);
         }
 
-        private static async Task GetReceiptAnalysisResultAsync(FormReceiptClient client, string[] args)
+        private static async Task GetReceiptAnalysisResultAsync(ReceiptClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
@@ -234,14 +234,14 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
-        private static async Task DeleteModelAsync(FormRecognizerClient client, string[] args)
+        private static async Task DeleteModelAsync(CustomFormClient client, string[] args)
         {
             var modelId = args[1];
             await client.GetModelReference(modelId).DeleteAsync();
             Console.WriteLine("Deleted!");
         }
 
-        private static async Task AnalyzeAsync(FormRecognizerClient client, string[] args)
+        private static async Task AnalyzeAsync(CustomFormClient client, string[] args)
         {
             var modelId = args[1];
             var type = args[2];
@@ -253,7 +253,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task GetAnalysisAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetAnalysisAsync(CustomFormClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
@@ -293,7 +293,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task GetAnalysisResultAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetAnalysisResultAsync(CustomFormClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
@@ -303,7 +303,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine(result.Value.LastUpdatedOn);
         }
 
-        private static async Task AnalyzeFileAsync(FormRecognizerClient client, string modelId, string[] args)
+        private static async Task AnalyzeFileAsync(CustomFormClient client, string modelId, string[] args)
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
@@ -322,7 +322,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task AnalyzeUrlAsync(FormRecognizerClient client, string modelId, string[] args)
+        private static async Task AnalyzeUrlAsync(CustomFormClient client, string modelId, string[] args)
         {
             var url = new Uri(args[3]);
             var op = await client.GetModelReference(modelId).StartAnalyzeAsync(url);
@@ -358,7 +358,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine(body);
         }
 
-        private static async Task GetModelAsync(FormRecognizerClient client, string[] args)
+        private static async Task GetModelAsync(CustomFormClient client, string[] args)
         {
             var modelId = args[1];
             var model = await client.GetModelReference(modelId).GetAsync(includeKeys: true);
@@ -369,7 +369,7 @@ namespace Azure.AI.FormRecognizer.Samples
             PrintResponse(model);
         }
 
-        private static async Task TrainAsync(FormRecognizerClient client, string[] args)
+        private static async Task TrainAsync(CustomFormClient client, string[] args)
         {
             var source = args[1];
             var prefix = args.Length == 3 ? args[2] : default;
@@ -394,7 +394,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task GetModelsSummaryAsync(FormRecognizerClient client)
+        private static async Task GetModelsSummaryAsync(CustomFormClient client)
         {
             var resp = await client.GetSummaryAsync();
             Console.WriteLine($"Count: {resp.Value.Count}");
@@ -402,7 +402,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine($"Last Updated: {resp.Value.LastUpdatedOn}");
         }
 
-        private static void ListModels(FormRecognizerClient client)
+        private static void ListModels(CustomFormClient client)
         {
             foreach (var modelInfo in client.ListModels())
             {
@@ -418,7 +418,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task ListModelsAsync(FormRecognizerClient client)
+        private static async Task ListModelsAsync(CustomFormClient client)
         {
             var models = client.ListModelsAsync();
 

@@ -11,7 +11,7 @@ using Azure.Core;
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// The form layout client extracts text and layout information from a given document.
+    /// The Form Layout client extracts text and layout information from documents.
     /// </summary>
     public class FormLayoutClient : AnalyzeClient
     {
@@ -24,7 +24,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         public FormLayoutClient(Uri endpoint, CognitiveKeyCredential credential)
-            : this(endpoint, credential, new FormRecognizerClientOptions())
+            : this(endpoint, credential, new FormClientOptions())
         {
         }
 
@@ -34,7 +34,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormLayoutClient(Uri endpoint, CognitiveKeyCredential credential, FormRecognizerClientOptions options)
+        public FormLayoutClient(Uri endpoint, CognitiveKeyCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
@@ -45,7 +45,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Azure Active Directory credential.</param>
         public FormLayoutClient(Uri endpoint, TokenCredential credential)
-            : this(endpoint, credential, new FormRecognizerClientOptions())
+            : this(endpoint, credential, new FormClientOptions())
         {
         }
 
@@ -55,7 +55,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Azure Active Directory credential.</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormLayoutClient(Uri endpoint, TokenCredential credential, FormRecognizerClientOptions options)
+        public FormLayoutClient(Uri endpoint, TokenCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
@@ -66,7 +66,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">User-defined credential.</param>
         public FormLayoutClient(Uri endpoint, CognitiveHeaderCredential credential)
-            : this(endpoint, credential, new FormRecognizerClientOptions())
+            : this(endpoint, credential, new FormClientOptions())
         {
         }
 
@@ -76,12 +76,12 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">User-defined credential</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormLayoutClient(Uri endpoint, CognitiveHeaderCredential credential, FormRecognizerClientOptions options)
+        public FormLayoutClient(Uri endpoint, CognitiveHeaderCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
 
-        internal FormLayoutClient(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
+        internal FormLayoutClient(Uri endpoint, FormAuthenticator authenticator, FormClientOptions options)
             : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseLayoutPath)
         {
         }

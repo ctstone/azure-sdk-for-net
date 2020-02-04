@@ -6,7 +6,7 @@ using System.Text;
 using Azure.AI.FormRecognizer.Http;
 using Azure.Core;
 using Xunit;
-using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
+using static Azure.AI.FormRecognizer.FormClientOptions;
 
 namespace Azure.AI.FormRecognizer.Tests
 {
@@ -16,12 +16,12 @@ namespace Azure.AI.FormRecognizer.Tests
         public void Constructor_Handles_DefaultParameters()
         {
             // Act
-            var options = new FormRecognizerClientOptions();
+            var options = new FormClientOptions();
 
             // Assert
             Assert.Equal(Encoding.UTF8, options.Encoding);
-            Assert.Equal(FormRecognizerClientOptions.LatestVersion, options.Version);
-            Assert.NotNull(FormRecognizerClientOptions.GetVersionString(options.Version));
+            Assert.Equal(FormClientOptions.LatestVersion, options.Version);
+            Assert.NotNull(FormClientOptions.GetVersionString(options.Version));
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             // Arrange
             var version = ServiceVersion.V2_0_Preview;
-            var options = new FormRecognizerClientOptions(version: version);
+            var options = new FormClientOptions(version: version);
 
             // Assert
             Assert.Equal(version, options.Version);

@@ -19,13 +19,13 @@ namespace Azure.AI.FormRecognizer.Tests.Http
 
         private readonly Uri _endpoint;
         private readonly HttpPipeline _pipeline;
-        private readonly FormRecognizerClientOptions _options;
+        private readonly FormClientOptions _options;
 
 
         public FormHttpPolicyTests()
         {
             _endpoint = new Uri(EndpointText);
-            _options = new FormRecognizerClientOptions();
+            _options = new FormClientOptions();
             var transport = new MockTransport(new MockResponse(200));
             var credential = new CognitiveKeyCredential(ApiKey);
             var policy = new FormHttpPolicy(_endpoint, _options.Version);
@@ -83,7 +83,7 @@ namespace Azure.AI.FormRecognizer.Tests.Http
             Assert.Equal(_endpoint.Scheme, request.Uri.Scheme);
             Assert.Equal(_endpoint.Host, request.Uri.Host);
             Assert.Equal(_endpoint.Port, request.Uri.Port);
-            Assert.Equal($"/formrecognizer/{FormRecognizerClientOptions.GetVersionString(_options.Version)}/foo?x=1", request.Uri.PathAndQuery);
+            Assert.Equal($"/formrecognizer/{FormClientOptions.GetVersionString(_options.Version)}/foo?x=1", request.Uri.PathAndQuery);
         }
     }
 }

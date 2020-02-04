@@ -191,12 +191,12 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             Assert.Equal(modelId, modelRef.ModelId);
         }
 
-        private FormRecognizerClient GetClient(params MockResponse[] responses)
+        private CustomFormClient GetClient(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
-            var options = new FormRecognizerClientOptions();
-            return new FormRecognizerClient(pipeline, options);
+            var options = new FormClientOptions();
+            return new CustomFormClient(pipeline, options);
         }
     }
 }

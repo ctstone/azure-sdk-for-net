@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Extensions
             request.Headers.Add(HttpHeader.Common.JsonContentType);
         }
 
-        public static async Task AddJsonContentAsync<T>(this Request request, T obj, FormRecognizerClientOptions options, CancellationToken cancellationToken)
+        public static async Task AddJsonContentAsync<T>(this Request request, T obj, FormClientOptions options, CancellationToken cancellationToken)
         {
             var memory = new MemoryStream();
             await JsonSerializer.SerializeAsync(memory, obj, options.SerializationOptions, cancellationToken).ConfigureAwait(false);

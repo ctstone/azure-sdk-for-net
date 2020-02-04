@@ -9,7 +9,7 @@ namespace Azure.AI.FormRecognizer.Http
 {
     internal static class FormHttpPipelineBuilder
     {
-        public static HttpPipeline Build(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
+        public static HttpPipeline Build(Uri endpoint, FormAuthenticator authenticator, FormClientOptions options)
         {
             Throw.IfMissing(options, nameof(options));
             var endpointPolicy = new FormHttpPolicy(endpoint, options.Version);

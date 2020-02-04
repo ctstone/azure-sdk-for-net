@@ -5,7 +5,7 @@ using System;
 using System.Text;
 using Azure.Core;
 using Xunit;
-using static Azure.AI.FormRecognizer.FormRecognizerClientOptions;
+using static Azure.AI.FormRecognizer.FormClientOptions;
 
 namespace Azure.AI.FormRecognizer.Tests
 {
@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer.Tests
         [Fact]
         public void Request_SourceFilter_IsOptional()
         {
-            var request = new TrainingRequest { SourceFilter = null };
+            var request = new TrainingRequest { Filter = null };
         }
 
         [Fact]

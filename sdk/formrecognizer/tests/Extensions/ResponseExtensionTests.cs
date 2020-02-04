@@ -19,7 +19,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         {
             // Arrange
             var response = MockFormResponses.GetModelResponse("creating");
-            var options = new FormRecognizerClientOptions();
+            var options = new FormClientOptions();
 
             // Act
             var model = await response.GetJsonContentAsync<Model>(options.SerializationOptions, CancellationToken.None);
@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         {
             // Arrange
             var response = MockFormResponses.GetModelResponse("creating");
-            var options = new FormRecognizerClientOptions();
+            var options = new FormClientOptions();
 
             // Act
             var model = response.GetJsonContent<Model>(options.SerializationOptions);
@@ -58,7 +58,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         {
             // Arrange
             var response = new MockResponse(responseStatus);
-            var options = new FormRecognizerClientOptions();
+            var options = new FormClientOptions();
 
             // Act/Assert
             if (isValid)

@@ -21,9 +21,9 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             Assert.True(client is AnalyzeClient);
         }
 
-        private FormReceiptClient GetClient(params MockResponse[] responses)
+        private ReceiptClient GetClient(params MockResponse[] responses)
         {
-            return new FormReceiptClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"));
+            return new ReceiptClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"));
         }
     }
 }

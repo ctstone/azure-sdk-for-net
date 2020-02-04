@@ -19,17 +19,17 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
         {
             writer.WriteStartObject();
             writer.WriteString("source", value.Source);
-            if (value.SourceFilter != default)
+            if (value.Filter != default)
             {
                 writer.WritePropertyName("sourceFilter");
                 writer.WriteStartObject();
-                if (value.SourceFilter.Prefix != default)
+                if (value.Filter.Prefix != default)
                 {
-                    writer.WriteString("prefix", value.SourceFilter.Prefix);
+                    writer.WriteString("prefix", value.Filter.Prefix);
                 }
-                if (value.SourceFilter.IncludeSubFolders.HasValue)
+                if (value.Filter.IncludeSubFolders.HasValue)
                 {
-                    writer.WriteBoolean("includeSubFolders", value.SourceFilter.IncludeSubFolders.Value);
+                    writer.WriteBoolean("includeSubFolders", value.Filter.IncludeSubFolders.Value);
                 }
                 writer.WriteEndObject();
             }

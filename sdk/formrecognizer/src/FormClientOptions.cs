@@ -10,9 +10,9 @@ using Azure.Core;
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// Set options for the Form Recognizer client.
+    /// Client options for the Form Recognizer service.
     /// </summary>
-    public class FormRecognizerClientOptions : ClientOptions
+    public class FormClientOptions : ClientOptions
     {
         internal const ServiceVersion LatestVersion = ServiceVersion.V2_0_Preview;
 
@@ -32,7 +32,6 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         public ServiceVersion Version { get; }
 
-
         /// <summary>
         /// Get the extra headers sent by the client to the service on each request.
         /// </summary>
@@ -41,10 +40,10 @@ namespace Azure.AI.FormRecognizer
         internal Encoding Encoding { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormRecognizerClientOptions"/> class.
+        /// Initializes a new instance of the <see cref="FormClientOptions"/> class.
         /// </summary>
         /// <param name="version">Set the service version to use for all requests.</param>
-        public FormRecognizerClientOptions(ServiceVersion version = LatestVersion)
+        public FormClientOptions(ServiceVersion version = LatestVersion)
         {
             Version = version;
             Encoding = Encoding.UTF8;
