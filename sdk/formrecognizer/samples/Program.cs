@@ -373,12 +373,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var source = args[1];
             var prefix = args.Length == 3 ? args[2] : default;
-            var op = await client.StartTrainingAsync(new TrainingRequest
-            {
-                Source = source,
-                // SourceFilter = new SourceFilter { Prefix = prefix },
-                UseLabelFile = true,
-            });
+            var op = await client.StartTrainingAsync(new TrainingRequest(source, new SourceFilter(prefix)));
             op.GetRawResponse().Headers.TryGetValue("apim-request-id", out string requestId);
 
             Console.WriteLine($"Created model with id {op.Id} (requestId: {requestId})");

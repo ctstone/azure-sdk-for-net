@@ -29,7 +29,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         public void CreateTrainRequest_CreatesRequest()
         {
             // Arrange
-            var trainRequest = new TrainingRequest { Source = "http://localhost" };
+            var trainRequest = new TrainingRequest("http://localhost");
 
             // Act
             var request = _pipeline.CreateTrainRequest(trainRequest, _options.SerializationOptions);

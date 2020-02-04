@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var mockResponse = new MockResponse((int)HttpStatusCode.Created);
             mockResponse.AddHeader(new HttpHeader("Location", $"http://localhost/{operationId}"));
             var client = GetClient(mockResponse);
-            var trainingRequest = new TrainingRequest { Source = "http://localhost/fake-source" };
+            var trainingRequest = new TrainingRequest("http://localhost/fake-source");
 
             // Act
             var operation = isAsync
@@ -66,7 +66,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
         {
             // Arrange
             var client = GetClient();
-            TrainingRequest trainingRequest = new TrainingRequest { Source = source };
+            TrainingRequest trainingRequest = new TrainingRequest(source);
 
             // Act / Assert
             var ex = isAsync

@@ -14,13 +14,13 @@ namespace Azure.AI.FormRecognizer.Tests
         [Fact]
         public void Request_SourceFilter_IsOptional()
         {
-            var request = new TrainingRequest { Filter = null };
+            var request = new TrainingRequest(source: "fake_source", useLabelFile: false);
         }
 
         [Fact]
         public void Request_UseLabelFile_IsOptional()
         {
-            var request = new TrainingRequest { UseLabelFile = null };
+            var request = new TrainingRequest(source: "fake_source", filter: new SourceFilter());
         }
     }
 }
