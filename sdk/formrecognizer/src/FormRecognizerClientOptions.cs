@@ -49,7 +49,12 @@ namespace Azure.AI.FormRecognizer
             Version = version;
             Encoding = Encoding.UTF8;
             SerializationOptions = new JsonSerializerOptions();
-            AddJsonConverters(SerializationOptions);
+            SerializationOptions.Converters.Add(new AnalysisJsonConverter());
+            SerializationOptions.Converters.Add(new ModelJsonConverter());
+            SerializationOptions.Converters.Add(new TrainingRequestJsonConverter());
+            SerializationOptions.Converters.Add(new AnalysisRequestJsonConverter());
+            SerializationOptions.Converters.Add(new ErrorResponseJsonConverter());
+            SerializationOptions.Converters.Add(new ModelListingJsonConverter());
         }
 
         internal static string GetVersionString(ServiceVersion version)
@@ -59,16 +64,6 @@ namespace Azure.AI.FormRecognizer
                 ServiceVersion.V2_0_Preview => "v2.0-preview",
                 _ => throw new NotSupportedException($"The service version {version} is not supported."),
             };
-        }
-
-        internal static void AddJsonConverters(JsonSerializerOptions serializerOptions)
-        {
-            serializerOptions.Converters.Add(new AnalysisJsonConverter());
-            serializerOptions.Converters.Add(new ModelJsonConverter());
-            serializerOptions.Converters.Add(new TrainingRequestJsonConverter());
-            serializerOptions.Converters.Add(new AnalysisRequestJsonConverter());
-            serializerOptions.Converters.Add(new ErrorResponseJsonConverter());
-            serializerOptions.Converters.Add(new ModelListingJsonConverter());
         }
     }
 }
