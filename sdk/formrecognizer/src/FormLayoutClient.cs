@@ -92,10 +92,4 @@ namespace Azure.AI.FormRecognizer
 
         #endregion
     }
-
-    /// <summary>
-    /// Options for analyzing layout.
-    /// </summary>
-    public struct AnalyzeLayoutOptions
-    { }
 }
