@@ -4,9 +4,9 @@
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// The unit used by the width, height and boundingBox properties.
+    /// A unit representing the width or height of a document page.
     /// </summary>
-    public enum Unit
+    public enum PageUnit
     {
         /// <summary>Pixel.</summary>
         Pixel = 1,

@@ -8,9 +8,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class FieldValueJson
     {
-        public static FieldValue Read(JsonElement root)
+        public static PredefinedField Read(JsonElement root)
         {
-            var fieldValue = FieldValue.Create();
+            var fieldValue = PredefinedField.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,17 +21,11 @@ namespace Azure.AI.FormRecognizer.Serialization
             return fieldValue;
         }
 
-        private static void ReadPropertyValue(ref FieldValue fieldValue, JsonProperty property)
+        private static void ReadPropertyValue(ref PredefinedField fieldValue, JsonProperty property)
         {
             if (property.NameEquals("type"))
             {
-                fieldValue.Type = property.Value.GetString() switch
-                {
-                    "string" => FieldValueType.StringType,
-                    "integer" => FieldValueType.IntegerType,
-                    "object" => FieldValueType.ObjectType,
-                    _ => EnumJson.Read<FieldValueType>(property.Value),
-                };
+                fieldValue.Type = property.Value.GetString();
             }
             else if (property.NameEquals("valueString"))
             {

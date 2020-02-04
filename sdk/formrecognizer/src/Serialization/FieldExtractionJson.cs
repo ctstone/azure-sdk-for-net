@@ -6,11 +6,11 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
-    internal class KeyValuePairJson
+    internal class FieldExtractionJson
     {
-        public static KeyValuePair Read(JsonElement root)
+        public static FieldExtraction Read(JsonElement root)
         {
-            var keyValuePair = KeyValuePair.Create();
+            var keyValuePair = FieldExtraction.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,23 +21,23 @@ namespace Azure.AI.FormRecognizer.Serialization
             return keyValuePair;
         }
 
-        private static void ReadPropertyValue(ref KeyValuePair keyValuePair, JsonProperty property)
+        private static void ReadPropertyValue(ref FieldExtraction fieldExtraction, JsonProperty property)
         {
             if (property.NameEquals("label"))
             {
-                keyValuePair.Label = property.Value.GetString();
+                fieldExtraction.Label = property.Value.GetString();
             }
             else if (property.NameEquals("key"))
             {
-                keyValuePair.Key = KeyValueElementJson.Read(property.Value);
+                fieldExtraction.Field = KeyValueElementJson.Read(property.Value);
             }
             else if (property.NameEquals("value"))
             {
-                keyValuePair.Value = KeyValueElementJson.Read(property.Value);
+                fieldExtraction.Value = KeyValueElementJson.Read(property.Value);
             }
             else if (property.NameEquals("confidence"))
             {
-                keyValuePair.Confidence = property.Value.GetSingle();
+                fieldExtraction.Confidence = property.Value.GetSingle();
             }
         }
     }

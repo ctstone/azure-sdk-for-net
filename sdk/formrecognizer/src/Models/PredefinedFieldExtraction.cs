@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// A set of extracted fields corresponding to the input document.
     /// </summary>
-    public class DocumentResult
+    public class PredefinedFieldExtraction
     {
         /// <summary>
         /// Document type.
@@ -23,14 +23,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Dictionary of named field values.
         /// </summary>
-        public IDictionary<string, FieldValue> Fields { get; internal set; }
+        public IDictionary<string, PredefinedField> Fields { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DocumentResult"/> class.
+        /// Initializes a new instance of the <see cref="PredefinedFieldExtraction"/> class.
         /// </summary>
-        protected DocumentResult()
+        protected PredefinedFieldExtraction()
         { }
 
-        internal static DocumentResult Create() => new DocumentResult();
+        internal static PredefinedFieldExtraction Create() => new PredefinedFieldExtraction();
     }
 }

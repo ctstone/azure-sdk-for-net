@@ -7,11 +7,11 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
-    internal class PageResultJson
+    internal class FieldExtractionPageJson
     {
-        public static PageResult Read(JsonElement root)
+        public static FieldExtractionPage Read(JsonElement root)
         {
-            var pageResult = PageResult.Create();
+            var pageResult = FieldExtractionPage.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -19,9 +19,9 @@ namespace Azure.AI.FormRecognizer.Serialization
                     ReadPropertyValue(ref pageResult, property);
                 }
             }
-            if (pageResult.KeyValuePairs == default)
+            if (pageResult.Fields == default)
             {
-                pageResult.KeyValuePairs = Array.Empty<KeyValuePair>();
+                pageResult.Fields = Array.Empty<FieldExtraction>();
             }
             if (pageResult.Tables == default)
             {
@@ -30,23 +30,23 @@ namespace Azure.AI.FormRecognizer.Serialization
             return pageResult;
         }
 
-        private static void ReadPropertyValue(ref PageResult readResult, JsonProperty property)
+        private static void ReadPropertyValue(ref FieldExtractionPage fieldExtractionPage, JsonProperty property)
         {
             if (property.NameEquals("page"))
             {
-                readResult.Page = property.Value.GetInt32();
+                fieldExtractionPage.PageNumber = property.Value.GetInt32();
             }
             else if (property.NameEquals("clusterId"))
             {
-                readResult.ClusterId = property.Value.GetInt32();
+                fieldExtractionPage.ClusterId = property.Value.GetInt32();
             }
             else if (property.NameEquals("keyValuePairs"))
             {
-                readResult.KeyValuePairs = ArrayJson.Read(property.Value, KeyValuePairJson.Read);
+                fieldExtractionPage.Fields = ArrayJson.Read(property.Value, FieldExtractionJson.Read);
             }
             else if (property.NameEquals("tables"))
             {
-                readResult.Tables = ArrayJson.Read(property.Value, DataTableJson.Read);
+                fieldExtractionPage.Tables = ArrayJson.Read(property.Value, DataTableJson.Read);
             }
         }
     }

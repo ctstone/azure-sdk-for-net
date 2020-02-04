@@ -8,12 +8,12 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Recognized field value.
     /// </summary>
-    public class FieldValue : ReferencingTextElement
+    public class PredefinedField : ReferencingTextElement
     {
         /// <summary>
         /// Type of field value.
         /// </summary>
-        public FieldValueType Type { get; internal set; }
+        public PredefinedFieldType Type { get; internal set; }
 
         /// <summary>
         /// String value.
@@ -48,12 +48,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Array of field values.
         /// </summary>
-        public FieldValue[] ArrayValue { get; internal set; }
+        public PredefinedField[] ArrayValue { get; internal set; }
 
         /// <summary>
         /// Dictionary of field values.
         /// </summary>
-        public IDictionary<string, FieldValue> ObjectValue { get; internal set; }
+        public IDictionary<string, PredefinedField> ObjectValue { get; internal set; }
 
         /// <summary>
         /// When includeTextDetails is set to true, a list of references to the text elements constituting this field.
@@ -70,11 +70,11 @@ namespace Azure.AI.FormRecognizer.Models
         public int? Page { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FieldValue"/> class.
+        /// Initializes a new instance of the <see cref="PredefinedField"/> class.
         /// </summary>
-        protected FieldValue()
+        protected PredefinedField()
         { }
 
-        internal static FieldValue Create() => new FieldValue();
+        internal static PredefinedField Create() => new PredefinedField();
     }
 }

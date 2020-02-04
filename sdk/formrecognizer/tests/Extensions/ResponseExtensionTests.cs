@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var options = new FormClientOptions();
 
             // Act
-            var model = await response.GetJsonContentAsync<Model>(options.SerializationOptions, CancellationToken.None);
+            var model = await response.GetJsonContentAsync<CustomFormModel>(options.SerializationOptions, CancellationToken.None);
 
             // Assert
             Assert.NotNull(model);
@@ -38,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
             var options = new FormClientOptions();
 
             // Act
-            var model = response.GetJsonContent<Model>(options.SerializationOptions);
+            var model = response.GetJsonContent<CustomFormModel>(options.SerializationOptions);
 
             // Assert
             Assert.NotNull(model);

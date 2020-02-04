@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class KeyValueElementJson
     {
-        public static KeyValueElement Read(JsonElement root)
+        public static FieldExtractionElementJson Read(JsonElement root)
         {
-            var keyValueElement = KeyValueElement.Create();
+            var keyValueElement = FieldExtractionElementJson.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -26,19 +26,19 @@ namespace Azure.AI.FormRecognizer.Serialization
             return keyValueElement;
         }
 
-        private static void ReadPropertyValue(ref KeyValueElement keyValuePair, JsonProperty property)
+        private static void ReadPropertyValue(ref FieldExtractionElementJson fieldExtractionElement, JsonProperty property)
         {
             if (property.NameEquals("text"))
             {
-                TextElementJson.ReadText(keyValuePair, property.Value);
+                TextElementJson.ReadText(fieldExtractionElement, property.Value);
             }
             else if (property.NameEquals("boundingBox"))
             {
-                TextElementJson.ReadBoundingBox(keyValuePair, property.Value);
+                TextElementJson.ReadBoundingBox(fieldExtractionElement, property.Value);
             }
             else if (property.NameEquals("elements"))
             {
-                keyValuePair.ElementReferences = ArrayJson.ReadStrings(property.Value);
+                fieldExtractionElement.ElementReferences = ArrayJson.ReadStrings(property.Value);
             }
         }
     }

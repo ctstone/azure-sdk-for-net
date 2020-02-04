@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted key-value pair.
     /// </summary>
-    public class KeyValuePair
+    public class FieldExtraction
     {
         /// <summary>
         /// A user defined label for the key/value pair entry.
@@ -16,12 +16,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Information about the extracted key in a key-value pair.
         /// </summary>
-        public KeyValueElement Key { get; internal set; }
+        public FieldExtractionElementJson Field { get; internal set; }
 
         /// <summary>
         /// Information about the extracted value in a key-value pair.
         /// </summary>
-        public KeyValueElement Value { get; internal set; }
+        public FieldExtractionElementJson Value { get; internal set; }
 
         /// <summary>
         /// Confidence value.
@@ -29,11 +29,11 @@ namespace Azure.AI.FormRecognizer.Models
         public float Confidence { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyValuePair"/> class.
+        /// Initializes a new instance of the <see cref="FieldExtraction"/> class.
         /// </summary>
-        protected KeyValuePair()
+        protected FieldExtraction()
         { }
 
-        internal static KeyValuePair Create() => new KeyValuePair();
+        internal static FieldExtraction Create() => new FieldExtraction();
     }
 }

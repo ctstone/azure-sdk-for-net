@@ -21,50 +21,50 @@ namespace Azure.AI.FormRecognizer.Serialization
                 }
             }
 
-            if (analysisResult.ReadResults == default)
+            if (analysisResult.TextExtractionPages == default)
             {
-                analysisResult.ReadResults = Array.Empty<ReadResult>();
+                analysisResult.TextExtractionPages = Array.Empty<TextExtractionPage>();
             }
-            if (analysisResult.PageResults == default)
+            if (analysisResult.FieldExtractionPages == default)
             {
-                analysisResult.PageResults = Array.Empty<PageResult>();
+                analysisResult.FieldExtractionPages = Array.Empty<FieldExtractionPage>();
             }
-            if (analysisResult.DocumentResults == default)
+            if (analysisResult.PredefinedFieldExtractions == default)
             {
-                analysisResult.DocumentResults = Array.Empty<DocumentResult>();
+                analysisResult.PredefinedFieldExtractions = Array.Empty<PredefinedFieldExtraction>();
             }
             if (analysisResult.Errors == default)
             {
                 analysisResult.Errors = Array.Empty<ErrorDetails>();
             }
-            foreach (var page in analysisResult.PageResults)
+            foreach (var page in analysisResult.FieldExtractionPages)
             {
-                foreach (var keyValuePair in page.KeyValuePairs)
+                foreach (var keyValuePair in page.Fields)
                 {
-                    if (keyValuePair.Key != default)
+                    if (keyValuePair.Field != default)
                     {
-                        keyValuePair.Key.ResolveTextReferences(analysisResult.ReadResults);
+                        keyValuePair.Field.ResolveTextReferences(analysisResult.TextExtractionPages);
                     }
                     if (keyValuePair.Value != default)
                     {
-                        keyValuePair.Value.ResolveTextReferences(analysisResult.ReadResults);
+                        keyValuePair.Value.ResolveTextReferences(analysisResult.TextExtractionPages);
                     }
                 }
                 foreach (var table in page.Tables)
                 {
                     foreach (var cell in table.Cells)
                     {
-                        cell.ResolveTextReferences(analysisResult.ReadResults);
+                        cell.ResolveTextReferences(analysisResult.TextExtractionPages);
                     }
                 }
             }
-            foreach (var documentResult in analysisResult.DocumentResults)
+            foreach (var documentResult in analysisResult.PredefinedFieldExtractions)
             {
                 foreach (var field in documentResult.Fields)
                 {
                     if (field.Value != default)
                     {
-                        field.Value.ResolveTextReferences(analysisResult.ReadResults);
+                        field.Value.ResolveTextReferences(analysisResult.TextExtractionPages);
                     }
                 }
             }
@@ -79,31 +79,31 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("readResults"))
             {
-                analyzedForm.ReadResults = new ReadResult[property.Value.GetArrayLength()];
+                analyzedForm.TextExtractionPages = new TextExtractionPage[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {
-                    analyzedForm.ReadResults[i] = ReadResultJson.Read(json);
+                    analyzedForm.TextExtractionPages[i] = TextExtractionPageJson.Read(json);
                     i += 1;
                 }
             }
             else if (property.NameEquals("pageResults"))
             {
-                analyzedForm.PageResults = new PageResult[property.Value.GetArrayLength()];
+                analyzedForm.FieldExtractionPages = new FieldExtractionPage[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {
-                    analyzedForm.PageResults[i] = PageResultJson.Read(json);
+                    analyzedForm.FieldExtractionPages[i] = FieldExtractionPageJson.Read(json);
                     i += 1;
                 }
             }
             else if (property.NameEquals("documentResults"))
             {
-                analyzedForm.DocumentResults = new DocumentResult[property.Value.GetArrayLength()];
+                analyzedForm.PredefinedFieldExtractions = new PredefinedFieldExtraction[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {
-                    analyzedForm.DocumentResults[i] = DocumentResultJson.Read(json);
+                    analyzedForm.PredefinedFieldExtractions[i] = PredefinedFieldExtractionJson.Read(json);
                     i += 1;
                 }
             }

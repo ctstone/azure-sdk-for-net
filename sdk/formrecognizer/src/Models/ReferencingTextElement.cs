@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Models
 
         /// <summary>
         /// Resolve references in the form of `"#/readResults/2/lines/3/words/12` to the corresponding
-        /// <see cref="TextElement" /> relative to a given <see cref="ReadResult" />.
+        /// <see cref="TextElement" /> relative to a given <see cref="TextExtractionPage" />.
         ///
         /// Updated values will be accessible from the public `Elements` property.
         ///
@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// returned to the caller.
         /// </summary>
         /// <param name="readResults">The top-level OCR read results.</param>
-        internal void ResolveTextReferences(ReadResult[] readResults)
+        internal void ResolveTextReferences(TextExtractionPage[] readResults)
         {
             if (ElementReferences == default)
             {
@@ -43,10 +43,10 @@ namespace Azure.AI.FormRecognizer.Models
             }
         }
 
-        internal static TextElement ResolveTextReference(ReadResult[] results, string reference)
+        internal static TextElement ResolveTextReference(TextExtractionPage[] results, string reference)
         {
             TextElement textElement = null;
-            ReadResult readResult = null;
+            TextExtractionPage readResult = null;
             if (!string.IsNullOrEmpty(reference) && reference.Length > 2 && reference[0] == '#')
             {
                 // offset by 2 to skip the '#/' prefix

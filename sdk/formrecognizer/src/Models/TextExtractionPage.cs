@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Text extracted from a page in the input document.
     /// </summary>
-    public class ReadResult
+    public class TextExtractionPage
     {
         /// <summary>
         /// The 1-based page number in the input document.
@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer.Models
         ///
         /// For images, the unit is "pixel". For PDF, the unit is "inch".
         /// </summary>
-        public Unit Unit { get; internal set; }
+        public PageUnit Unit { get; internal set; }
 
         /// <summary>
         /// The detected language on the page overall.
@@ -52,11 +52,11 @@ namespace Azure.AI.FormRecognizer.Models
         public IList<TextLine> Lines { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReadResult"/> class.
+        /// Initializes a new instance of the <see cref="TextExtractionPage"/> class.
         /// </summary>
-        protected ReadResult()
+        protected TextExtractionPage()
         { }
 
-        internal static ReadResult Create() => new ReadResult();
+        internal static TextExtractionPage Create() => new TextExtractionPage();
     }
 }

@@ -127,12 +127,12 @@ namespace Azure.AI.FormRecognizer.Samples
             var op = client.StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
             // PrintResponse(result.GetRawResponse());
-            foreach (var page in result.Value.AnalyzeResult.PageResults)
+            foreach (var page in result.Value.AnalyzeResult.FieldExtractionPages)
             {
                 Console.WriteLine(page.ClusterId);
-                foreach (var kvp in page.KeyValuePairs)
+                foreach (var kvp in page.Fields)
                 {
-                    var keyText = kvp.Key.Text;
+                    var keyText = kvp.Field.Text;
                     var valueText = kvp.Value.Text;
                     Console.WriteLine($"{keyText} => {valueText}");
                 }
@@ -265,16 +265,16 @@ namespace Azure.AI.FormRecognizer.Samples
                 // PrintResponse(op.GetRawResponse());
 
                 var analysis = op.Value;
-                foreach (var x in analysis.AnalyzeResult.ReadResults)
+                foreach (var x in analysis.AnalyzeResult.TextExtractionPages)
                 {
                 }
 
-                foreach (var page in analysis.AnalyzeResult.PageResults)
+                foreach (var page in analysis.AnalyzeResult.FieldExtractionPages)
                 {
                     Console.WriteLine($"cluster(${page.ClusterId})");
-                    foreach (var kvp in page.KeyValuePairs)
+                    foreach (var kvp in page.Fields)
                     {
-                        var keyText = kvp.Key.Text;
+                        var keyText = kvp.Field.Text;
                         var valueText = kvp.Value.Text;
                         Console.WriteLine($"{keyText} => {valueText}");
                     }

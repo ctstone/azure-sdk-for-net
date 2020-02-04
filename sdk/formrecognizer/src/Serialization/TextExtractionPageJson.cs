@@ -7,11 +7,11 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
-    internal class ReadResultJson
+    internal class TextExtractionPageJson
     {
-        public static ReadResult Read(JsonElement root)
+        public static TextExtractionPage Read(JsonElement root)
         {
-            var readResult = ReadResult.Create();
+            var readResult = TextExtractionPage.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -26,35 +26,35 @@ namespace Azure.AI.FormRecognizer.Serialization
             return readResult;
         }
 
-        private static void ReadPropertyValue(ref ReadResult readResult, JsonProperty property)
+        private static void ReadPropertyValue(ref TextExtractionPage textExtractionPage, JsonProperty property)
         {
             if (property.NameEquals("page"))
             {
-                readResult.PageNumber = property.Value.GetInt32();
+                textExtractionPage.PageNumber = property.Value.GetInt32();
             }
             else if (property.NameEquals("angle"))
             {
-                readResult.Angle = property.Value.GetSingle();
+                textExtractionPage.Angle = property.Value.GetSingle();
             }
             else if (property.NameEquals("width"))
             {
-                readResult.Width = property.Value.GetSingle();
+                textExtractionPage.Width = property.Value.GetSingle();
             }
             else if (property.NameEquals("height"))
             {
-                readResult.Height = property.Value.GetSingle();
+                textExtractionPage.Height = property.Value.GetSingle();
             }
             else if (property.NameEquals("unit"))
             {
-                readResult.Unit = EnumJson.Read<Unit>(property.Value);
+                textExtractionPage.Unit = EnumJson.Read<PageUnit>(property.Value);
             }
             else if (property.NameEquals("language"))
             {
-                readResult.Language = property.Value.GetString();
+                textExtractionPage.Language = property.Value.GetString();
             }
             else if (property.NameEquals("lines"))
             {
-                readResult.Lines = ArrayJson.Read(property.Value, TextLineJson.Read);
+                textExtractionPage.Lines = ArrayJson.Read(property.Value, TextLineJson.Read);
             }
         }
     }

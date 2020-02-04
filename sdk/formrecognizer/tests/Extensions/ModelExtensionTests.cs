@@ -15,7 +15,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         public void IsModelComplete_ReturnsTrue_WhenComplete(ModelStatus testStatus, bool expectComplete)
         {
             // Arrange
-            var model = Model.Create();
+            var model = CustomFormModel.Create();
             model.ModelInfo = ModelInfo.Create();
             model.ModelInfo.Status = testStatus;
 
@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         public void IsModelSuccess_ReturnsTrue_WhenReady(ModelStatus testStatus, bool expectSuccess)
         {
             // Arrange
-            var model = Model.Create();
+            var model = CustomFormModel.Create();
             model.ModelInfo = ModelInfo.Create();
             model.ModelInfo.Status = testStatus;
 
