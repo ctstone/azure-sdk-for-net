@@ -6,6 +6,8 @@ using Azure.AI.FormRecognizer.Http;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core;
 
+#pragma warning disable AZC0007 // Client type should have public constructor with equivalent parameters not taking 'FormReceiptClientOptions' as last argument
+
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
@@ -22,7 +24,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         public FormReceiptClient(Uri endpoint, CognitiveKeyCredential credential)
-            : this(endpoint, credential, new FormReceiptClientOptions())
+            : this(endpoint, credential, new FormRecognizerClientOptions())
         {
         }
 
@@ -32,7 +34,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormReceiptClient(Uri endpoint, CognitiveKeyCredential credential, FormReceiptClientOptions options)
+        public FormReceiptClient(Uri endpoint, CognitiveKeyCredential credential, FormRecognizerClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
@@ -43,7 +45,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Azure Active Directory credential.</param>
         public FormReceiptClient(Uri endpoint, TokenCredential credential)
-            : this(endpoint, credential, new FormReceiptClientOptions())
+            : this(endpoint, credential, new FormRecognizerClientOptions())
         {
         }
 
@@ -53,7 +55,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Azure Active Directory credential.</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormReceiptClient(Uri endpoint, TokenCredential credential, FormReceiptClientOptions options)
+        public FormReceiptClient(Uri endpoint, TokenCredential credential, FormRecognizerClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
@@ -64,7 +66,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">User-defined credential.</param>
         public FormReceiptClient(Uri endpoint, CognitiveHeaderCredential credential)
-            : this(endpoint, credential, new FormReceiptClientOptions())
+            : this(endpoint, credential, new FormRecognizerClientOptions())
         {
         }
 
@@ -74,12 +76,12 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">User-defined credential</param>
         /// <param name="options">Optional service parameters.</param>
-        public FormReceiptClient(Uri endpoint, CognitiveHeaderCredential credential, FormReceiptClientOptions options)
+        public FormReceiptClient(Uri endpoint, CognitiveHeaderCredential credential, FormRecognizerClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }
 
-        internal FormReceiptClient(Uri endpoint, FormAuthenticator authenticator, FormReceiptClientOptions options)
+        internal FormReceiptClient(Uri endpoint, FormAuthenticator authenticator, FormRecognizerClientOptions options)
             : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseReceiptPath)
         {
         }

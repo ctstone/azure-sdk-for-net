@@ -20,16 +20,6 @@ namespace Azure.AI.FormRecognizer.Http
         {
         }
 
-        public FormHttpPolicy(Uri endpoint, FormLayoutClientOptions.ServiceVersion serviceVersion)
-            : this(endpoint, FormLayoutClientOptions.GetVersionString(serviceVersion))
-        {
-        }
-
-        public FormHttpPolicy(Uri endpoint, FormReceiptClientOptions.ServiceVersion serviceVersion)
-            : this(endpoint, FormReceiptClientOptions.GetVersionString(serviceVersion))
-        {
-        }
-
         private FormHttpPolicy(Uri endpoint, string versionSegment)
         {
             Throw.IfMissing(endpoint, nameof(endpoint));
