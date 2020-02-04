@@ -26,10 +26,12 @@ You can use one of the cross-platform client applications to easily upload your 
 ```csharp
 // using Azure.AI.FormRecognizer
 
-var endpoint = new Uri("https://{your_service_name}.cognitiveservices.azure.com/");
+var endpoint = new Uri("{your_endpoint}");
 var credential = new CognitiveKeyCredential("{your_service_key}");
-var client = new FormRecognizerClient(endpoint, credential);
+var client = new CustomFormClient(endpoint, credential);
 ```
+
+> Copy your `endpoint` and `credential` from the Azure Portal after you create your resource.
 
 ## Construct the training request
 
@@ -37,10 +39,10 @@ A training request is an Azure Storage url that points to a blob container holdi
 
 By default, the Form Recognizer service will only scan documents at the root of your container. You may optionally specify a path prefix to limit the documents that are read and a flag to recursively scan all segments matching the prefix.
 
-> Use your Azure Storage client application to generate the SAS Url (refer to SAS instructions for [Storage Explorer], [Azure CLI], or [.NET]).
+> Use your Azure Storage client application to generate the SAS Url for a __container__ (refer to SAS instructions for [Storage Explorer], [Azure CLI], or [.NET]).
 
 ```csharp
-var trainingRequest = new TrainingRequest { Source = "{your_blob_container_sas_url}" };
+var trainingRequest = new TrainingRequest("{your_blob_container_sas_url}");
 ```
 
 ## Submit the training request

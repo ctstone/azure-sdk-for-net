@@ -40,11 +40,7 @@ By default, the Form Recognizer service will only scan documents at the root of 
 > Use your Azure Storage client application to generate the SAS Url (refer to SAS instructions for [Storage Explorer], [Azure CLI], or [.NET]).
 
 ```csharp
-var trainingRequest = new TrainingRequest
-{
-    Source = "{your_blob_container_sas_url}",
-    UseLabelFile = true, // instruct the Form Recognizer service to look for your labeled annotations
-};
+var trainingRequest = new TrainingRequest(source: "{your_blob_container_sas_url}", useLabelFile: true);
 ```
 
 ## Submit the Training Request
@@ -60,7 +56,7 @@ Console.WriteLine($"Created model with id {trainingOperation.Id}");
 
 ## Wait for Training Completion
 
-The `FormRecognizerClient` can poll for the latest training status, asynchronously blocking the current thread.
+The `CustomFormClient` can poll for the latest training status, asynchronously blocking the current thread.
 
 ```csharp
 var trainingResponse = await trainingOperation.WaitForCompletionAsync();

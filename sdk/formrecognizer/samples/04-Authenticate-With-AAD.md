@@ -46,20 +46,22 @@ When the registration is complete, make note of the client's `appId`, `password`
 
 > Copy these values for later use.
 
-## Authorize the FormRecognizerClient with Your Credential
+## Authorize the CustomFormClient with Your Credential
 
 Now that you have an `appId` and `password`, you can create a `ClientSecretCredential` for your `tenant`:
 
 ```csharp
-var endpoint = "https://{your_resource_name}.cognitiveservices.azure.com/";
+var endpoint = new Uri("{your_endpoint}"); // copy from Azure Portal after creating resource
 var clientId = "{your_client_id}"; // aka appId
 var tenantId = "{your_tenant_id}"; // aka tenant
 var clientSecret = "{your_client_secret}"; // aka password
 var credential = ClientSecretCredential(tenantId, clientId, clientSecret);
-var client = new FormRecognizerClient(new Uri(endpoint), credential);
+var client = new CustomFormClient(new Uri(endpoint), credential);
 ```
 
-You are now ready to use your `FormRecognizerClient`!
+> This sample demonstrates how to use AAD authorization for a `CustomFormClient`. The same process can be used for `ReceiptClient` and `LayoutClient`.
+
+You are now ready to use your `client`!
 
 [TokenCredential]: https://docs.microsoft.com/en-us/dotnet/api/azure.core.tokencredential?view=azure-dotnet
 [ClientSecretCredential]: https://docs.microsoft.com/en-us/dotnet/api/azure.identity.clientsecretcredential?view=azure-dotnet

@@ -13,10 +13,12 @@ You can use your own receipt file or a [sample receipt].
 ```csharp
 // using Azure.AI.FormRecognizer
 
-var endpoint = new Uri("https://{your_service_name}.cognitiveservices.azure.com/");
+var endpoint = new Uri("{your_endpoint}");
 var credential = new CognitiveKeyCredential("{your_service_key}");
-var client = new FormReceiptClient(endpoint, credential);
+var client = new ReceiptClient(endpoint, credential);
 ```
+
+> Copy your `endpoint` and `credential` from the Azure Portal after you create your resource.
 
 ## Load your request file
 
@@ -42,7 +44,7 @@ Console.WriteLine($"Created request with id {analysisOperation.Id}");
 
 ## Wait for analysis completion
 
-The `FormReceiptClient` can poll for the latest analysis status, asynchronously blocking the current thread.
+The `ReceiptClient` can poll for the latest analysis status, asynchronously blocking the current thread.
 
 ```csharp
 var analysisResponse = await analysisOperation.WaitForCompletionAsync();

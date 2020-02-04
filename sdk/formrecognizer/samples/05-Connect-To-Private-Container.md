@@ -4,7 +4,7 @@ This sample demonstrates how to connect the Form Recognizer client to a private 
 
 Please review the [Form Recognizer Container] documentation.
 
-## Option 1: Authorize the FormRecognizerClient without a Credential
+## Option 1: Authorize the CustomFormClient without a Credential
 
 By default, a Form Recognizer container does not configure any authorization scheme. It's up to the container admin to setup (or not setup) authorization for clients.
 
@@ -13,13 +13,13 @@ By default, a Form Recognizer container does not configure any authorization sch
 To connect to a default Form Recognizer container, pass an empty `CognitiveHeaderCredential`:
 
 ```csharp
-var endpoint = new Uri("http://my_container_host");
-var client = new FormRecognizerClient(endpoint, new CognitiveHeaderCredential());
+var endpoint = new Uri("http://my_container_endpoint/");
+var client = new CustomFormClient(endpoint, new CognitiveHeaderCredential());
 ```
 
 The client is ready to use!
 
-## Option 2: Authorize the FormRecognizerClient with a Custom Header Credential
+## Option 2: Authorize the CustomFormClient with a Custom Header Credential
 
 Advanced users may configure custom authorization for containers using a third party ingress proxy. Refer to documentation from your container orchestrator (e.g. Docker Compose or Kubernetes) to learn how to setup an ingress proxy for your container.
 
@@ -28,7 +28,7 @@ Configure the Form Recognizer Client to send custom headers:
 ```csharp
 var credential = new CognitiveHeaderCredential(new HttpHeader("my-custom-api-key", "xyz"));
 var endpoint = new Uri("http://my_container_host");
-var client = new FormRecognizerClient(endpoint, credential);
+var client = new CustomFormClient(endpoint, credential);
 ```
 
 The client is ready to use!

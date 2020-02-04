@@ -13,10 +13,12 @@ You should have the `modelId` of the model you want to delete. If you're not sur
 ```csharp
 // using Azure.AI.FormRecognizer
 
-var endpoint = new Uri("https://{your_service_name}.cognitiveservices.azure.com/");
+var endpoint = new Uri("{your_endpoint}");
 var credential = new CognitiveKeyCredential("{your_service_key}");
-var client = new FormRecognizerClient(endpoint, credential);
+var client = new CustomFormClient(endpoint, credential);
 ```
+
+> Copy your `endpoint` and `credential` from the Azure Portal after you create your resource.
 
 ## Get a Model Reference
 
