@@ -13,7 +13,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// The 1-based page number in the input document.
         /// </summary>
-        public int Page { get; internal set; }
+        public int PageNumber { get; internal set; }
 
         /// <summary>
         /// The general orientation of the text in clockwise direction, measured in degrees between (-180, 180].

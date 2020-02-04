@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Serialization
         {
             if (property.NameEquals("page"))
             {
-                readResult.Page = property.Value.GetInt32();
+                readResult.PageNumber = property.Value.GetInt32();
             }
             else if (property.NameEquals("angle"))
             {
