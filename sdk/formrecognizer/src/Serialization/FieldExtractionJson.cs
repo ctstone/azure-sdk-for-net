@@ -29,11 +29,11 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("key"))
             {
-                fieldExtraction.Field = KeyValueElementJson.Read(property.Value);
+                fieldExtraction.Field = FieldExtractionElementJson.Read(property.Value);
             }
             else if (property.NameEquals("value"))
             {
-                fieldExtraction.Value = KeyValueElementJson.Read(property.Value);
+                fieldExtraction.Value = FieldExtractionElementJson.Read(property.Value);
             }
             else if (property.NameEquals("confidence"))
             {

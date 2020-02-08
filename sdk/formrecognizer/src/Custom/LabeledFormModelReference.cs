@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class CustomFormModelReference : AnalyzeClient
+    public class LabeledFormModelReference : AnalyzeClient
     {
         private readonly string _modelId;
 
@@ -30,12 +30,12 @@ namespace Azure.AI.FormRecognizer.Custom
         public string ModelId => _modelId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomFormModelReference"/> class for mocking.
+        /// Initializes a new instance of the <see cref="LabeledFormModelReference"/> class for mocking.
         /// </summary>
-        protected CustomFormModelReference()
+        protected LabeledFormModelReference()
         { }
 
-        internal CustomFormModelReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
+        internal LabeledFormModelReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
             : base(pipeline, options, GetModelPath(modelId))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
@@ -47,32 +47,30 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// Asynchronously get detailed information about a custom model.
         /// </summary>
-        /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<CustomFormModel>> GetAsync(bool? includeKeys = default, CancellationToken cancellationToken = default)
+        public async virtual Task<Response<LabeledFormModel>> GetAsync(CancellationToken cancellationToken = default)
         {
-            using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
+            using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys: null))
             using (var response = await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
                 var model = await response.GetJsonContentAsync<CustomFormModel>(Options, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(model, response);
+                return Response.FromValue(new LabeledFormModel(model), response);
             }
         }
 
         /// <summary>
         /// Get detailed information about a custom model.
         /// </summary>
-        /// /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<CustomFormModel> Get(bool? includeKeys = default, CancellationToken cancellationToken = default)
+        public virtual Response<FormModel> Get(CancellationToken cancellationToken = default)
         {
-            using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
+            using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys: null))
             using (var response = Pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
                 var model = response.GetJsonContent<CustomFormModel>(Options);
-                return Response.FromValue(model, response);
+                return Response.FromValue(new FormModel(model), response);
             }
         }
 

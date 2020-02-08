@@ -23,5 +23,11 @@ namespace Azure.AI.FormRecognizer.Models
             Message = message;
             Code = code;
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"{Code}: {Message}";
+        }
     }
 }

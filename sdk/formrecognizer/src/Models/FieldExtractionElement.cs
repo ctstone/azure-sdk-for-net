@@ -8,14 +8,14 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted key or value in a key-value pair.
     /// </summary>
-    public class FieldExtractionElementJson : ReferencingTextElement
+    public class FieldExtractionElement : ReferencingTextElement
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FieldExtractionElementJson"/> class.
+        /// Initializes a new instance of the <see cref="FieldExtractionElement"/> class.
         /// </summary>
-        protected FieldExtractionElementJson()
+        protected FieldExtractionElement()
         { }
 
-        internal static FieldExtractionElementJson Create() => new FieldExtractionElementJson();
+        internal static FieldExtractionElement Create() => new FieldExtractionElement();
     }
 }

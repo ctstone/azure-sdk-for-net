@@ -25,12 +25,12 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var mockResponse = new MockResponse((int)HttpStatusCode.Created);
             mockResponse.AddHeader(new HttpHeader("Location", $"http://localhost/{operationId}"));
             var client = GetClient(mockResponse);
-            var trainingRequest = new TrainingRequest("http://localhost/fake-source");
+            var source = "http://localhost/fake-source";
 
             // Act
             var operation = isAsync
-                ? await client.StartTrainingAsync(trainingRequest)
-                : client.StartTraining(trainingRequest);
+                ? await client.StartTrainingAsync(source)
+                : client.StartTraining(source);
 
             // Assert
             Assert.NotNull(operation);
@@ -48,12 +48,12 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
         {
             // Arrange
             var client = GetClient();
-            TrainingRequest trainingRequest = null;
+            string source = null;
 
             // Act / Assert
             var ex = isAsync
-                ? await Assert.ThrowsAsync<ArgumentNullException>(() => client.StartTrainingAsync(trainingRequest))
-                : Assert.Throws<ArgumentNullException>(() => client.StartTraining(trainingRequest));
+                ? await Assert.ThrowsAsync<ArgumentNullException>(() => client.StartTrainingAsync(source))
+                : Assert.Throws<ArgumentNullException>(() => client.StartTraining(source));
             Assert.NotNull(ex.ParamName);
         }
 
@@ -66,12 +66,11 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
         {
             // Arrange
             var client = GetClient();
-            TrainingRequest trainingRequest = new TrainingRequest(source);
 
             // Act / Assert
             var ex = isAsync
-                ? await Assert.ThrowsAsync<ArgumentException>(() => client.StartTrainingAsync(trainingRequest))
-                : Assert.Throws<ArgumentException>(() => client.StartTraining(trainingRequest));
+                ? await Assert.ThrowsAsync<ArgumentException>(() => client.StartTrainingAsync(source))
+                : Assert.Throws<ArgumentException>(() => client.StartTraining(source));
             Assert.NotNull(ex.ParamName);
         }
 

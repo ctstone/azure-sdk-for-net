@@ -99,16 +99,16 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             // Assert
             Assert.NotNull(response);
             Assert.NotNull(response.Value);
-            Assert.NotNull(response.Value.ModelInfo);
-            Assert.Equal(expectStatus, response.Value.ModelInfo.Status);
+            Assert.NotNull(response.Value.Information);
+            Assert.Equal(expectStatus, response.Value.Information.Status);
         }
 
-        private TrainingOperation GetOperation(params MockResponse[] responses)
+        private TrainingOperation<FormModel> GetOperation(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormClientOptions();
-            return new TrainingOperation(pipeline, FakeOperationId, options.SerializationOptions);
+            return new TrainingOperation<FormModel>(pipeline, FakeOperationId, options.SerializationOptions, (model) => new FormModel(model));
         }
     }
 }

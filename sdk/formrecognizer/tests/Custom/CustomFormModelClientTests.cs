@@ -23,10 +23,10 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var validModelId = "fake-model-id";
             var validPipeline = new HttpPipeline(new MockTransport());
             var validOptions = new FormClientOptions();
-            var ex1 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(null, validPipeline, validOptions.SerializationOptions));
-            var ex2 = Assert.Throws<ArgumentException>(() => new CustomFormModelReference(String.Empty, validPipeline, validOptions.SerializationOptions));
-            var ex3 = Assert.Throws<ArgumentNullException>(() => new CustomFormModelReference(validModelId, null, validOptions.SerializationOptions));
-            var ex4 = Assert.Throws<ArgumentNullException>(() => new CustomFormModelReference(validModelId, validPipeline, null));
+            var ex1 = Assert.Throws<ArgumentException>(() => new FormModelReference(null, validPipeline, validOptions.SerializationOptions));
+            var ex2 = Assert.Throws<ArgumentException>(() => new FormModelReference(String.Empty, validPipeline, validOptions.SerializationOptions));
+            var ex3 = Assert.Throws<ArgumentNullException>(() => new FormModelReference(validModelId, null, validOptions.SerializationOptions));
+            var ex4 = Assert.Throws<ArgumentNullException>(() => new FormModelReference(validModelId, validPipeline, null));
 
             Assert.NotNull(ex1.ParamName);
             Assert.NotNull(ex2.ParamName);
@@ -74,8 +74,8 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             // Assert
             Assert.NotNull(model);
             Assert.NotNull(model.Value);
-            Assert.NotNull(model.Value.ModelInfo);
-            Assert.Equal(ModelId, model.Value.ModelInfo.ModelId);
+            Assert.NotNull(model.Value.Information);
+            Assert.Equal(ModelId, model.Value.Information.ModelId);
         }
 
         [Theory]
@@ -98,12 +98,12 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             Assert.Contains("foo", ex.Message);
         }
 
-        private CustomFormModelReference GetClient(params MockResponse[] responses)
+        private FormModelReference GetClient(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormClientOptions();
-            return new CustomFormModelReference(ModelId, pipeline, options.SerializationOptions);
+            return new FormModelReference(ModelId, pipeline, options.SerializationOptions);
         }
     }
 }

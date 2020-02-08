@@ -16,12 +16,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Information about the extracted key in a key-value pair.
         /// </summary>
-        public FieldExtractionElementJson Field { get; internal set; }
+        public FieldExtractionElement Field { get; internal set; }
 
         /// <summary>
         /// Information about the extracted value in a key-value pair.
         /// </summary>
-        public FieldExtractionElementJson Value { get; internal set; }
+        public FieldExtractionElement Value { get; internal set; }
 
         /// <summary>
         /// Confidence value.

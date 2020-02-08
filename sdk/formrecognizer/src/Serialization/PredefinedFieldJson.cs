@@ -6,7 +6,7 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
-    internal class FieldValueJson
+    internal class PredefinedFieldJson
     {
         public static PredefinedField Read(JsonElement root)
         {
@@ -53,11 +53,11 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("valueArray"))
             {
-                fieldValue.ArrayValue = ArrayJson.Read(property.Value, FieldValueJson.Read);
+                fieldValue.ArrayValue = ArrayJson.Read(property.Value, PredefinedFieldJson.Read);
             }
             else if (property.NameEquals("valueObject"))
             {
-                fieldValue.ObjectValue = ObjectJson.Read(property.Value, FieldValueJson.Read);
+                fieldValue.ObjectValue = ObjectJson.Read(property.Value, PredefinedFieldJson.Read);
             }
             else if (property.NameEquals("text"))
             {

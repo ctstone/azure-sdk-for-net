@@ -34,7 +34,7 @@ namespace Azure.AI.FormRecognizer.Extensions
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Get;
-            request.Uri.Path = CustomFormModelReference.GetModelPath(modelId);
+            request.Uri.Path = FormModelReference.GetModelPath(modelId);
             if (includeKeys.HasValue)
             {
                 request.Uri.AppendQuery(IncludeKeysQueryKey, includeKeys.Value ? "true" : "false");
@@ -65,7 +65,7 @@ namespace Azure.AI.FormRecognizer.Extensions
         {
             var request = pipeline.CreateRequest();
             request.Method = RequestMethod.Delete;
-            request.Uri.Path = CustomFormModelReference.GetModelPath(modelId);
+            request.Uri.Path = FormModelReference.GetModelPath(modelId);
             return request;
         }
         #endregion

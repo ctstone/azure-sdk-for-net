@@ -16,14 +16,17 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// Represents a long-running training operation.
     /// </summary>
-    public class TrainingOperation : Operation<CustomFormModel>
+    public class TrainingOperation<TModel> : Operation<TModel>
+        where TModel : class
     {
         private const string LocationHeader = "Location";
         private static TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly JsonSerializerOptions _options;
+        private readonly Func<CustomFormModel, TModel> _modelFactory;
         private CustomFormModel _value;
+        private TModel _model;
         private Response _response;
 
         /// <summary>
@@ -34,7 +37,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// The final result of the training operation, if the operation completed successfully.
         /// </summary>
-        public override CustomFormModel Value => HasValue ? _value : default;
+        public override TModel Value => HasValue ? _model : default;
 
         /// <summary>
         /// True if the training operation completed.
@@ -46,19 +49,20 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
-        internal TrainingOperation(HttpPipeline pipeline, string operationId, JsonSerializerOptions options)
+        internal TrainingOperation(HttpPipeline pipeline, string operationId, JsonSerializerOptions options, Func<CustomFormModel, TModel> modelFactory)
         {
             Throw.IfMissing(pipeline, nameof(pipeline));
             Throw.IfMissing(operationId, nameof(operationId));
             Throw.IfMissing(options, nameof(options));
             Throw.IfNullOrEmpty(operationId, nameof(operationId));
+            Throw.IfMissing(modelFactory, nameof(modelFactory));
             _id = operationId;
             _pipeline = pipeline;
             _options = options;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrainingOperation"/> class for mocking.
+        /// Initializes a new instance of the <see cref="TrainingOperation{TModel}"/> class for mocking.
         /// </summary>
         protected TrainingOperation()
         { }
@@ -88,13 +92,13 @@ namespace Azure.AI.FormRecognizer.Custom
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<CustomFormModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<TModel>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<CustomFormModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<TModel>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -105,7 +109,7 @@ namespace Azure.AI.FormRecognizer.Custom
                 }
             }
             while (!HasCompleted);
-            return Response.FromValue(_value, _response);
+            return Response.FromValue(_model, _response);
         }
 
         private Response UpdateStatus(Response response)
@@ -116,6 +120,7 @@ namespace Azure.AI.FormRecognizer.Custom
             if (model.IsModelComplete())
             {
                 _value = model;
+                _model = _modelFactory(_value);
             }
             return response;
         }

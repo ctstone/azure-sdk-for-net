@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// String.
         /// </summary>
-        public static PredefinedFieldType String => "string";
+        public static PredefinedFieldType StringType => "string";
 
         /// <summary>
         /// Date.
@@ -41,7 +41,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Integer.
         /// </summary>
-        public static PredefinedFieldType Integer => "integer";
+        public static PredefinedFieldType IntegerType => "integer";
 
         /// <summary>
         /// Array.
@@ -51,7 +51,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Object.
         /// </summary>
-        public static PredefinedFieldType Object => "object";
+        public static PredefinedFieldType ObjectType => "object";
 
         internal PredefinedFieldType(string value) => _value = value;
 

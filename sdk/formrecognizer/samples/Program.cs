@@ -22,22 +22,11 @@ namespace Azure.AI.FormRecognizer.Samples
                 // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
                 var op = args.Length > 0 ? args[0] : String.Empty;
+                var endpoint = new Uri(Environment.GetEnvironmentVariable("FR_ENDPOINT"));
+                var credential = new CognitiveKeyCredential(Environment.GetEnvironmentVariable("FR_KEY"));
                 var options = new FormClientOptions();
-                // var endpoint = new Uri("http://192.168.1.4:5000");
-                // var endpoint = new Uri("http://forms.eastus.cloudapp.azure.com:5000/");
-                var endpoint = new Uri("https://chstone-forms-westus2.cognitiveservices.azure.com/");
-                // var endpoint = new Uri("https://chstone-fr.cognitiveservices.azure.com/");
-                // var credential2 = new CognitiveHeaderCredential(new HttpHeader("apim-subscription-id", "123"));
-                // credential2.UpdateCredential(new[] { new HttpHeader("custom-api-key", "abc") });
-                var key = string.Empty;
-                var credential = new CognitiveKeyCredential(key);
-                // var credential = new InteractiveBrowserCredential();
-                // var credential = new ClientSecretCredential("a37a5329-37d8-4358-a0b4-f46e2ec7479c", "b0fd01ff-866c-46ab-97c8-84e1b7a15cf6", "");
-                // options.Diagnostics.IsLoggingContentEnabled = true;
-                options.Diagnostics.IsLoggingEnabled = true;
-                // options.Diagnostics.LoggedHeaderNames.Add("apim-request-id");
-                // options.Diagnostics.ApplicationId = "chstone";
-                var client = new CustomFormClient(endpoint, credential, options);
+                // options.Diagnostics.IsLoggingEnabled = true;
+                var client = new CustomFormClient(endpoint, credential);
                 var layoutClient = new FormLayoutClient(endpoint, credential);
                 var receiptClient = new ReceiptClient(endpoint, credential);
 
@@ -362,7 +351,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var modelId = args[1];
             var model = await client.GetModelReference(modelId).GetAsync(includeKeys: true);
-            foreach (var document in model.Value.TrainResult.TrainingDocuments)
+            foreach (var document in model.Value.Documents)
             {
                 Console.Error.WriteLine($"{document.DocumentName}: {document.Status} - {document.Pages} page(s) - {document.Errors.Length} errors.");
             }
@@ -373,19 +362,21 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var source = args[1];
             var prefix = args.Length == 3 ? args[2] : default;
-            var op = await client.StartTrainingAsync(new TrainingRequest(source, new SourceFilter(prefix)));
-            op.GetRawResponse().Headers.TryGetValue("apim-request-id", out string requestId);
+            var op = await client.StartLabeledTrainingAsync(source, new SourceFilter(prefix));
 
-            Console.WriteLine($"Created model with id {op.Id} (requestId: {requestId})");
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(10));
             if (op.HasValue)
             {
-                Console.WriteLine($"Status: {op.Value.ModelInfo.Status}");
+                Console.WriteLine($"Status: {op.Value.Information.Status}");
             }
             else
             {
-                Console.WriteLine("error!");
+                var model = await client.GetModelReference(op.Id).GetAsync();
+                foreach (var error in model.Value.Errors)
+                {
+                    Console.WriteLine(error);
+                }
             }
         }
 
@@ -416,32 +407,10 @@ namespace Azure.AI.FormRecognizer.Samples
         private static async Task ListModelsAsync(CustomFormClient client)
         {
             var models = client.ListModelsAsync();
-
-            var enumerator = models.AsPages().GetAsyncEnumerator();
-            await enumerator.MoveNextAsync();
-            var page1 = enumerator.Current;
-            // return page1 to UI and wait for user to request next page
-            // var page2 = models.AsPages(page1.ContinuationToken).GetAsyncEnumerator().Current;
-
-            page1.GetRawResponse();
-
-            await foreach (var page in models.AsPages())
-            {
-                Console.WriteLine(page.ContinuationToken);
-                foreach (var model in page.Values)
-                {
-                    Console.WriteLine($"{model.ModelId} - {model.Status}");
-                }
-            }
-
             await foreach (var model in models)
             {
-                Console.WriteLine($"{model.ModelId} - {model.Status}");
+                Console.WriteLine($"{model.ModelId} - {model.Status} ({model.LastUpdatedOn})");
             }
         }
-
-
-
-
     }
 }

@@ -42,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("fields"))
             {
-                documentResult.Fields = ObjectJson.Read(property.Value, FieldValueJson.Read);
+                documentResult.Fields = ObjectJson.Read(property.Value, PredefinedFieldJson.Read);
             }
         }
     }
