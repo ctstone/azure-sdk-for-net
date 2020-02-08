@@ -21,14 +21,6 @@ namespace Azure.AI.FormRecognizer.Tests
         }
 
         [Fact]
-        public void HeaderConstructor_Throws_OnInvalidParams()
-        {
-            // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveHeaderCredential)null));
-            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveHeaderCredential)null, null));
-        }
-
-        [Fact]
         public void TokenConstructor_Throws_OnInvalidParams()
         {
             // Act / assert

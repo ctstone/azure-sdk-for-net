@@ -13,19 +13,12 @@ namespace Azure.AI.FormRecognizer.Http
     {
         private const string DefaultCognitiveScope = "https://cognitiveservices.azure.com/.default";
         private readonly CognitiveKeyCredential _keyCredential;
-        private readonly CognitiveHeaderCredential _headerCredential;
         private readonly BearerTokenAuthenticationPolicy _bearerPolicy;
 
         public FormAuthenticator(CognitiveKeyCredential keyCredential)
         {
             Throw.IfMissing(keyCredential, nameof(keyCredential));
             _keyCredential = keyCredential;
-        }
-
-        public FormAuthenticator(CognitiveHeaderCredential headerCredential)
-        {
-            Throw.IfMissing(headerCredential, nameof(headerCredential));
-            _headerCredential = headerCredential;
         }
 
         public FormAuthenticator(TokenCredential tokenCredential)
@@ -40,10 +33,6 @@ namespace Azure.AI.FormRecognizer.Http
             if (_keyCredential != default)
             {
                 await _keyCredential.AuthenticateAsync(request).ConfigureAwait(false);
-            }
-            else if (_headerCredential != default)
-            {
-                await _headerCredential.AuthenticateAsync(request).ConfigureAwait(false);
             }
             else if (_bearerPolicy != default)
             {
@@ -60,10 +49,6 @@ namespace Azure.AI.FormRecognizer.Http
             if (_keyCredential != default)
             {
                 _keyCredential.Authenticate(request);
-            }
-            else if (_headerCredential != default)
-            {
-                _headerCredential.Authenticate(request);
             }
             else if (_bearerPolicy != default)
             {

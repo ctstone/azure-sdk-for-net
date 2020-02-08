@@ -60,27 +60,6 @@ namespace Azure.AI.FormRecognizer
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReceiptClient"/> class using a user-defined credential.
-        /// </summary>
-        /// <param name="endpoint">Endpoint.</param>
-        /// <param name="credential">User-defined credential.</param>
-        public ReceiptClient(Uri endpoint, CognitiveHeaderCredential credential)
-            : this(endpoint, credential, new FormClientOptions())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReceiptClient"/> class using a user-defined credential.
-        /// </summary>
-        /// <param name="endpoint">Endpoint.</param>
-        /// <param name="credential">User-defined credential</param>
-        /// <param name="options">Optional service parameters.</param>
-        public ReceiptClient(Uri endpoint, CognitiveHeaderCredential credential, FormClientOptions options)
-            : this(endpoint, new FormAuthenticator(credential), options)
-        {
-        }
-
         internal ReceiptClient(Uri endpoint, FormAuthenticator authenticator, FormClientOptions options)
             : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseReceiptPath)
         {
