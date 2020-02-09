@@ -27,6 +27,11 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedOn { get; }
 
         /// <summary>
+        /// Get analysis processing time.
+        /// </summary>
+        public TimeSpan Duration => LastUpdatedOn - CreatedOn;
+
+        /// <summary>
         /// Get the schema version used for this result.
         /// </summary>
         /// <value></value>
@@ -41,7 +46,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Get all tables recognized in the current analysis.
         /// </summary>
-        public ClusteredDataTable[] Tables { get; }
+        public DataTable[] Tables { get; }
 
         internal LayoutAnalysis(AnalysisInternal analysis)
         {
@@ -53,8 +58,8 @@ namespace Azure.AI.FormRecognizer.Models
             TextExtractionPages = analysis.AnalyzeResult?.TextExtractionPages ?? Array.Empty<TextExtractionPage>();
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
-                .Select((x) => new ClusteredDataTable(x.page, x.table))
-                .ToArray() ?? Array.Empty<ClusteredDataTable>();
+                .Select((x) => new DataTable(x.page, x.table))
+                .ToArray() ?? Array.Empty<DataTable>();
         }
 
         /// <summary>
