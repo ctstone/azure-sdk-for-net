@@ -46,5 +46,8 @@ namespace Azure.AI.FormRecognizer.Models
         protected FormModel()
         {
         }
+
+        /// <inheritdoc />
+        public override string ToString() => Information.ToString();
     }
 }

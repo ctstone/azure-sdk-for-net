@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Linq;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
@@ -16,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Total number of pages trained.
         /// </summary>
-        public int Pages { get; internal set; }
+        public int PageCount { get; internal set; }
 
         /// <summary>
         /// List of errors.
@@ -35,5 +37,11 @@ namespace Azure.AI.FormRecognizer.Models
         { }
 
         internal static TrainingDocument Create() => new TrainingDocument();
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"TrainingDocument(name={DocumentName}, status={Status}, pages={PageCount}, error={Errors.Any()})";
+        }
     }
 }

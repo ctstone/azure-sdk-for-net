@@ -34,7 +34,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("pages"))
             {
-                trainingDocument.Pages = property.Value.GetInt32();
+                trainingDocument.PageCount = property.Value.GetInt32();
             }
             else if (property.NameEquals("errors"))
             {

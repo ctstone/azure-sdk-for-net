@@ -13,7 +13,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Model Id.
         /// </summary>
-        public string ModelId { get; internal set; }
+        public string Id { get; internal set; }
 
         /// <summary>
         /// Model status.
@@ -31,10 +31,21 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedOn { get; internal set; }
 
         /// <summary>
+        /// Get the time taken to train the model.
+        /// </summary>
+        public TimeSpan TrainingDuration => LastUpdatedOn - CreatedOn;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ModelInfo"/> class.
         /// </summary>
         protected ModelInfo() { }
 
         internal static ModelInfo Create() => new ModelInfo();
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"CustomFormModel(id={Id}, status={Status}, created={CreatedOn})";
+        }
     }
 }

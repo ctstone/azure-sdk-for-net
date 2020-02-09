@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer.Serialization
         {
             if (property.NameEquals("modelId"))
             {
-                modelInfo.ModelId = property.Value.GetString();
+                modelInfo.Id = property.Value.GetString();
             }
             else if (property.NameEquals("status"))
             {
