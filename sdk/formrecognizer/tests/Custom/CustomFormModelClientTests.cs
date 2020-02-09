@@ -76,7 +76,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             Assert.NotNull(model);
             Assert.NotNull(model.Value);
             Assert.NotNull(model.Value.Information);
-            Assert.Equal(ModelId, model.Value.Information.ModelId);
+            Assert.Equal(ModelId, model.Value.Information.Id);
         }
 
         [Theory]

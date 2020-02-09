@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
@@ -22,33 +23,91 @@ namespace Azure.AI.FormRecognizer.Samples
                 // https://github.com/Azure/azure-sdk-for-net/blob/d99777ef4a7d75dd5f9482c84c0240a900e15f9c/sdk/core/Azure.Core/samples/Configuration.md
                 // using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
-                var op = args.Length > 0 ? args[0] : String.Empty;
+                // var op = args.Length > 0 ? args[0] : String.Empty;
                 var endpoint = new Uri(Environment.GetEnvironmentVariable("FR_ENDPOINT"));
                 var credential = new CognitiveKeyCredential(Environment.GetEnvironmentVariable("FR_KEY"));
-                var options = new FormClientOptions();
-                // options.Diagnostics.IsLoggingEnabled = true;
+                // var options = new FormClientOptions();
+                // // options.Diagnostics.IsLoggingEnabled = true;
                 var client = new CustomFormClient(endpoint, credential);
-                var layoutClient = new FormLayoutClient(endpoint, credential);
-                var receiptClient = new ReceiptClient(endpoint, credential);
+                // var layoutClient = new FormLayoutClient(endpoint, credential);
+                // var receiptClient = new ReceiptClient(endpoint, credential);
 
-                await (op switch
-                {
-                    "train" => TrainAsync(client, args),
-                    "model" => GetModelAsync(client, args),
-                    "analyze" => AnalyzeAsync(client, args),
-                    "analysis" => GetAnalysisAsync(client, args),
-                    "analysisResult" => GetAnalysisResultAsync(client, args),
-                    "summary" => GetModelsSummaryAsync(client),
-                    "delete" => DeleteModelAsync(client, args),
-                    "list" => ListModelsAsync(client),
-                    "receipt" => UseReceipt(receiptClient, args),
-                    "layout" => UseLayout(layoutClient, args),
-                    _ => throw new NotSupportedException(),
-                });
+                // await (op switch
+                // {
+                //     "train" => TrainAsync(client, args),
+                //     "model" => GetModelAsync(client, args),
+                //     "analyze" => AnalyzeAsync(client, args),
+                //     "analysis" => GetAnalysisAsync(client, args),
+                //     "analysisResult" => GetAnalysisResultAsync(client, args),
+                //     "summary" => GetModelsSummaryAsync(client),
+                //     "delete" => DeleteModelAsync(client, args),
+                //     "list" => ListModelsAsync(client),
+                //     "receipt" => UseReceipt(receiptClient, args),
+                //     "layout" => UseLayout(layoutClient, args),
+                //     _ => throw new NotSupportedException(),
+                // });
+
+                await Sample_01_TrainAsync(client);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+            }
+        }
+
+        private static async Task Sample_01_TrainAsync(CustomFormClient client)
+        {
+            // setup
+            // var endpoint = new Uri("{your_endpoint}");
+            // var credential = new CognitiveKeyCredential("{your_service_key}");
+            // var client = new CustomFormClient(endpoint, credential);
+
+            // operation
+            // var source = "{your_blob_container_sas_url}";
+            var source = "https://chstoneforms.blob.core.windows.net/samples?st=2020-02-09T12%3A38%3A23Z&se=2030-02-10T12%3A38%3A00Z&sp=rl&sv=2018-03-28&sr=c&sig=axqLT%2FPoLtg3BhKg6iVPlaVsp%2FVTeDqhiVleeBviogw%3D";
+            var operation = client.StartTraining(source);
+            Console.WriteLine($"Created model with id {operation.Id}");
+
+            // wait for completion
+            var response = await operation.WaitForCompletionAsync();
+
+            // examine model
+            var model = response.Value;
+            Console.WriteLine("Information:");
+            Console.WriteLine($"  Id: {model.Information.Id}");
+            Console.WriteLine($"  Status: {model.Information.Status}");
+            Console.WriteLine($"  Duration: '{model.Information.TrainingDuration}'");
+            Console.WriteLine("Documents:");
+            foreach (var document in model.Documents)
+            {
+                Console.WriteLine($"- Name: {document.DocumentName}");
+                Console.WriteLine($"  Status: {document.Status}");
+                Console.WriteLine($"  Pages: {document.PageCount}");
+                if (document.Errors.Any())
+                {
+                    Console.WriteLine($"  Errors:");
+                    foreach (var error in document.Errors)
+                    {
+                        Console.WriteLine($"  - {error.Message}");
+                    }
+                }
+            }
+            Console.WriteLine("DocumentClusters:");
+            foreach (var documentCluster in model.DocumentKeyClusters)
+            {
+                Console.WriteLine($"  ClusterId: {documentCluster.Key}");
+                foreach (var key in documentCluster.Value)
+                {
+                    Console.WriteLine($"  - '{key}'");
+                }
+            }
+            if (model.Errors.Any())
+            {
+                Console.WriteLine("Errors:");
+                foreach (var error in model.Errors)
+                {
+                    Console.WriteLine($"- {error.Message}");
+                }
             }
         }
 
@@ -329,7 +388,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var model = await client.GetModelReference(modelId).GetAsync(includeKeys: true);
             foreach (var document in model.Value.Documents)
             {
-                Console.Error.WriteLine($"{document.DocumentName}: {document.Status} - {document.Pages} page(s) - {document.Errors.Length} errors.");
+                Console.Error.WriteLine($"{document.DocumentName}: {document.Status} - {document.PageCount} page(s) - {document.Errors.Length} errors.");
             }
             PrintResponse(model);
         }
@@ -403,7 +462,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var models = client.ListModelsAsync();
             await foreach (var model in models)
             {
-                Console.WriteLine($"{model.ModelId} - {model.Status} ({model.LastUpdatedOn})");
+                Console.WriteLine($"{model.Id} - {model.Status} ({model.LastUpdatedOn})");
             }
         }
 
