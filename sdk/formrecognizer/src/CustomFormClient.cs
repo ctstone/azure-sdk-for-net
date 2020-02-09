@@ -92,10 +92,16 @@ namespace Azure.AI.FormRecognizer
         #endregion
 
         /// <summary>
-        /// Access a model to perform analysis, retrieve metadata or delete it.
+        /// Access a model to perform analysis, retrieve metadata, or delete it.
         /// </summary>
         /// <param name="modelId">Model identifier</param>
         public virtual FormModelReference GetModelReference(string modelId) => new FormModelReference(modelId, _pipeline, _options.SerializationOptions);
+
+        /// <summary>
+        /// Access a model that uses labels to perform analysis, retrieve metadata, or delete it.
+        /// </summary>
+        /// <param name="modelId">Model identifier</param>
+        public virtual LabeledFormModelReference GetModelReferenceWithLabels(string modelId) => new LabeledFormModelReference(modelId, _pipeline, _options.SerializationOptions);
 
         /// <summary>
         /// Asynchronously create and train a custom model.

@@ -27,6 +27,12 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedOn { get; }
 
         /// <summary>
+        /// Get the time spent to analyze the request.
+        /// </summary>
+        /// <value></value>
+        public TimeSpan Duration => LastUpdatedOn - CreatedOn;
+
+        /// <summary>
         /// Get the schema version used for this result.
         /// </summary>
         /// <value></value>

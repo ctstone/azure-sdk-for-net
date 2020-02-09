@@ -19,11 +19,6 @@ namespace Azure.AI.FormRecognizer.Models
         public int PageNumber { get; }
 
         /// <summary>
-        /// A user defined label for the key/value pair entry.
-        /// </summary>
-        public string Label { get; internal set; }
-
-        /// <summary>
         /// Information about the extracted key in a key-value pair.
         /// </summary>
         public FieldExtractionElement Field { get; internal set; }
@@ -33,19 +28,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public FieldExtractionElement Value { get; internal set; }
 
-        /// <summary>
-        /// Confidence value.
-        /// </summary>
-        public float Confidence { get; internal set; }
-
         internal FieldExtraction(FieldExtractionPageInternal page, FieldExtractionInternal fieldExtraction)
         {
             ClusterId = page.ClusterId.Value;
             PageNumber = page.PageNumber;
-            Label = fieldExtraction.Label;
             Field = fieldExtraction.Field;
             Value = fieldExtraction.Value;
-            Confidence = fieldExtraction.Confidence;
         }
 
         /// <summary>
