@@ -5,8 +5,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Serialization.Converters;
 using Azure.Core;
 using Azure.Core.Diagnostics;
 using Azure.Identity;
@@ -30,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 // // options.Diagnostics.IsLoggingEnabled = true;
                 var client = new CustomFormClient(endpoint, credential);
                 // var layoutClient = new FormLayoutClient(endpoint, credential);
-                // var receiptClient = new ReceiptClient(endpoint, credential);
+                var receiptClient = new ReceiptClient(endpoint, credential);
 
                 // await (op switch
                 // {
@@ -47,13 +49,18 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
-                await Sample_08_AnalyzeFileWithLabeledCustomModel(client);
+                await Sample_09_AnalyzeReceiptFileAsync(receiptClient);
+
+                // Temp.Temp1();
+                // await Task.CompletedTask;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
         }
+
+
 
         private static async Task Sample_01_TrainAsync(CustomFormClient client)
         {
@@ -213,7 +220,7 @@ namespace Azure.AI.FormRecognizer.Samples
             // a61aba7f-98fd-49af-94f3-3e32695bb93f
         }
 
-        private static async Task Sample_08_AnalyzeFileWithLabeledCustomModel(CustomFormClient client)
+        private static async Task Sample_08_AnalyzeFileWithLabeledCustomModelAsync(CustomFormClient client)
         {
             // setup
             // var endpoint = new Uri("{your_endpoint}");
@@ -240,16 +247,16 @@ namespace Azure.AI.FormRecognizer.Samples
             foreach (var extraction in result.Extractions)
             {
                 Console.WriteLine($"- Type: '{extraction.DocumentType}'");
-                Console.WriteLine($"  FirstPage: '{extraction.FirstPageNumber}'");
-                Console.WriteLine($"  LastPgae: {extraction.LastPageNumber}");
+                Console.WriteLine($"  FirstPage: {extraction.FirstPageNumber}");
+                Console.WriteLine($"  LastPage: {extraction.LastPageNumber}");
                 Console.WriteLine($"  Fields:");
                 foreach (var field in extraction.Fields)
                 {
-                    Console.WriteLine($"  - Field: {field.Key}");
-                    Console.WriteLine($"    Type: {field.Value.Type}");
+                    Console.WriteLine($"  - Field: '{field.Key}'");
+                    Console.WriteLine($"    Type: '{field.Value.Type}'");
                     Console.WriteLine($"    Confidence: {field.Value.Confidence}");
                     Console.WriteLine($"    PageNumber: {field.Value.PageNumber}");
-                    Console.WriteLine($"    Text: {field.Value.Text}");
+                    Console.WriteLine($"    Text: '{field.Value.Text}'");
                 }
             }
 
@@ -259,6 +266,55 @@ namespace Azure.AI.FormRecognizer.Samples
             {
                 table.WriteAscii(Console.Out);
             }
+        }
+
+        private static async Task Sample_09_AnalyzeReceiptFileAsync(ReceiptClient client)
+        {
+            var stream = File.OpenRead("/Users/christopherstone/Downloads/contoso-allinone.jpg");
+
+            // operation
+            var operation = await client.StartAnalyzeAsync(stream);
+            var response = await operation.WaitForCompletionAsync();
+            var result = response.Value;
+
+            // examine result information
+            Console.WriteLine("Information:");
+            Console.WriteLine($"  Status: {result.Status}");
+            Console.WriteLine($"  Duration: '{result.Duration}'");
+            Console.WriteLine($"  Version: '{result.Version}'");
+
+            Console.WriteLine($"Receipts:");
+            foreach (var receipt in result.Receipts)
+            {
+                Console.WriteLine($"- Type: {receipt.ReceiptType}");
+                Console.WriteLine($"  Merchant:");
+                Console.WriteLine($"    Name: {receipt.MerchantName}");
+                Console.WriteLine($"    Address: {receipt.MerchantAddress}");
+                Console.WriteLine($"    Phone: {receipt.MerchantPhoneNumber}");
+                Console.WriteLine($"  Transaction:");
+                Console.WriteLine($"    Date: {receipt.TransactionDate}");
+                Console.WriteLine($"    Time: {receipt.TransactionTime}");
+                Console.WriteLine($"  Items:");
+                foreach (var item in receipt.Items.Value)
+                {
+                    Console.WriteLine($"  - Name: {item.Name}");
+                    Console.WriteLine($"    Quantity: {item.Quantity}");
+                    Console.WriteLine($"    TotalPrice: {item.TotalPrice}");
+                }
+                Console.WriteLine($"  Subtotal: {receipt.Subtotal}");
+                Console.WriteLine($"  Tax: {receipt.Tax}");
+                Console.WriteLine($"  Tip: {receipt.Tip}");
+                Console.WriteLine($"  Total: {receipt.Total}");
+            }
+
+            if (result.Receipts[0].TryGetField("SomeNewField", out PredefinedField value))
+            {
+                Console.WriteLine($"NewField: {value.Text}");
+            }
+
+            var fieldNames = result.Receipts[0].FieldNames;
+
+            PrintResponse(response);
         }
 
         private static async Task UseLayout(FormLayoutClient client, string[] args)

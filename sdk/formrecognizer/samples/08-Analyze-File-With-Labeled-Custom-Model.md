@@ -71,5 +71,84 @@ Console.WriteLine($"  Duration: '{result.Duration}'");
 Console.WriteLine($"  Version: '{result.Version}'");
 ```
 
+### Display result fields
+
+```csharp
+Console.WriteLine("Fields:");
+foreach (var extraction in result.Extractions)
+{
+    Console.WriteLine($"- Type: '{extraction.DocumentType}'");
+    Console.WriteLine($"  FirstPage: {extraction.FirstPageNumber}");
+    Console.WriteLine($"  LastPage: {extraction.LastPageNumber}");
+    Console.WriteLine($"  Fields:");
+    foreach (var field in extraction.Fields)
+    {
+        Console.WriteLine($"  - Field: '{field.Key}'");
+        Console.WriteLine($"    Type: {field.Value.Type}");
+        Console.WriteLine($"    Confidence: {field.Value.Confidence}");
+        Console.WriteLine($"    PageNumber: {field.Value.PageNumber}");
+        Console.WriteLine($"    Text: '{field.Value.Text}'");
+    }
+}
+```
+
+### Display result tables
+
+```csharp
+Console.WriteLine("Tables:");
+foreach (var table in result.Tables)
+{
+    table.WriteAscii(Console.Out);
+}
+```
+
+```yaml
+# sample program output
+
+Information:
+  Status: Succeeded
+  Duration: '00:00:14'
+  Version: '2.0.0'
+Fields:
+- Type: 'custom:form'
+  FirstPage: 1
+  LastPage: 1
+  Fields:
+  - Field: 'InvoiceDueDate'
+    Type: string
+    Confidence: 1
+    PageNumber: 1
+    Text: '6/29/2016'
+  - Field: 'InvoiceNumber'
+    Type: string
+    Confidence: 1
+    PageNumber: 1
+    Text: '7689302'
+  - Field: 'InvoiceDate'
+    Type: string
+    Confidence: 1
+    PageNumber: 1
+    Text: '3/09/2015'
+  - Field: 'InvoiceVatId'
+    Type: string
+    Confidence: 0.98
+    PageNumber: 1
+    Text: 'QR'
+  - Field: 'InvoiceCharges'
+    Type: string
+    Confidence: 1
+    PageNumber: 1
+    Text: '$22,123.24'
+```
+
+```
+Tables:
+┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
+│ Invoice Number│   Invoice Date│Invoice Due Dat│        Charges│              -│         VAT ID│
+├───────────────┼───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤
+│        7689302│      3/09/2015│      6/29/2016│                     $22,123.24│             QR│
+└───────────────┴───────────────┴───────────────┴───────────────┴───────────────┴───────────────┘
+```
+
 [previous sample]: ./07-Train-Custom-Model-With-Labels.md
 [list your models]: ./05-List-Custom-Models.md
