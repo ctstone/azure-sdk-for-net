@@ -42,73 +42,110 @@ var stream = File.OpenRead(filePath);
 
 ## Submit analysis request
 
-Analysis may take several seconds or several minutes depending on the size and complexity of your document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `Analysis` object.
+Analysis may take several seconds or several minutes depending on the size and complexity of your document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `FormAnalysis` object.
 
 ```csharp
-var analysisOperation = await model.StartAnalysisAsync(stream);
-Console.WriteLine($"Created request with id {analysisOperation.Id}");
+var operation = await model.StartAnalysisAsync(stream);
+Console.WriteLine($"Created request with id {operation.Id}");
 ```
 
 > You can use the operation id to retrieve the analysis results for up to 48 hours.
 
 ## Wait for analysis completion
 
-The `FormRecognizerClient` can poll for the latest analysis status, asynchronously blocking the current thread.
+The `CustomFormClient` can poll for the latest analysis status, asynchronously blocking the current thread.
 
 ```csharp
-var analysisResponse = await analysisOperation.WaitForCompletionAsync();
-if (analysisResponse.HasValue)
-{
-    var analysis = analysisResponse.Value;
-    var status = analysis.Status;
-    Console.WriteLine($"Status: {status}");
-}
+var response = await operation.WaitForCompletionAsync();
+var result = response.Value
 ```
 
 ## Examine the analysis results
 
-### Loop over the recognized key value pairs:
+### Display result information
 
 ```csharp
-foreach (var page in analysis.AnalyzeResult.PageResults)
+Console.WriteLine("Information:");
+Console.WriteLine($"  Status: {result.Status}");
+Console.WriteLine($"  Duration: '{result.Duration}'");
+Console.WriteLine($"  Version: '{result.Version}'");
+```
+
+## Display result fields
+
+```csharp
+Console.WriteLine("Fields:");
+foreach (var extraction in result.Fields)
 {
-    var clusterId = page.clusterId;
-    Console.WriteLine($"Cluster({clusterId}):");
-    foreach (var kvp in page.KeyValuePairs)
-    {
-        var keyText = kvp.Key.Text;
-        var valueText = kvp.Value.Text;
-        Console.WriteLine($"\t{keyText} => {valueText}");
-    }
+    Console.WriteLine($"- Field: '{extraction.Field.Text}'");
+    Console.WriteLine($"  Value: '{extraction.Value.Text}'");
+    Console.WriteLine($"  ClusterId: {extraction.ClusterId}");
+    Console.WriteLine($"  Page: {extraction.PageNumber}");
 }
 ```
 
-```
-Cluster(0):
-    Address: => 14564 Main St. Saratoga, CA 94588
-    Invoice For: => First Up Consultants 1234 King St Redmond, WA 97624
-    Invoice Number => 7689302
-    Invoice Date => 3/09/2015
-    Invoice Due Date => 6/29/2016
-    Charges => $22,123.24
-    VAT ID => QR
-    Page => 1 of
-    __Tokens__1 => Contoso Suites
-    __Tokens__2 => 1
-```
-
-### Render the recognized tables:
+## Display result tables
 
 ```csharp
-foreach (var table in page.Tables)
+Console.WriteLine("Tables:");
+foreach (var table in result.Tables)
 {
     table.WriteAscii(Console.Out);
-    // table.WriteHtml(Console.Out);
-    // table.WriteMarkdown(Console.Out);
 }
 ```
 
+```yaml
+# sample program output
+
+Information:
+  Status: Succeeded
+  Duration: '00:00:02'
+  Version: '2.0.0'
+Fields:
+- Field: 'Address:'
+  Value: '14564 Main St. Saratoga, CA 94588'
+  ClusterId: 0
+  Page: 1
+- Field: 'Invoice For:'
+  Value: 'First Up Consultants 1234 King St Redmond, WA 97624'
+  ClusterId: 0
+  Page: 1
+- Field: 'Invoice Number'
+  Value: '7689302'
+  ClusterId: 0
+  Page: 1
+- Field: 'Invoice Date'
+  Value: '3/09/2015'
+  ClusterId: 0
+  Page: 1
+- Field: 'Invoice Due Date'
+  Value: '6/29/2016'
+  ClusterId: 0
+  Page: 1
+- Field: 'Charges'
+  Value: '$22,123.24'
+  ClusterId: 0
+  Page: 1
+- Field: 'VAT ID'
+  Value: 'QR'
+  ClusterId: 0
+  Page: 1
+- Field: 'Page'
+  Value: '1 of'
+  ClusterId: 0
+  Page: 1
+- Field: '__Tokens__1'
+  Value: 'Contoso Suites'
+  ClusterId: 0
+  Page: 1
+- Field: '__Tokens__2'
+  Value: '1'
+  ClusterId: 0
+  Page: 1
 ```
+
+```
+Tables:
 ┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
 │ Invoice Number│   Invoice Date│Invoice Due Dat│        Charges│         VAT ID│
 ╞═══════════════╪═══════════════╪═══════════════╪═══════════════╪═══════════════╡

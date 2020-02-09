@@ -45,7 +45,7 @@ var source = "{your_blob_container_sas_url}";
 
 ## Submit the Training Request
 
-Training may take several minutes depending on the quantity, size and complexity of your training documents. When you start a training request, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the training operation is a `Model`.
+Training may take several minutes depending on the quantity, size and complexity of your training documents. When you start a training request, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the training operation is a `LabeledFormModel`.
 
 ```csharp
 var operation = await client.StartTrainingWithLabelsAsync(source);

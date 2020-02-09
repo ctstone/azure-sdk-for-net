@@ -47,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
-                await Sample_08_TrainWithLabelsAsync(client);
+                await Sample_02_AnalyzeFileWithCustomModel(client);
             }
             catch (Exception ex)
             {
@@ -111,6 +111,46 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
+        private static async Task Sample_02_AnalyzeFileWithCustomModel(CustomFormClient client)
+        {
+            // setup
+            // var endpoint = new Uri("{your_endpoint}");
+            // var credential = new CognitiveKeyCredential("{your_service_key}");
+            // var client = new CustomFormClient(endpoint, credential);
+
+            var modelId = "d2ab67d1-44a8-4268-90c4-cc31f6660d4d";
+            var model = client.GetModelReference(modelId);
+            var stream = File.OpenRead("/Users/christopherstone/Downloads/sample_data/Test/Invoice_6.pdf");
+
+            // operation
+            var operation = await model.StartAnalyzeAsync(stream);
+            var response = await operation.WaitForCompletionAsync();
+            var result = response.Value;
+
+            // examine result information
+            Console.WriteLine("Information:");
+            Console.WriteLine($"  Status: {result.Status}");
+            Console.WriteLine($"  Duration: '{result.Duration}'");
+            Console.WriteLine($"  Version: '{result.Version}'");
+
+            // examine result fields
+            Console.WriteLine("Fields:");
+            foreach (var extraction in result.Fields)
+            {
+                Console.WriteLine($"- Field: '{extraction.Field.Text}'");
+                Console.WriteLine($"  Value: '{extraction.Value.Text}'");
+                Console.WriteLine($"  ClusterId: {extraction.ClusterId}");
+                Console.WriteLine($"  Page: {extraction.PageNumber}");
+            }
+
+            // examine result tables
+            Console.WriteLine("Tables:");
+            foreach (var table in result.Tables)
+            {
+                table.WriteAscii(Console.Out);
+            }
+        }
+
         private static async Task Sample_08_TrainWithLabelsAsync(CustomFormClient client)
         {
             // setup
@@ -169,6 +209,8 @@ namespace Azure.AI.FormRecognizer.Samples
                     Console.WriteLine($"- {error.Message}");
                 }
             }
+
+            // a61aba7f-98fd-49af-94f3-3e32695bb93f
         }
 
         private static async Task UseLayout(FormLayoutClient client, string[] args)
