@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
+
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
@@ -26,9 +28,15 @@ namespace Azure.AI.FormRecognizer.Models
         internal PredefinedField(TValue value, PredefinedField field)
         {
             Value = value;
-            Confidence = field.Confidence;
-            PageNumber = field.Page;
-            Elements = field.Elements;
+            Confidence = field?.Confidence;
+            PageNumber = field?.Page;
+            Elements = field?.Elements ?? Array.Empty<TextElement>();
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
 }
