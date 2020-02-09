@@ -27,6 +27,12 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedOn { get; }
 
         /// <summary>
+        /// Get the time spent to analyze the request.
+        /// </summary>
+        /// <value></value>
+        public TimeSpan Duration => LastUpdatedOn - CreatedOn;
+
+        /// <summary>
         /// Get the schema version used for this result.
         /// </summary>
         /// <value></value>
@@ -47,7 +53,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// Get the predefined fields recognized in the current analysis.
         /// </summary>
         /// <value></value>
-        public PredefinedFieldExtraction[] FieldExtractions { get; }
+        public PredefinedFieldExtraction[] Extractions { get; }
 
         internal LabeledFormAnalysis(AnalysisInternal analysis)
         {
@@ -62,7 +68,7 @@ namespace Azure.AI.FormRecognizer.Models
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
                 .Select((x) => new DataTable(x.page, x.table))
                 .ToArray();
-            FieldExtractions = predefinedFields
+            Extractions = predefinedFields
                 .Select((x) => new PredefinedFieldExtraction(x))
                 .ToArray();
         }

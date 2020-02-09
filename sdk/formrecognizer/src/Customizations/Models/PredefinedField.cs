@@ -29,7 +29,7 @@ namespace Azure.AI.FormRecognizer.Models
         {
             Value = value;
             Confidence = field?.Confidence;
-            PageNumber = field?.Page;
+            PageNumber = field?.PageNumber;
             Elements = field?.Elements ?? Array.Empty<TextElement>();
         }
 

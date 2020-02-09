@@ -68,7 +68,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// The 1-based page number in the input document.
         /// </summary>
-        public int? Page { get; internal set; }
+        public int? PageNumber { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PredefinedField"/> class.

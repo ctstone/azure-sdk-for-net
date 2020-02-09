@@ -48,7 +48,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// Get all fields recognized in the current analysis.
         /// </summary>
         /// <value></value>
-        public FieldExtraction[] Fields { get; }
+        public FieldExtraction[] Extractions { get; }
 
         /// <summary>
         /// Get all tables recognized in the current analysis.
@@ -63,7 +63,7 @@ namespace Azure.AI.FormRecognizer.Models
             LastUpdatedOn = analysis.LastUpdatedOn;
             Version = analysis.AnalyzeResult?.Version;
             TextExtractionPages = analysis.AnalyzeResult?.TextExtractionPages ?? Array.Empty<TextExtractionPage>();
-            Fields = fieldExtractionPages
+            Extractions = fieldExtractionPages
                 .SelectMany((page) => page.Fields.Select((field) => (page, field)))
                 .Select((x) => new FieldExtraction(x.page, x.field))
                 .ToArray();
