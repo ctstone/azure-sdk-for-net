@@ -75,7 +75,7 @@ Console.WriteLine($"  Version: '{result.Version}'");
 
 ```csharp
 Console.WriteLine("Fields:");
-foreach (var extraction in result.Fields)
+foreach (var extraction in result.Extractions)
 {
     Console.WriteLine($"- Field: '{extraction.Field.Text}'");
     Console.WriteLine($"  Value: '{extraction.Value.Text}'");

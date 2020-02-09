@@ -55,7 +55,7 @@ var endpoint = new Uri("{your_endpoint}"); // copy from Azure Portal after creat
 var clientId = "{your_client_id}"; // aka appId
 var tenantId = "{your_tenant_id}"; // aka tenant
 var clientSecret = "{your_client_secret}"; // aka password
-var credential = ClientSecretCredential(tenantId, clientId, clientSecret);
+var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
 var client = new CustomFormClient(new Uri(endpoint), credential);
 ```
 

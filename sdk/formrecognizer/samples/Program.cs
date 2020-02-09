@@ -47,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
-                await Sample_02_AnalyzeFileWithCustomModel(client);
+                await Sample_08_AnalyzeFileWithLabeledCustomModel(client);
             }
             catch (Exception ex)
             {
@@ -135,7 +135,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             // examine result fields
             Console.WriteLine("Fields:");
-            foreach (var extraction in result.Fields)
+            foreach (var extraction in result.Extractions)
             {
                 Console.WriteLine($"- Field: '{extraction.Field.Text}'");
                 Console.WriteLine($"  Value: '{extraction.Value.Text}'");
@@ -211,6 +211,54 @@ namespace Azure.AI.FormRecognizer.Samples
             }
 
             // a61aba7f-98fd-49af-94f3-3e32695bb93f
+        }
+
+        private static async Task Sample_08_AnalyzeFileWithLabeledCustomModel(CustomFormClient client)
+        {
+            // setup
+            // var endpoint = new Uri("{your_endpoint}");
+            // var credential = new CognitiveKeyCredential("{your_service_key}");
+            // var client = new CustomFormClient(endpoint, credential);
+
+            var modelId = "a61aba7f-98fd-49af-94f3-3e32695bb93f";
+            var model = client.GetModelReferenceWithLabels(modelId);
+            var stream = File.OpenRead("/Users/christopherstone/Downloads/sample_data/Test/Invoice_6.pdf");
+
+            // operation
+            var operation = await model.StartAnalyzeAsync(stream);
+            var response = await operation.WaitForCompletionAsync();
+            var result = response.Value;
+
+            // examine result information
+            Console.WriteLine("Information:");
+            Console.WriteLine($"  Status: {result.Status}");
+            Console.WriteLine($"  Duration: '{result.Duration}'");
+            Console.WriteLine($"  Version: '{result.Version}'");
+
+            // examine result fields
+            Console.WriteLine("Fields:");
+            foreach (var extraction in result.Extractions)
+            {
+                Console.WriteLine($"- Type: '{extraction.DocumentType}'");
+                Console.WriteLine($"  FirstPage: '{extraction.FirstPageNumber}'");
+                Console.WriteLine($"  LastPgae: {extraction.LastPageNumber}");
+                Console.WriteLine($"  Fields:");
+                foreach (var field in extraction.Fields)
+                {
+                    Console.WriteLine($"  - Field: {field.Key}");
+                    Console.WriteLine($"    Type: {field.Value.Type}");
+                    Console.WriteLine($"    Confidence: {field.Value.Confidence}");
+                    Console.WriteLine($"    PageNumber: {field.Value.PageNumber}");
+                    Console.WriteLine($"    Text: {field.Value.Text}");
+                }
+            }
+
+            // examine result tables
+            Console.WriteLine("Tables:");
+            foreach (var table in result.Tables)
+            {
+                table.WriteAscii(Console.Out);
+            }
         }
 
         private static async Task UseLayout(FormLayoutClient client, string[] args)
@@ -405,7 +453,7 @@ namespace Azure.AI.FormRecognizer.Samples
             if (op.HasValue)
             {
                 WriteTables(Console.Out, op.Value.Tables);
-                foreach (var field in op.Value.Fields)
+                foreach (var field in op.Value.Extractions)
                 {
                     Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
                 }
@@ -423,7 +471,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var result = await client.GetModelReference(modelId).GetAnalysisResultAsync(resultId);
 
             WriteTables(Console.Out, result.Value.Tables);
-            foreach (var field in result.Value.Fields)
+            foreach (var field in result.Value.Extractions)
             {
                 Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
             }
