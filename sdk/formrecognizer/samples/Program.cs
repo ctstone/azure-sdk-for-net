@@ -162,7 +162,10 @@ namespace Azure.AI.FormRecognizer.Samples
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                Console.WriteLine($"Status: {op.Value.Status}");
+                foreach (var receipt in op.Value.Receipts)
+                {
+                    WriteReceipt(Console.Out, receipt);
+                }
             }
             else
             {
@@ -179,7 +182,10 @@ namespace Azure.AI.FormRecognizer.Samples
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(1));
             if (op.HasValue)
             {
-                Console.WriteLine($"Status: {op.Value.Status}");
+                foreach (var receipt in op.Value.Receipts)
+                {
+                    WriteReceipt(Console.Out, receipt);
+                }
             }
             else
             {
@@ -193,7 +199,10 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var op = client.StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
-            Console.WriteLine(result.Value.Status);
+            foreach (var receipt in result.Value.Receipts)
+            {
+                WriteReceipt(Console.Out, receipt);
+            }
         }
 
         private static async Task GetReceiptAnalysisResultAsync(ReceiptClient client, string[] args)
@@ -201,9 +210,10 @@ namespace Azure.AI.FormRecognizer.Samples
             var modelId = args[1];
             var resultId = args[2];
             var result = await client.GetAnalysisResultAsync(resultId);
-            Console.WriteLine(result.Value.Status);
-            Console.WriteLine(result.Value.CreatedOn);
-            Console.WriteLine(result.Value.LastUpdatedOn);
+            foreach (var receipt in result.Value.Receipts)
+            {
+                WriteReceipt(Console.Out, receipt);
+            }
         }
 
         private static async Task DeleteModelAsync(CustomFormClient client, string[] args)
@@ -233,8 +243,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var result = await op.WaitForCompletionAsync();
             if (op.HasValue)
             {
-                PrintTables(Console.Out, op.Value.Tables);
-
+                WriteTables(Console.Out, op.Value.Tables);
                 foreach (var field in op.Value.Fields)
                 {
                     Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
@@ -251,9 +260,12 @@ namespace Azure.AI.FormRecognizer.Samples
             var modelId = args[1];
             var resultId = args[2];
             var result = await client.GetModelReference(modelId).GetAnalysisResultAsync(resultId);
-            Console.WriteLine(result.Value.Status);
-            Console.WriteLine(result.Value.CreatedOn);
-            Console.WriteLine(result.Value.LastUpdatedOn);
+
+            WriteTables(Console.Out, result.Value.Tables);
+            foreach (var field in result.Value.Fields)
+            {
+                Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
+            }
         }
 
         private static async Task AnalyzeFileAsync(CustomFormClient client, string modelId, string[] args)
@@ -368,6 +380,24 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
+        private static void WriteReceipt(TextWriter writer, ReceiptExtraction receipt)
+        {
+            writer.WriteLine($"Receipt {receipt.ReceiptType}:");
+            writer.WriteLine($"\tMerchant: {receipt.MerchantName} | {receipt.MerchantAddress} | {receipt.MerchantPhoneNumber}");
+            writer.WriteLine($"\tTransaction: {receipt.TransactionDate} {receipt.TransactionTime}");
+            writer.WriteLine($"\tItems:");
+            foreach (var item in receipt.Items.Value)
+            {
+                writer.WriteLine($"\t\tName: {item.Name}");
+                writer.WriteLine($"\t\tQuantity: {item.Quantity}");
+                writer.WriteLine($"\t\tTotal Price: {item.TotalPrice}");
+            }
+            writer.WriteLine($"\tSubtotal: {receipt.Subtotal}");
+            writer.WriteLine($"\tTax: {receipt.Tax}");
+            writer.WriteLine($"\tTip: {receipt.Tip}");
+            writer.WriteLine($"\tTotal: {receipt.Total}");
+        }
+
         private static async Task ListModelsAsync(CustomFormClient client)
         {
             var models = client.ListModelsAsync();
@@ -377,7 +407,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static void PrintTables(TextWriter writer, DataTable[] tables)
+        private static void WriteTables(TextWriter writer, DataTable[] tables)
         {
             foreach (var table in tables)
             {
