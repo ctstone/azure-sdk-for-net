@@ -35,6 +35,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             else if (property.NameEquals("pageRange"))
             {
                 var array = property.Value.EnumerateArray();
+                array.MoveNext();
                 var start = array.Current.GetInt32();
                 array.MoveNext();
                 var end = array.Current.GetInt32();
