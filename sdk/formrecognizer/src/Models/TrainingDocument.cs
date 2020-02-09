@@ -13,7 +13,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Training document name.
         /// </summary>
-        public string DocumentName { get; internal set; }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// Total number of pages trained.
@@ -41,7 +41,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"TrainingDocument(name={DocumentName}, status={Status}, pages={PageCount}, error={Errors.Any()})";
+            return $"TrainingDocument(name={Name}, status={Status}, pages={PageCount}, error={Errors.Any()})";
         }
     }
 }

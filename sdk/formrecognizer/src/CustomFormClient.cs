@@ -225,7 +225,7 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<TrainingOperation<LabeledFormModel>> StartLabeledTrainingAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public async virtual Task<TrainingOperation<LabeledFormModel>> StartTrainingWithLabelsAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), _options.SerializationOptions))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
@@ -274,7 +274,7 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<LabeledFormModel> StartLabeledTraining(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public virtual TrainingOperation<LabeledFormModel> StartTrainingWithLabels(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), _options.SerializationOptions))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
@@ -290,7 +290,7 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         /// <param name="operationId">The operation id from a previous training request.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<LabeledFormModel> StartLabeledTraining(string operationId, CancellationToken cancellationToken = default)
+        public virtual TrainingOperation<LabeledFormModel> StartTrainingWithLabelsX(string operationId, CancellationToken cancellationToken = default)
         {
             return new TrainingOperation<LabeledFormModel>(_pipeline, operationId, _options.SerializationOptions, _labeledModelFactory);
         }

@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer.Serialization
         {
             if (property.NameEquals("fieldName"))
             {
-                trainingField.FieldName = property.Value.GetString();
+                trainingField.Name = property.Value.GetString();
             }
             else if (property.NameEquals("accuracy"))
             {

@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Training field name.
         /// </summary>
-        public string FieldName { get; internal set; }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// Estimated extraction accuracy for this field.
