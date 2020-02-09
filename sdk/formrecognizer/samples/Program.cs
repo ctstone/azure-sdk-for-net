@@ -31,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 // var options = new FormClientOptions();
                 // // options.Diagnostics.IsLoggingEnabled = true;
                 var client = new CustomFormClient(endpoint, credential);
-                // var layoutClient = new FormLayoutClient(endpoint, credential);
+                var layoutClient = new FormLayoutClient(endpoint, credential);
                 var receiptClient = new ReceiptClient(endpoint, credential);
 
                 // await (op switch
@@ -49,7 +49,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
-                await Sample_09_AnalyzeReceiptFileAsync(receiptClient);
+                await Sample_10_AnalyzeLayoutAsync(layoutClient);
 
                 // Temp.Temp1();
                 // await Task.CompletedTask;
@@ -315,6 +315,29 @@ namespace Azure.AI.FormRecognizer.Samples
             var fieldNames = result.Receipts[0].FieldNames;
 
             PrintResponse(response);
+        }
+
+        private static async Task Sample_10_AnalyzeLayoutAsync(FormLayoutClient client)
+        {
+            var stream = File.OpenRead("/Users/christopherstone/Downloads/sample_data/Test/Invoice_6.pdf");
+
+            // operation
+            var operation = await client.StartAnalyzeAsync(stream);
+            var response = await operation.WaitForCompletionAsync();
+            var result = response.Value;
+
+            // examine result information
+            Console.WriteLine("Information:");
+            Console.WriteLine($"  Status: {result.Status}");
+            Console.WriteLine($"  Duration: '{result.Duration}'");
+            Console.WriteLine($"  Version: '{result.Version}'");
+
+            // examine result tables
+            Console.WriteLine("Tables:");
+            foreach (var table in result.Tables)
+            {
+                table.WriteAscii(Console.Out);
+            }
         }
 
         private static async Task UseLayout(FormLayoutClient client, string[] args)
