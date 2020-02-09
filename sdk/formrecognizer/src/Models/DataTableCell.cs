@@ -45,7 +45,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public float Confidence { get; internal set; }
 
-        internal DataTable DataTable { get; set; }
+        internal DataTableInternal DataTable { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataTableCell"/> class.

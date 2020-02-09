@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Extracted information from a single page.
     /// </summary>
-    public class FieldExtractionPage
+    internal class FieldExtractionPageInternal
     {
         /// <summary>
         /// Page number.
@@ -21,19 +21,19 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of key-value pairs extracted from the page.
         /// </summary>
-        public FieldExtraction[] Fields { get; internal set; }
+        public FieldExtractionInternal[] Fields { get; internal set; }
 
         /// <summary>
         /// List of data tables extracted from the page.
         /// </summary>
-        public DataTable[] Tables { get; internal set; }
+        public DataTableInternal[] Tables { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FieldExtractionPage"/> class.
+        /// Initializes a new instance of the <see cref="FieldExtractionPageInternal"/> class.
         /// </summary>
-        protected FieldExtractionPage()
+        protected FieldExtractionPageInternal()
         { }
 
-        internal static FieldExtractionPage Create() => new FieldExtractionPage();
+        internal static FieldExtractionPageInternal Create() => new FieldExtractionPageInternal();
     }
 }

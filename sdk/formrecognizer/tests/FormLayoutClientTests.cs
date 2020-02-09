@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 using System;
+using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
-using Azure.Core.Pipeline;
 using Azure.Core.Testing;
 using Xunit;
 
@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             var client = GetClient();
 
             // Assert
-            Assert.True(client is AnalyzeClient);
+            Assert.True(client is AnalyzeClient<LayoutAnalysis>);
         }
 
         private FormLayoutClient GetClient(params MockResponse[] responses)

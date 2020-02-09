@@ -52,7 +52,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         public void IsAnalysisComplete_ReturnsTrue_WhenComplete(OperationStatus testStatus, bool expectComplete)
         {
             // Arrange
-            var analysis = Analysis.Create();
+            var analysis = AnalysisInternal.Create();
             analysis.Status = testStatus;
 
             // Act
@@ -70,7 +70,7 @@ namespace Azure.AI.FormRecognizer.Tests.Extensions
         public void IsAnalysisSuccess_ReturnsTrue_WhenReady(OperationStatus testStatus, bool expectSuccess)
         {
             // Arrange
-            var analysis = Analysis.Create();
+            var analysis = AnalysisInternal.Create();
             analysis.Status = testStatus;
 
             // Act

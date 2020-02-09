@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class AnalysisResultJson
     {
-        public static AnalysisResult Read(JsonElement root)
+        public static AnalysisResultInternal Read(JsonElement root)
         {
-            var analysisResult = AnalysisResult.Create();
+            var analysisResult = AnalysisResultInternal.Create();
 
             if (root.ValueKind == JsonValueKind.Object)
             {
@@ -27,11 +27,11 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (analysisResult.FieldExtractionPages == default)
             {
-                analysisResult.FieldExtractionPages = Array.Empty<FieldExtractionPage>();
+                analysisResult.FieldExtractionPages = Array.Empty<FieldExtractionPageInternal>();
             }
             if (analysisResult.PredefinedFieldExtractions == default)
             {
-                analysisResult.PredefinedFieldExtractions = Array.Empty<PredefinedFieldExtraction>();
+                analysisResult.PredefinedFieldExtractions = Array.Empty<PredefinedFieldExtractionInternal>();
             }
             if (analysisResult.Errors == default)
             {
@@ -71,7 +71,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return analysisResult;
         }
 
-        private static void ReadPropertyValue(ref AnalysisResult analyzedForm, JsonProperty property)
+        private static void ReadPropertyValue(ref AnalysisResultInternal analyzedForm, JsonProperty property)
         {
             if (property.NameEquals("version"))
             {
@@ -89,7 +89,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("pageResults"))
             {
-                analyzedForm.FieldExtractionPages = new FieldExtractionPage[property.Value.GetArrayLength()];
+                analyzedForm.FieldExtractionPages = new FieldExtractionPageInternal[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {
@@ -99,7 +99,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("documentResults"))
             {
-                analyzedForm.PredefinedFieldExtractions = new PredefinedFieldExtraction[property.Value.GetArrayLength()];
+                analyzedForm.PredefinedFieldExtractions = new PredefinedFieldExtractionInternal[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {

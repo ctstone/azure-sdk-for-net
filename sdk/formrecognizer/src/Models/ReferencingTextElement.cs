@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// When includeTextDetails is set to true, a list of references to the text elements constituting this value.
         /// </summary>
-        public TextElement[] Elements { get; private set; }
+        public TextElement[] Elements { get; protected set; }
 
         internal string[] ElementReferences { get; set; }
 

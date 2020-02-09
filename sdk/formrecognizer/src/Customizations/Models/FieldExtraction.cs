@@ -4,10 +4,20 @@
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// Information about the extracted key-value pair.
+    /// Field extraction.
     /// </summary>
     public class FieldExtraction
     {
+        /// <summary>
+        /// Get the cluster identifier associated with the current field extraction.
+        /// </summary>
+        public int ClusterId { get; }
+
+        /// <summary>
+        /// Get the page number where the current field was extracted.
+        /// </summary>
+        public int PageNumber { get; }
+
         /// <summary>
         /// A user defined label for the key/value pair entry.
         /// </summary>
@@ -28,12 +38,21 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public float Confidence { get; internal set; }
 
+        internal FieldExtraction(FieldExtractionPageInternal page, FieldExtractionInternal fieldExtraction)
+        {
+            ClusterId = page.ClusterId.Value;
+            PageNumber = page.PageNumber;
+            Label = fieldExtraction.Label;
+            Field = fieldExtraction.Field;
+            Value = fieldExtraction.Value;
+            Confidence = fieldExtraction.Confidence;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldExtraction"/> class.
         /// </summary>
         protected FieldExtraction()
-        { }
-
-        internal static FieldExtraction Create() => new FieldExtraction();
+        {
+        }
     }
 }

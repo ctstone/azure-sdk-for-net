@@ -3,12 +3,13 @@
 
 using System.Collections.Generic;
 
+// TODO: expose strong typing for Fields dictionary.
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
     /// A set of extracted fields corresponding to the input document.
     /// </summary>
-    public class PredefinedFieldExtraction
+    internal class PredefinedFieldExtractionInternal
     {
         /// <summary>
         /// Document type.
@@ -16,9 +17,14 @@ namespace Azure.AI.FormRecognizer.Models
         public string DocumentType { get; internal set; }
 
         /// <summary>
-        /// First and last page number where the document is found.
+        /// Get the first page number where the document is found.
         /// </summary>
-        public (int, int) PageRange { get; internal set; }
+        public int FirstPageNumber { get; internal set; }
+
+        /// <summary>
+        /// Get the last page number where the document is found.
+        /// </summary>
+        public int LastPageNumber { get; internal set; }
 
         /// <summary>
         /// Dictionary of named field values.
@@ -26,11 +32,11 @@ namespace Azure.AI.FormRecognizer.Models
         public IDictionary<string, PredefinedField> Fields { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PredefinedFieldExtraction"/> class.
+        /// Initializes a new instance of the <see cref="PredefinedFieldExtractionInternal"/> class.
         /// </summary>
-        protected PredefinedFieldExtraction()
+        protected PredefinedFieldExtractionInternal()
         { }
 
-        internal static PredefinedFieldExtraction Create() => new PredefinedFieldExtraction();
+        internal static PredefinedFieldExtractionInternal Create() => new PredefinedFieldExtractionInternal();
     }
 }

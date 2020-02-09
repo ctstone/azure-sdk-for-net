@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class PredefinedFieldExtractionJson
     {
-        public static PredefinedFieldExtraction Read(JsonElement root)
+        public static PredefinedFieldExtractionInternal Read(JsonElement root)
         {
-            var documentResult = PredefinedFieldExtraction.Create();
+            var documentResult = PredefinedFieldExtractionInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return documentResult;
         }
 
-        private static void ReadPropertyValue(ref PredefinedFieldExtraction documentResult, JsonProperty property)
+        private static void ReadPropertyValue(ref PredefinedFieldExtractionInternal documentResult, JsonProperty property)
         {
             if (property.NameEquals("docType"))
             {
@@ -38,7 +38,8 @@ namespace Azure.AI.FormRecognizer.Serialization
                 var start = array.Current.GetInt32();
                 array.MoveNext();
                 var end = array.Current.GetInt32();
-                documentResult.PageRange = (start, end);
+                documentResult.FirstPageNumber = start;
+                documentResult.LastPageNumber = end;
             }
             else if (property.NameEquals("fields"))
             {

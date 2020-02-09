@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class FieldExtractionPageJson
     {
-        public static FieldExtractionPage Read(JsonElement root)
+        public static FieldExtractionPageInternal Read(JsonElement root)
         {
-            var pageResult = FieldExtractionPage.Create();
+            var pageResult = FieldExtractionPageInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,16 +21,16 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (pageResult.Fields == default)
             {
-                pageResult.Fields = Array.Empty<FieldExtraction>();
+                pageResult.Fields = Array.Empty<FieldExtractionInternal>();
             }
             if (pageResult.Tables == default)
             {
-                pageResult.Tables = Array.Empty<DataTable>();
+                pageResult.Tables = Array.Empty<DataTableInternal>();
             }
             return pageResult;
         }
 
-        private static void ReadPropertyValue(ref FieldExtractionPage fieldExtractionPage, JsonProperty property)
+        private static void ReadPropertyValue(ref FieldExtractionPageInternal fieldExtractionPage, JsonProperty property)
         {
             if (property.NameEquals("page"))
             {

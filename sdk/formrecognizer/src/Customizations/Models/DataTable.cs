@@ -9,10 +9,15 @@ using System.Linq;
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// Information about the extracted table contained in a page.
+    /// Data table.
     /// </summary>
     public class DataTable
     {
+        /// <summary>
+        /// Get the page number where the current field was extracted.
+        /// </summary>
+        public int PageNumber { get; }
+
         /// <summary>
         /// Number of rows.
         /// </summary>
@@ -28,11 +33,20 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public DataTableCell[] Cells { get; internal set; }
 
+        internal DataTable(FieldExtractionPageInternal page, DataTableInternal dataTable)
+        {
+            PageNumber = page.PageNumber;
+            Rows = dataTable.Rows;
+            Columns = dataTable.Columns;
+            Cells = dataTable.Cells;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataTable"/> class.
         /// </summary>
         protected DataTable()
-        { }
+        {
+        }
 
         /// <summary>
         /// Write an ASCII-formatted table to a <see cref="TextWriter" />.
@@ -272,7 +286,6 @@ namespace Azure.AI.FormRecognizer.Models
             return writer.ToString();
         }
 
-        internal static DataTable Create() => new DataTable();
 
         private Dictionary<int, IDictionary<int, DataTableCell>> IndexCells()
         {

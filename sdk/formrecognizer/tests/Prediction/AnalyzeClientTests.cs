@@ -4,9 +4,11 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
+using Azure.AI.FormRecognizer.Tests.Mocks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.Testing;
@@ -14,7 +16,7 @@ using Xunit;
 
 namespace Azure.AI.FormRecognizer.Tests.Prediction
 {
-    public class AnalyzeClientTests
+    public partial class AnalyzeClientTests
     {
         public AnalyzeClientTests()
         { }
@@ -40,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Tests.Prediction
             // Assert
             Assert.NotNull(response);
             Assert.NotNull(response.Value);
-            Assert.Equal(OperationStatus.Running, response.Value.Status);
+            Assert.Equal(OperationStatus.Running, response.Value.Analysis.Status);
         }
 
         [Theory]
@@ -95,7 +97,7 @@ namespace Azure.AI.FormRecognizer.Tests.Prediction
             var client = GetClient(mockResponse);
 
             // Act
-            AnalyzeOperation operation;
+            AnalyzeOperation<FakeAnalysisClient.FakeAnalysis> operation;
             if (payloadType == typeof(Stream))
             {
                 var requestStream = new MemoryStream();
@@ -212,12 +214,12 @@ namespace Azure.AI.FormRecognizer.Tests.Prediction
             Assert.Equal(operationId, operation.Id);
         }
 
-        private AnalyzeClient GetClient(params MockResponse[] responses)
+        private FakeAnalysisClient GetClient(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormClientOptions();
-            return new AnalyzeClient(pipeline, options.SerializationOptions, "/fake-path");
+            return new FakeAnalysisClient(pipeline, options.SerializationOptions);
         }
     }
 }

@@ -4,6 +4,7 @@
 using System;
 using Azure.AI.FormRecognizer.Http;
 using Azure.AI.FormRecognizer.Prediction;
+using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 
 #pragma warning disable AZC0007 // Client type should have public constructor with equivalent parameters not taking 'FormReceiptClientOptions' as last argument
@@ -13,7 +14,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// The Form Layout client extracts text and layout information from documents.
     /// </summary>
-    public class FormLayoutClient : AnalyzeClient
+    public class FormLayoutClient : AnalyzeClient<LayoutAnalysis>
     {
         private const string BaseLayoutPath = "/layout";
 
@@ -61,7 +62,7 @@ namespace Azure.AI.FormRecognizer
         }
 
         internal FormLayoutClient(Uri endpoint, FormAuthenticator authenticator, FormClientOptions options)
-            : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseLayoutPath)
+            : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseLayoutPath, (model) => new LayoutAnalysis(model))
         {
         }
 

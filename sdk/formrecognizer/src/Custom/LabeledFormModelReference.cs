@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class LabeledFormModelReference : AnalyzeClient
+    public class LabeledFormModelReference : AnalyzeClient<LabeledFormAnalysis>
     {
         private readonly string _modelId;
 
@@ -36,7 +36,7 @@ namespace Azure.AI.FormRecognizer.Custom
         { }
 
         internal LabeledFormModelReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
-            : base(pipeline, options, GetModelPath(modelId))
+            : base(pipeline, options, GetModelPath(modelId), (analysis) => new LabeledFormAnalysis(analysis))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
             Throw.IfMissing(pipeline, nameof(pipeline));

@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
+using Azure.AI.FormRecognizer.Tests.Mocks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.Testing;
@@ -113,15 +114,15 @@ namespace Azure.AI.FormRecognizer.Tests.Prediction
             // Assert
             Assert.NotNull(response);
             Assert.NotNull(response.Value);
-            Assert.Equal(expectStatus, response.Value.Status);
+            Assert.Equal(expectStatus, response.Value.Analysis.Status);
         }
 
-        private AnalyzeOperation GetOperation(params MockResponse[] responses)
+        private AnalyzeOperation<FakeAnalysisClient.FakeAnalysis> GetOperation(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormClientOptions();
-            return new AnalyzeOperation(pipeline, FakeBasePath, FakeOperationId, options.SerializationOptions);
+            return new AnalyzeOperation<FakeAnalysisClient.FakeAnalysis>(pipeline, FakeBasePath, FakeOperationId, options.SerializationOptions, (analysis) => new FakeAnalysisClient.FakeAnalysis(analysis));
         }
     }
 }

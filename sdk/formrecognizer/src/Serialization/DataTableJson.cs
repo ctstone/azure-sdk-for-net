@@ -9,9 +9,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class DataTableJson
     {
-        public static DataTable Read(JsonElement root)
+        public static DataTableInternal Read(JsonElement root)
         {
-            var dataTable = DataTable.Create();
+            var dataTable = DataTableInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -27,7 +27,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return dataTable;
         }
 
-        private static void ReadPropertyValue(ref DataTable dataTable, JsonProperty property)
+        private static void ReadPropertyValue(ref DataTableInternal dataTable, JsonProperty property)
         {
             if (property.NameEquals("rows"))
             {

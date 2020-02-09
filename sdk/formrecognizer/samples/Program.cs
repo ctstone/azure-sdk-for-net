@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Diagnostics;
 using Azure.Identity;
@@ -115,25 +116,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var resultId = args[2];
             var op = client.StartAnalyze(resultId);
             var result = await op.WaitForCompletionAsync();
-            // PrintResponse(result.GetRawResponse());
-            foreach (var page in result.Value.AnalyzeResult.FieldExtractionPages)
-            {
-                Console.WriteLine(page.ClusterId);
-                foreach (var kvp in page.Fields)
-                {
-                    var keyText = kvp.Field.Text;
-                    var valueText = kvp.Value.Text;
-                    Console.WriteLine($"{keyText} => {valueText}");
-                }
 
-                foreach (var table in page.Tables)
-                {
-                    foreach (var x in table.Cells)
-                    {
-                        Console.WriteLine($"{x.Text} [{x.RowIndex}, {x.ColumnIndex}]");
-                    }
-                }
-            }
         }
 
         private static async Task GetLayoutAnalysisResultAsync(FormLayoutClient client, string[] args)
@@ -250,30 +233,11 @@ namespace Azure.AI.FormRecognizer.Samples
             var result = await op.WaitForCompletionAsync();
             if (op.HasValue)
             {
-                // Console.WriteLine($"Status: {op.Value.Status}");
-                // PrintResponse(op.GetRawResponse());
+                PrintTables(Console.Out, op.Value.Tables);
 
-                var analysis = op.Value;
-                foreach (var x in analysis.AnalyzeResult.TextExtractionPages)
+                foreach (var field in op.Value.Fields)
                 {
-                }
-
-                foreach (var page in analysis.AnalyzeResult.FieldExtractionPages)
-                {
-                    Console.WriteLine($"cluster(${page.ClusterId})");
-                    foreach (var kvp in page.Fields)
-                    {
-                        var keyText = kvp.Field.Text;
-                        var valueText = kvp.Value.Text;
-                        Console.WriteLine($"{keyText} => {valueText}");
-                    }
-
-                    foreach (var table in page.Tables)
-                    {
-                        table.WriteAscii(Console.Out);
-                        table.WriteHtml(Console.Out);
-                        table.WriteMarkdown(Console.Out);
-                    }
+                    Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
                 }
             }
             else
@@ -410,6 +374,15 @@ namespace Azure.AI.FormRecognizer.Samples
             await foreach (var model in models)
             {
                 Console.WriteLine($"{model.ModelId} - {model.Status} ({model.LastUpdatedOn})");
+            }
+        }
+
+        private static void PrintTables(TextWriter writer, DataTable[] tables)
+        {
+            foreach (var table in tables)
+            {
+                writer.WriteLine($"Page {table.PageNumber} table:");
+                table.WriteAscii(writer);
             }
         }
     }

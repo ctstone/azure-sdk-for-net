@@ -15,7 +15,8 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// <summary>
     /// Represents a long-running analysis operation.
     /// </summary>
-    public class AnalyzeOperation : Operation<Analysis>
+    public class AnalyzeOperation<TAnalysis> : Operation<TAnalysis>
+        where TAnalysis : class
     {
         private const int DefaultPollingIntervalSeconds = 10;
         private const string LocationHeader = "Operation-Location";
@@ -24,8 +25,10 @@ namespace Azure.AI.FormRecognizer.Prediction
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly JsonSerializerOptions _options;
-        private Analysis _value;
+        private TAnalysis _analysis;
+        private AnalysisInternal _value;
         private Response _response;
+        private readonly Func<AnalysisInternal, TAnalysis> _analysisFactory;
 
         /// <summary>
         /// Get the ID of the analysis operation. This value can be used to poll for the status of the analysis outcome.
@@ -35,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// <summary>
         /// The final result of the analysis operation, if the operation completed successfully.
         /// </summary>
-        public override Analysis Value => HasValue ? _value : default;
+        public override TAnalysis Value => HasValue ? _analysis : default;
 
         /// <summary>
         /// True if the analysis operation completed.
@@ -47,16 +50,17 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         public override bool HasValue => _value?.IsAnalysisSuccess() ?? false;
 
-        internal AnalyzeOperation(HttpPipeline pipeline, string basePath, string id, JsonSerializerOptions options)
+        internal AnalyzeOperation(HttpPipeline pipeline, string basePath, string id, JsonSerializerOptions options, Func<AnalysisInternal, TAnalysis> analysisFactory)
         {
             _basePath = basePath;
             _id = id;
             _pipeline = pipeline;
             _options = options;
+            _analysisFactory = analysisFactory;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnalyzeOperation"/> class for mocking.
+        /// Initializes a new instance of the <see cref="AnalyzeOperation{TAnalysis}"/> class for mocking.
         /// </summary>
         protected AnalyzeOperation()
         { }
@@ -86,13 +90,13 @@ namespace Azure.AI.FormRecognizer.Prediction
         }
 
         /// <inheritdoc/>
-        public override ValueTask<Response<Analysis>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+        public override ValueTask<Response<TAnalysis>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
         {
             return WaitForCompletionAsync(DefaultPollingInterval, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async override ValueTask<Response<Analysis>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
+        public async override ValueTask<Response<TAnalysis>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default)
         {
             do
             {
@@ -103,17 +107,18 @@ namespace Azure.AI.FormRecognizer.Prediction
                 }
             }
             while (!HasCompleted);
-            return Response.FromValue(_value, _response);
+            return Response.FromValue(_analysis, _response);
         }
 
         private Response UpdateStatus(Response response)
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var analysis = response.GetJsonContent<Analysis>(_options);
+            var analysis = response.GetJsonContent<AnalysisInternal>(_options);
             if (analysis.IsAnalysisComplete())
             {
                 _value = analysis;
+                _analysis = _analysisFactory(_value);
             }
             return response;
         }
@@ -135,11 +140,11 @@ namespace Azure.AI.FormRecognizer.Prediction
             return location.Substring(i + 1);
         }
 
-        internal static AnalyzeOperation FromResponse(HttpPipeline pipeline, string basePath, Response response, JsonSerializerOptions options)
+        internal static AnalyzeOperation<TAnalysis> FromResponse(HttpPipeline pipeline, string basePath, Response response, JsonSerializerOptions options, Func<AnalysisInternal, TAnalysis> analysisFactory)
         {
             response.ExpectStatus(HttpStatusCode.Accepted, options);
-            var id = AnalyzeOperation.GetAnalysisOperationId(response);
-            return new AnalyzeOperation(pipeline, basePath, id, options);
+            var id = GetAnalysisOperationId(response);
+            return new AnalyzeOperation<TAnalysis>(pipeline, basePath, id, options, analysisFactory);
         }
     }
 }

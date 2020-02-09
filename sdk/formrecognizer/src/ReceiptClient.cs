@@ -4,6 +4,7 @@
 using System;
 using Azure.AI.FormRecognizer.Http;
 using Azure.AI.FormRecognizer.Prediction;
+using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 
 #pragma warning disable AZC0007 // Client type should have public constructor with equivalent parameters not taking 'FormReceiptClientOptions' as last argument
@@ -13,7 +14,7 @@ namespace Azure.AI.FormRecognizer
     /// <summary>
     /// The Receipt Client extract field text and semantic values from receipt documents.
     /// </summary>
-    public class ReceiptClient : AnalyzeClient
+    public class ReceiptClient : AnalyzeClient<ReceiptAnalysis>
     {
         internal const string BaseReceiptPath = "/prebuilt/receipt";
 
@@ -61,7 +62,7 @@ namespace Azure.AI.FormRecognizer
         }
 
         internal ReceiptClient(Uri endpoint, FormAuthenticator authenticator, FormClientOptions options)
-            : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseReceiptPath)
+            : base(FormHttpPipelineBuilder.Build(endpoint, authenticator, options), options.SerializationOptions, BaseReceiptPath, (model) => new ReceiptAnalysis(model))
         {
         }
 

@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Result of an analysis operation.
     /// </summary>
-    public class AnalysisResult
+    internal class AnalysisResultInternal
     {
         /// <summary>
         /// Version of schema used for this result.
@@ -25,12 +25,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Page-level information extracted from the input.
         /// </summary>
-        public FieldExtractionPage[] FieldExtractionPages { get; internal set; }
+        public FieldExtractionPageInternal[] FieldExtractionPages { get; internal set; }
 
         /// <summary>
         /// Document-level information extracted from the input.
         /// </summary>
-        public PredefinedFieldExtraction[] PredefinedFieldExtractions { get; internal set; }
+        public PredefinedFieldExtractionInternal[] PredefinedFieldExtractions { get; internal set; }
 
         /// <summary>
         /// List of errors reported during the analyze operation.
@@ -38,11 +38,11 @@ namespace Azure.AI.FormRecognizer.Models
         public ErrorDetails[] Errors { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnalysisResult"/> class.
+        /// Initializes a new instance of the <see cref="AnalysisResultInternal"/> class.
         /// </summary>
-        protected AnalysisResult()
+        protected AnalysisResultInternal()
         { }
 
-        internal static AnalysisResult Create() => new AnalysisResult();
+        internal static AnalysisResultInternal Create() => new AnalysisResultInternal();
     }
 }

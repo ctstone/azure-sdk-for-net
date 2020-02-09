@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using System.Collections.Generic;
 
 namespace Azure.AI.FormRecognizer.Models
@@ -23,7 +24,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Date value.
         /// </summary>
-        public string DateValue { get; internal set; }
+        public DateTimeOffset DateValue { get; internal set; }
 
         /// <summary>
         /// Time value.

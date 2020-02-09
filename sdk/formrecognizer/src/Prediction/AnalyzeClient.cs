@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Models;
-using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.FormRecognizer.Prediction
@@ -19,12 +18,14 @@ namespace Azure.AI.FormRecognizer.Prediction
     /// Defines the synchronous and asynchronous operations to analyze forms and retrieve results.
     /// Supports analyzing files from both <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class AnalyzeClient
+    public abstract class AnalyzeClient<TAnalysis>
+        where TAnalysis : class
     {
         private readonly HttpPipeline _pipeline;
         // private readonly FormRecognizerClientOptions _options;
         private readonly string _basePath;
         private readonly JsonSerializerOptions _options;
+        private Func<AnalysisInternal, TAnalysis> _analysisFactory;
 
         /// <summary>
         /// Get the HTTP pipeline.
@@ -41,18 +42,18 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         protected JsonSerializerOptions Options => _options;
 
-
         /// <summary>
-        /// /// Initializes a new instance of the <see cref="AnalyzeClient"/> class.
+        /// /// Initializes a new instance of the <see cref="AnalyzeClient{TAnalysis>"/> class.
         /// </summary>
         protected AnalyzeClient()
         { }
 
-        internal AnalyzeClient(HttpPipeline pipeline, JsonSerializerOptions options, string basePath)
+        internal AnalyzeClient(HttpPipeline pipeline, JsonSerializerOptions options, string basePath, Func<AnalysisInternal, TAnalysis> analysisFactory)
         {
             _pipeline = pipeline;
             _basePath = basePath;
             _options = options;
+            _analysisFactory = analysisFactory;
         }
 
         /// <summary>
@@ -60,15 +61,15 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         /// <param name="operationId">The operation id from a previous analysis request.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<Analysis> GetAnalysisResult(string operationId, CancellationToken cancellationToken = default)
+        public virtual Response<TAnalysis> GetAnalysisResult(string operationId, CancellationToken cancellationToken = default)
         {
             Throw.IfNullOrEmpty(operationId, nameof(operationId));
             using (var request = _pipeline.CreateGetAnalysisRequest(_basePath, operationId))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var analysis = response.GetJsonContent<Analysis>(_options);
-                return Response.FromValue(analysis, response);
+                var analysis = response.GetJsonContent<AnalysisInternal>(_options);
+                return Response.FromValue(_analysisFactory(analysis), response);
             }
         }
 
@@ -77,15 +78,15 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </summary>
         /// <param name="operationId">The operation id from a previous analysis request.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual async Task<Response<Analysis>> GetAnalysisResultAsync(string operationId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<TAnalysis>> GetAnalysisResultAsync(string operationId, CancellationToken cancellationToken = default)
         {
             Throw.IfNullOrEmpty(operationId, nameof(operationId));
             using (var request = _pipeline.CreateGetAnalysisRequest(_basePath, operationId))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var analysis = await response.GetJsonContentAsync<Analysis>(_options, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(analysis, response);
+                var analysis = await response.GetJsonContentAsync<AnalysisInternal>(_options, cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(_analysisFactory(analysis), response);
             }
         }
 
@@ -98,7 +99,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// - `image/png`
         /// - `image/tiff`
         ///
-        /// This method returns an <see cref="AnalyzeOperation" /> that can be used to track the status of the training
+        /// This method returns an <see cref="AnalyzeOperation{TAnalysis}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -135,7 +136,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </param>
         /// <param name="includeTextDetails">Optional parameter to include extra details in the response.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual AnalyzeOperation StartAnalyze(Stream stream, FormContentType? contentType = null, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
+        public virtual AnalyzeOperation<TAnalysis> StartAnalyze(Stream stream, FormContentType? contentType = null, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeStreamRequest(_basePath, stream, contentType, includeTextDetails))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
@@ -153,7 +154,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// - `image/png`
         /// - `image/tiff`
         ///
-        /// This method returns an <see cref="AnalyzeOperation" /> that can be used to track the status of the training
+        /// This method returns an <see cref="AnalyzeOperation{TAnalysis}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -176,7 +177,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </param>
         /// <param name="includeTextDetails">Optional parameter to include extra details in the response.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual AnalyzeOperation StartAnalyze(Uri uri, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
+        public virtual AnalyzeOperation<TAnalysis> StartAnalyze(Uri uri, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeUriRequest(_basePath, uri, includeTextDetails, _options))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
@@ -186,13 +187,13 @@ namespace Azure.AI.FormRecognizer.Prediction
         }
 
         /// <summary>
-        /// Get an <see cref="AnalyzeOperation" /> status reference to an existhing analysis request.
+        /// Get an <see cref="AnalyzeOperation{TAnalysis}" /> status reference to an existhing analysis request.
         /// </summary>
         /// <param name="operationId">The operation id from a previous analysis request.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual AnalyzeOperation StartAnalyze(string operationId, CancellationToken cancellationToken = default)
+        public virtual AnalyzeOperation<TAnalysis> StartAnalyze(string operationId, CancellationToken cancellationToken = default)
         {
-            return new AnalyzeOperation(_pipeline, _basePath, operationId, _options);
+            return new AnalyzeOperation<TAnalysis>(_pipeline, _basePath, operationId, _options, _analysisFactory);
         }
 
         /// <summary>
@@ -204,7 +205,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// - `image/png`
         /// - `image/tiff`
         ///
-        /// This method returns an <see cref="AnalyzeOperation" /> that can be used to track the status of the analysis
+        /// This method returns an <see cref="AnalyzeOperation{TAnalysis}" /> that can be used to track the status of the analysis
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -233,7 +234,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </param>
         /// <param name="includeTextDetails">Optional parameter to include extra details in the response.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual async Task<AnalyzeOperation> StartAnalyzeAsync(Stream stream, FormContentType? contentType = default, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
+        public virtual async Task<AnalyzeOperation<TAnalysis>> StartAnalyzeAsync(Stream stream, FormContentType? contentType = default, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeStreamRequest(_basePath, stream, contentType, includeTextDetails))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
@@ -251,7 +252,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// - `image/png`
         /// - `image/tiff`
         ///
-        /// This method returns an <see cref="AnalyzeOperation" /> that can be used to track the status of the training
+        /// This method returns an <see cref="AnalyzeOperation{TAnalysis}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -274,7 +275,7 @@ namespace Azure.AI.FormRecognizer.Prediction
         /// </param>
         /// <param name="includeTextDetails">Optional parameter to include extra details in the response.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual async Task<AnalyzeOperation> StartAnalyzeAsync(Uri uri, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
+        public virtual async Task<AnalyzeOperation<TAnalysis>> StartAnalyzeAsync(Uri uri, bool? includeTextDetails = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateAnalyzeUriRequest(_basePath, uri, includeTextDetails, _options))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
@@ -283,11 +284,11 @@ namespace Azure.AI.FormRecognizer.Prediction
             }
         }
 
-        private AnalyzeOperation GetAnalysisOperation(Response response)
+        private AnalyzeOperation<TAnalysis> GetAnalysisOperation(Response response)
         {
             response.ExpectStatus(HttpStatusCode.Accepted, _options);
-            var id = AnalyzeOperation.GetAnalysisOperationId(response);
-            return new AnalyzeOperation(_pipeline, _basePath, id, _options);
+            var id = AnalyzeOperation<TAnalysis>.GetAnalysisOperationId(response);
+            return new AnalyzeOperation<TAnalysis>(_pipeline, _basePath, id, _options, _analysisFactory);
         }
     }
 }

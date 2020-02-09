@@ -59,6 +59,7 @@ namespace Azure.AI.FormRecognizer.Custom
             _id = operationId;
             _pipeline = pipeline;
             _options = options;
+            _modelFactory = modelFactory;
         }
 
         /// <summary>

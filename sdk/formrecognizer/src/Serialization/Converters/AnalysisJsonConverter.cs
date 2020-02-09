@@ -8,9 +8,9 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization.Converters
 {
-    internal class AnalysisJsonConverter : JsonConverter<Analysis>
+    internal class AnalysisJsonConverter : JsonConverter<AnalysisInternal>
     {
-        public override Analysis Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override AnalysisInternal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             using JsonDocument json = JsonDocument.ParseValue(ref reader);
             JsonElement root = json.RootElement;
@@ -18,14 +18,14 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
             return ReadAnalyzedForm(root);
         }
 
-        public override void Write(Utf8JsonWriter writer, Analysis value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, AnalysisInternal value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }
 
-        public static Analysis ReadAnalyzedForm(JsonElement root)
+        public static AnalysisInternal ReadAnalyzedForm(JsonElement root)
         {
-            var analyzedForm = Analysis.Create();
+            var analyzedForm = AnalysisInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -37,7 +37,7 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
             return analyzedForm;
         }
 
-        private static void ReadPropertyValue(ref Analysis analyzedForm, JsonProperty property)
+        private static void ReadPropertyValue(ref AnalysisInternal analyzedForm, JsonProperty property)
         {
             if (property.NameEquals("status"))
             {

@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Custom;
+using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -41,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             var client = GetClient();
 
             // Assert
-            Assert.True(client is AnalyzeClient);
+            Assert.True(client is AnalyzeClient<FormAnalysis>);
         }
 
         [Fact]

@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Status and result of an analysis operation.
     /// </summary>
-    public class Analysis
+    internal class AnalysisInternal
     {
         /// <summary>
         /// Status of the operation.
@@ -30,14 +30,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Results of the analyze operation.
         /// </summary>
-        public AnalysisResult AnalyzeResult { get; internal set; }
+        public AnalysisResultInternal AnalyzeResult { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Analysis"/> class.
+        /// Initializes a new instance of the <see cref="AnalysisInternal"/> class.
         /// </summary>
-        protected Analysis()
+        protected AnalysisInternal()
         { }
 
-        internal static Analysis Create() => new Analysis();
+        internal static AnalysisInternal Create() => new AnalysisInternal();
     }
 }

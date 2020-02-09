@@ -8,9 +8,9 @@ namespace Azure.AI.FormRecognizer.Serialization
 {
     internal class FieldExtractionJson
     {
-        public static FieldExtraction Read(JsonElement root)
+        public static FieldExtractionInternal Read(JsonElement root)
         {
-            var keyValuePair = FieldExtraction.Create();
+            var keyValuePair = FieldExtractionInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return keyValuePair;
         }
 
-        private static void ReadPropertyValue(ref FieldExtraction fieldExtraction, JsonProperty property)
+        private static void ReadPropertyValue(ref FieldExtractionInternal fieldExtraction, JsonProperty property)
         {
             if (property.NameEquals("label"))
             {

@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("valueDate"))
             {
-                fieldValue.DateValue = property.Value.GetString();
+                fieldValue.DateValue = property.Value.GetDateTimeOffset();
             }
             else if (property.NameEquals("valueTime"))
             {
