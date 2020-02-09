@@ -136,6 +136,11 @@ namespace Azure.AI.FormRecognizer.Models
                     Total = new PredefinedField<float>(value.NumberValue.Value, value);
                 }
             }
+
+            if (Items == default)
+            {
+                Items = new PredefinedField<ReceiptExtractionItem[]>(Array.Empty<ReceiptExtractionItem>(), null);
+            }
         }
 
         /// <summary>
