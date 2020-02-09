@@ -104,16 +104,24 @@ namespace Azure.AI.FormRecognizer.Models
                     {
                         if (row.TryGetValue(colIndex, out DataTableCell cell))
                         {
-                            var colspan = cell.ColumnSpan ?? 1;
-                            var maxWidth = cellWidth * colspan; // TODO
+                            var colSpan = cell.ColumnSpan.Value;
+                            var maxWidth = cellWidth * colSpan; // TODO
+                            if (maxWidth > cellWidth)
+                            {
+                                maxWidth += 1 * (colSpan - 1);
+                            }
                             var text = cell.Text.Substring(0, Math.Min(cell.Text.Length, maxWidth));
-                            writer.Write($"{inner}{{0, {cellWidth}}}", text);
-                            for (var i = cell.ColumnIndex; i < cell.ColumnIndex + cell.ColumnSpan; i += 1)
+                            writer.Write($"{inner}{{0, {maxWidth}}}", text);
+                            for (var i = cell.ColumnIndex; i < cell.ColumnIndex + colSpan; i += 1)
                             {
                                 headerColumns[i] = cell.IsHeader ?? false;
                                 footerColumns[i] = cell.IsFooter ?? false;
                             }
-                            colIndex += colspan - 1;
+                            colIndex += colSpan - 1;
+                        }
+                        else
+                        {
+                            writer.Write($"{inner}{{0, {cellWidth}}}", '-');
                         }
                     }
                 }
@@ -292,13 +300,18 @@ namespace Azure.AI.FormRecognizer.Models
             var index = new Dictionary<int, IDictionary<int, DataTableCell>>();
             foreach (var cell in Cells)
             {
-                for (var rowIndex = cell.RowIndex; rowIndex < cell.RowIndex + cell.RowSpan; rowIndex += 1)
+                var rowSpan = cell.RowSpan ?? 1;
+                var colSpan = cell.ColumnSpan ?? 1;
+                for (var rowIndex = cell.RowIndex; rowIndex < cell.RowIndex + rowSpan; rowIndex += 1)
                 {
                     if (!index.TryGetValue(rowIndex, out IDictionary<int, DataTableCell> row))
                     {
                         index[rowIndex] = row = new Dictionary<int, DataTableCell>();
                     }
-                    row[cell.ColumnIndex] = cell;
+                    for (var i = cell.ColumnIndex; i < cell.ColumnIndex + colSpan; i += 1)
+                    {
+                        row[i] = cell;
+                    }
                 }
             }
             return index;
@@ -309,7 +322,8 @@ namespace Azure.AI.FormRecognizer.Models
             var index = new Dictionary<int, int>();
             foreach (var cell in Cells)
             {
-                for (var colIndex = cell.ColumnIndex; colIndex < cell.ColumnIndex + cell.ColumnSpan; colIndex += 1)
+                var columnSpan = cell.ColumnSpan ?? 1;
+                for (var colIndex = cell.ColumnIndex; colIndex < cell.ColumnIndex + columnSpan; colIndex += 1)
                 {
                     if (!index.TryGetValue(colIndex, out int maxWidth))
                     {
