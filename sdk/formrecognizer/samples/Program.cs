@@ -47,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
-                await Sample_01_TrainAsync(client);
+                await Sample_08_TrainWithLabelsAsync(client);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Console.WriteLine("Documents:");
             foreach (var document in model.Documents)
             {
-                Console.WriteLine($"- Name: {document.DocumentName}");
+                Console.WriteLine($"- Name: {document.Name}");
                 Console.WriteLine($"  Status: {document.Status}");
                 Console.WriteLine($"  Pages: {document.PageCount}");
                 if (document.Errors.Any())
@@ -101,6 +101,66 @@ namespace Azure.AI.FormRecognizer.Samples
                     Console.WriteLine($"  - '{key}'");
                 }
             }
+            if (model.Errors.Any())
+            {
+                Console.WriteLine("Errors:");
+                foreach (var error in model.Errors)
+                {
+                    Console.WriteLine($"- {error.Message}");
+                }
+            }
+        }
+
+        private static async Task Sample_08_TrainWithLabelsAsync(CustomFormClient client)
+        {
+            // setup
+            // var endpoint = new Uri("{your_endpoint}");
+            // var credential = new CognitiveKeyCredential("{your_service_key}");
+            // var client = new CustomFormClient(endpoint, credential);
+
+            // operation
+            // var source = "{your_blob_container_sas_url}";
+            var source = "https://chstoneforms.blob.core.windows.net/samples2?st=2020-02-08T20%3A53%3A41Z&se=2030-02-09T20%3A53%3A00Z&sp=rl&sv=2018-03-28&sr=c&sig=rM43twY2fnaNugFqNMfVFCi03IhtMFqZJ2cs0ccs3w8%3D";
+            var operation = await client.StartTrainingWithLabelsAsync(source);
+            Console.WriteLine($"Created model with id {operation.Id}");
+
+            // wait for completion
+            var response = await operation.WaitForCompletionAsync();
+
+            // examine model metadata
+            var model = response.Value;
+            Console.WriteLine("Information:");
+            Console.WriteLine($"  Id: {model.Information.Id}");
+            Console.WriteLine($"  Status: {model.Information.Status}");
+            Console.WriteLine($"  Duration: '{model.Information.TrainingDuration}'");
+            Console.WriteLine($"  Accuracy: {model.AverageAccuracy}");
+
+            // examine model documents
+            Console.WriteLine("Documents:");
+            foreach (var document in model.Documents)
+            {
+                Console.WriteLine($"- Name: {document.Name}");
+                Console.WriteLine($"  Status: {document.Status}");
+                Console.WriteLine($"  Pages: {document.PageCount}");
+                if (document.Errors.Any())
+                {
+                    Console.WriteLine($"  Errors:");
+                    foreach (var error in document.Errors)
+                    {
+                        Console.WriteLine($"  - {error.Message}");
+                    }
+                }
+            }
+
+            // examine model field accuracy report
+            Console.WriteLine("Fields:");
+            foreach (var field in model.Fields)
+            {
+                Console.WriteLine($"- Name: {field.Name}");
+                Console.WriteLine($"  Accuracy: {field.Accuracy}");
+            }
+
+            // examine model errors
             if (model.Errors.Any())
             {
                 Console.WriteLine("Errors:");
@@ -388,7 +448,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var model = await client.GetModelReference(modelId).GetAsync(includeKeys: true);
             foreach (var document in model.Value.Documents)
             {
-                Console.Error.WriteLine($"{document.DocumentName}: {document.Status} - {document.PageCount} page(s) - {document.Errors.Length} errors.");
+                Console.Error.WriteLine($"{document.Name}: {document.Status} - {document.PageCount} page(s) - {document.Errors.Length} errors.");
             }
             PrintResponse(model);
         }
@@ -397,7 +457,7 @@ namespace Azure.AI.FormRecognizer.Samples
         {
             var source = args[1];
             var prefix = args.Length == 3 ? args[2] : default;
-            var op = await client.StartLabeledTrainingAsync(source, new SourceFilter(prefix));
+            var op = await client.StartTrainingWithLabelsAsync(source, new SourceFilter(prefix));
 
             Console.WriteLine("Waiting for completion...");
             await op.WaitForCompletionAsync(TimeSpan.FromSeconds(10));

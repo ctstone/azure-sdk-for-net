@@ -84,7 +84,7 @@ Console.WriteLine($"  Duration: {model.Information.TrainingDuration}");
 Console.WriteLine("Documents:");
 foreach (var document in model.Documents)
 {
-    Console.WriteLine($"- Name: {document.DocumentName}");
+    Console.WriteLine($"- Name: {document.Name}");
     Console.WriteLine($"  Status: {document.Status}");
     Console.WriteLine($"  Pages: {document.PageCount}");
     if (document.Errors.Any())
