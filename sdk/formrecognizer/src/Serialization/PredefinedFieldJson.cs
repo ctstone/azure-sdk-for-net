@@ -71,6 +71,10 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 fieldValue.Confidence = property.Value.GetSingle();
             }
+            else if (property.NameEquals("page"))
+            {
+                fieldValue.PageNumber = property.Value.GetInt32();
+            }
         }
     }
 }

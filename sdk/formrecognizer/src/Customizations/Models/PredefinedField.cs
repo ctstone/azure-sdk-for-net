@@ -31,12 +31,22 @@ namespace Azure.AI.FormRecognizer.Models
             Confidence = field?.Confidence;
             PageNumber = field?.PageNumber;
             Elements = field?.Elements ?? Array.Empty<TextElement>();
+            Text = field?.Text;
+            BoundingBox = field?.BoundingBox;
         }
 
         /// <inheritdoc />
         public override string ToString()
         {
-            return Value.ToString();
+            if (Value != null)
+            {
+                return Value.ToString();
+            }
+            else if (Text != null)
+            {
+                return Text;
+            }
+            return string.Empty;
         }
     }
 }

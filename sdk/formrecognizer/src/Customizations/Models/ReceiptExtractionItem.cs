@@ -17,7 +17,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Get the receipt item quantity.
         /// </summary>
-        public PredefinedField<float> Quantity { get; }
+        public PredefinedField<int?> Quantity { get; }
 
         /// <summary>
         /// Get the receipt item name.
@@ -27,7 +27,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Get the receipt item total price.
         /// </summary>
-        public PredefinedField<float> TotalPrice { get; }
+        public PredefinedField<float?> TotalPrice { get; }
 
         internal ReceiptExtractionItem(PredefinedField field)
         {
@@ -39,7 +39,7 @@ namespace Azure.AI.FormRecognizer.Models
                     var value = kvp.Value;
                     if (key == QuantityKey)
                     {
-                        Quantity = new PredefinedField<float>(value.NumberValue.Value, value);
+                        Quantity = new PredefinedField<int?>(value.IntegerValue, value);
                     }
                     else if (key == NameKey)
                     {
@@ -47,7 +47,7 @@ namespace Azure.AI.FormRecognizer.Models
                     }
                     else if (key == TotalPriceKey)
                     {
-                        TotalPrice = new PredefinedField<float>(value.NumberValue.Value, value);
+                        TotalPrice = new PredefinedField<float?>(value.NumberValue, value);
                     }
                 }
             }

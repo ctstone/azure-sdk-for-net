@@ -16,13 +16,13 @@ namespace Azure.AI.FormRecognizer.Models
         private const string MerchantNameKey = "MerchantName";
         private const string MerchantAddressKey = "MerchantAddress";
         private const string MerchantPhoneNumberKey = "MerchantPhoneNumber";
-        private const string TransactionDateKey = "TransactionDateKey";
-        private const string TransactionTimeKey = "TransactionTimeKey";
-        private const string ItemsKey = "ItemsKey";
+        private const string TransactionDateKey = "TransactionDate";
+        private const string TransactionTimeKey = "TransactionTime";
+        private const string ItemsKey = "Items";
         private const string SubtotalKey = "Subtotal";
-        private const string TaxKey = "TaxKey";
-        private const string TipKey = "TipKey";
-        private const string TotalKey = "TotalKey";
+        private const string TaxKey = "Tax";
+        private const string TipKey = "Tip";
+        private const string TotalKey = "Total";
 
         private readonly IDictionary<string, PredefinedField> _fields;
 
@@ -49,7 +49,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Get the receipt transaction date.
         /// </summary>
-        public PredefinedField<DateTimeOffset> TransactionDate { get; }
+        public PredefinedField<DateTimeOffset?> TransactionDate { get; }
 
         /// <summary>
         /// Get the receipt transaction time.
@@ -64,22 +64,28 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Get the receipt subtotal.
         /// </summary>
-        public PredefinedField<float> Subtotal { get; }
+        public PredefinedField<float?> Subtotal { get; }
 
         /// <summary>
         /// Get the receipt tax.
         /// </summary>
-        public PredefinedField<float> Tax { get; }
+        public PredefinedField<float?> Tax { get; }
 
         /// <summary>
         /// Get the receipt tip.
         /// </summary>
-        public PredefinedField<float> Tip { get; }
+        public PredefinedField<float?> Tip { get; }
 
         /// <summary>
         /// Get the receipt total.
         /// </summary>
-        public PredefinedField<float> Total { get; }
+        public PredefinedField<float?> Total { get; }
+
+        /// <summary>
+        /// Get the field names recognized in this extraction.
+        /// </summary>
+        public ICollection<string> FieldNames => _fields.Keys;
+
 
         internal ReceiptExtraction(IDictionary<string, PredefinedField> fields)
         {
@@ -102,15 +108,15 @@ namespace Azure.AI.FormRecognizer.Models
                 }
                 else if (key == MerchantPhoneNumberKey)
                 {
-                    MerchantPhoneNumber = new PredefinedField<string>(value.StringValue, value);
+                    MerchantPhoneNumber = new PredefinedField<string>(value.PhoneNumberValue, value);
                 }
                 else if (key == TransactionDateKey)
                 {
-                    TransactionDate = new PredefinedField<DateTimeOffset>(value.DateValue, value);
+                    TransactionDate = new PredefinedField<DateTimeOffset?>(value.DateValue, value);
                 }
                 else if (key == TransactionTimeKey)
                 {
-                    TransactionTime = new PredefinedField<string>(value.StringValue, value);
+                    TransactionTime = new PredefinedField<string>(value.TimeValue, value);
                 }
                 else if (key == ItemsKey)
                 {
@@ -121,19 +127,19 @@ namespace Azure.AI.FormRecognizer.Models
                 }
                 else if (key == SubtotalKey)
                 {
-                    Subtotal = new PredefinedField<float>(value.NumberValue.Value, value);
+                    Subtotal = new PredefinedField<float?>(value.NumberValue, value);
                 }
                 else if (key == TaxKey)
                 {
-                    Tax = new PredefinedField<float>(value.NumberValue.Value, value);
+                    Tax = new PredefinedField<float?>(value.NumberValue, value);
                 }
                 else if (key == TipKey)
                 {
-                    Tip = new PredefinedField<float>(value.NumberValue.Value, value);
+                    Tip = new PredefinedField<float?>(value.NumberValue, value);
                 }
                 else if (key == TotalKey)
                 {
-                    Total = new PredefinedField<float>(value.NumberValue.Value, value);
+                    Total = new PredefinedField<float?>(value.NumberValue, value);
                 }
             }
 
