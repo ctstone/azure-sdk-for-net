@@ -60,7 +60,7 @@ var response = await operation.WaitForCompletionAsync();
 var result = response.Value
 ```
 
-## Examine the analysis results
+## Examine analysis results
 
 ### Display result information
 

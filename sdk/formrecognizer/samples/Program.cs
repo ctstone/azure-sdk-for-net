@@ -151,7 +151,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task Sample_08_TrainWithLabelsAsync(CustomFormClient client)
+        private static async Task Sample_07_TrainWithLabelsAsync(CustomFormClient client)
         {
             // setup
             // var endpoint = new Uri("{your_endpoint}");

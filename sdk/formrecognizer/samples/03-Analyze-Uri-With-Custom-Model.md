@@ -63,102 +63,12 @@ var response = await operation.WaitForCompletionAsync();
 var result = response.Value
 ```
 
-## Examine the analysis results
+## Examine analysis results
 
-### Display result information
-
-```csharp
-Console.WriteLine("Information:");
-Console.WriteLine($"  Status: {result.Status}");
-Console.WriteLine($"  Duration: '{result.Duration}'");
-Console.WriteLine($"  Version: '{result.Version}'");
-```
-
-## Display result fields
-
-```csharp
-Console.WriteLine("Fields:");
-foreach (var extraction in result.Fields)
-{
-    Console.WriteLine($"- Field: '{extraction.Field.Text}'");
-    Console.WriteLine($"  Value: '{extraction.Value.Text}'");
-    Console.WriteLine($"  ClusterId: {extraction.ClusterId}");
-    Console.WriteLine($"  Page: {extraction.PageNumber}");
-}
-```
-
-## Display result tables
-
-```csharp
-Console.WriteLine("Tables:");
-foreach (var table in result.Tables)
-{
-    table.WriteAscii(Console.Out);
-}
-```
-
-```yaml
-# sample program output
-
-Information:
-  Status: Succeeded
-  Duration: '00:00:02'
-  Version: '2.0.0'
-Fields:
-- Field: 'Address:'
-  Value: '14564 Main St. Saratoga, CA 94588'
-  ClusterId: 0
-  Page: 1
-- Field: 'Invoice For:'
-  Value: 'First Up Consultants 1234 King St Redmond, WA 97624'
-  ClusterId: 0
-  Page: 1
-- Field: 'Invoice Number'
-  Value: '7689302'
-  ClusterId: 0
-  Page: 1
-- Field: 'Invoice Date'
-  Value: '3/09/2015'
-  ClusterId: 0
-  Page: 1
-- Field: 'Invoice Due Date'
-  Value: '6/29/2016'
-  ClusterId: 0
-  Page: 1
-- Field: 'Charges'
-  Value: '$22,123.24'
-  ClusterId: 0
-  Page: 1
-- Field: 'VAT ID'
-  Value: 'QR'
-  ClusterId: 0
-  Page: 1
-- Field: 'Page'
-  Value: '1 of'
-  ClusterId: 0
-  Page: 1
-- Field: '__Tokens__1'
-  Value: 'Contoso Suites'
-  ClusterId: 0
-  Page: 1
-- Field: '__Tokens__2'
-  Value: '1'
-  ClusterId: 0
-  Page: 1
-```
-
-```
-Tables:
-┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
-│ Invoice Number│   Invoice Date│Invoice Due Dat│        Charges│         VAT ID│
-╞═══════════════╪═══════════════╪═══════════════╪═══════════════╪═══════════════╡
-│        7689302│      3/09/2015│      6/29/2016│     $22,123.24│             QR│
-└───────────────┴───────────────┴───────────────┴───────────────┴───────────────┘
-```
-
-> ASCII tables are rendered with unicode glyphs. If you require true ASCII tables, use `table.WriteAscii(Console.Out, unicode: false)`.
+Refer to the sample code in [Analyze File with Custom Model]
 
 [first sample]: ./01-Train-Custom-Model.md
 [training sample]: ./01-Train-Custom-Model.md
 [sample data set]: https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/curl/form-recognizer/sample_data.zip
 [Shared Access Signature]: https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview
+[Analyze File with Custom Model]: ./02-Analyze-File-With-Custom-Model.md#examine-analysis-results
