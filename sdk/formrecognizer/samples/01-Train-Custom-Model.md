@@ -42,60 +42,123 @@ By default, the Form Recognizer service will only scan documents at the root of 
 > Use your Azure Storage client application to generate the SAS Url for a __container__ (refer to SAS instructions for [Storage Explorer], [Azure CLI], or [.NET]).
 
 ```csharp
-var trainingRequest = new TrainingRequest("{your_blob_container_sas_url}");
+var source = "{your_blob_container_sas_url}";
 ```
 
 ## Submit the training request
 
-Training may take several minutes depending on the quantity, size and complexity of your training documents. When you start a training request, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the training operation is a `Model`.
+Training may take several minutes depending on the quantity, size and complexity of your training documents. When you start a training request, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the training operation is a `FormModel`.
 
 ```csharp
-var trainingOperation = await client.StartTrainingAsync(trainingRequest);
-Console.WriteLine($"Created model with id {trainingOperation.Id}");
+var operation = await client.StartTrainingAsync(source);
+Console.WriteLine($"Created model with id {operation.Id}");
 ```
 
 > The operation identifier is also the model identifer. You can use this value to retrieve the model information or perform analysis.
 
 ## Wait for training completion
 
-The `FormRecognizerClient` can poll for the latest training status, asynchronously blocking the current thread.
+The `CustomFormClient` can poll for the latest training status, asynchronously blocking the current thread.
 
 ```csharp
-var trainingResponse = await trainingOperation.WaitForCompletionAsync();
-if (trainingResponse.HasValue)
-{
-    var model = trainingResponse.Value;
-    var status = model.ModelInfo.Status;
-    Console.WriteLine($"Status: {status}");
-}
+var response = await operation.WaitForCompletionAsync();
+var model = response.Value;
 ```
 
 ## Examine the trained model
 
-Loop through the model's keys. Each key in the cluster dictionary represents a recognized document group.
+Your custom model contains information on the documents that were processed, the document clusters and keys that were learned, as well as any document or training errors.
+
+### Display model metadata:
 
 ```csharp
-var model = trainingResponse.Value;
-foreach (var cluster in model.Keys.Clusters)
+Console.WriteLine("Information:");
+Console.WriteLine($"  Id: {model.Information.Id}");
+Console.WriteLine($"  Status: {model.Information.Status}");
+Console.WriteLine($"  Duration: {model.Information.TrainingDuration}");
+```
+
+### Display model documents:
+
+```csharp
+Console.WriteLine("Documents:");
+foreach (var document in model.Documents)
 {
-    var clusterId = cluster.Key;
-    var numKeys = cluster.Value.Length;
-    Console.WriteLine($"Cluster '{clusterId}' has {numKeys} recognized keys.");
+    Console.WriteLine($"- Name: {document.DocumentName}");
+    Console.WriteLine($"  Status: {document.Status}");
+    Console.WriteLine($"  Pages: {document.PageCount}");
+    if (document.Errors.Any())
+    {
+        Console.WriteLine($"  Errors:");
+        foreach (var error in document.Errors)
+        {
+            Console.WriteLine($"  - {error.Message}");
+        }
+    }
 }
 ```
 
-Identify the trained document names and their status. Each document reports the original filename, number of pages, and any potential errors.
+### Display document clusters
 
 ```csharp
-var model = trainingResponse.Value;
-foreach (var document in model.TrainResult.TrainingDocuments)
+Console.WriteLine("DocumentClusters:");
+foreach (var documentCluster in model.DocumentKeyClusters)
 {
-    var name = document.DocumentName;
-    var status = document.Status;
-    var numPages = document.Pages;
-    var numErrors = document.Errors.Length;
-    Console.WriteLine($"{name}: {status} - {numPages} page(s) - {numErrors} errors.");
+    Console.WriteLine($"  ClusterId: {documentCluster.Key}");
+    foreach (var key in documentCluster.Value)
+    {
+        Console.WriteLine($"  - {key}");
+    }
 }
+```
+
+### Display model errors
+
+```csharp
+if (model.Errors.Any())
+{
+    Console.WriteLine("Errors:");
+    foreach (var error in model.Errors)
+    {
+        Console.WriteLine($"- {error.Message}");
+    }
+}
+```
+
+```yaml
+# Sample model output
+
+Information:
+  Id: d2ab67d1-44a8-4268-90c4-cc31f6660d4d
+  Status: Ready
+  Duration: '00:00:08'
+Documents:
+- Name: Invoice_1.pdf
+  Status: Succeeded
+  Pages: 1
+- Name: Invoice_2.pdf
+  Status: Succeeded
+  Pages: 1
+- Name: Invoice_3.pdf
+  Status: Succeeded
+  Pages: 1
+- Name: Invoice_4.pdf
+  Status: Succeeded
+  Pages: 1
+- Name: Invoice_5.pdf
+  Status: Succeeded
+  Pages: 1
+DocumentClusters:
+  ClusterId: 0
+  - 'Address:'
+  - 'Charges'
+  - 'Invoice Date'
+  - 'Invoice Due Date'
+  - 'Invoice For:'
+  - 'Invoice Number'
+  - 'Microsoft'
+  - 'Page'
+  - 'VAT ID'
 ```
 
 ## Next Steps
