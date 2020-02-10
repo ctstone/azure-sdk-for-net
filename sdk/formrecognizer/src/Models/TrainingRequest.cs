@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.AI.FormRecognizer
+namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
     /// Request parameter to train a new custom model.
     /// </summary>
-    public class TrainingRequest
+    internal class TrainingRequest
     {
         /// <summary>
         /// Source path containing the training documents.

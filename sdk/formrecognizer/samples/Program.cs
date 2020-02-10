@@ -11,7 +11,6 @@ using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Serialization.Converters;
 using Azure.Core;
 using Azure.Core.Diagnostics;
-using Azure.Identity;
 
 namespace Azure.AI.FormRecognizer.Samples
 {

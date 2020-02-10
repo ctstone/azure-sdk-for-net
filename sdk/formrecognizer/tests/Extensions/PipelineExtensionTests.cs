@@ -9,6 +9,7 @@ using Azure.Core.Pipeline;
 using Azure.Core.Testing;
 using Xunit;
 using Azure.AI.FormRecognizer.Extensions;
+using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Tests.Extensions
 {

@@ -3,6 +3,7 @@
 
 using System;
 using System.Text;
+using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Xunit;
 using static Azure.AI.FormRecognizer.FormClientOptions;
