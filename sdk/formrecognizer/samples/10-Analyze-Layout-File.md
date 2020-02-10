@@ -1,12 +1,12 @@
-# Analyze Receipt with Form Recognizer
+# Analyze Layout with Form Recognizer
 
-This sample demonstrates how to analyze a receipt using the Form Recognizer SDK.
+This sample demonstrates how to analyze the table layout of a form using the Form Recognizer SDK.
 
 ## Prerequisites
 
 If you don't have an Azure subscription, create a [free account] before you begin.
 
-You can use your own receipt file or a [sample receipt].
+You can use your own form file or a [sample form].
 
 ## Create the client
 
@@ -22,7 +22,7 @@ var client = new FormLayoutClient(endpoint, credential);
 
 ## Load your request file
 
-This is the receipt file that you want to analyze (pdf, jpeg, png, or tiff).
+This is the form file that you want to analyze (pdf, jpeg, png, or tiff).
 
 ```csharp
 var filePath = "/path/to/local/file.jpg";
@@ -33,7 +33,7 @@ var stream = File.OpenRead(filePath);
 
 ## Submit analysis request
 
-Analysis may take several seconds or several minutes depending on the size and complexity of your document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `ReceiptAnalysis` object.
+Analysis may take several seconds or several minutes depending on the size and complexity of your document. When you start an analysis operation, you receive an identifier that can be used to check the status of the operation and retrieve the results when complete. The result of the analysis operation is an `LayoutAnalysis` object.
 
 ```csharp
 var operation = await client.StartAnalysisAsync(stream);
@@ -92,4 +92,4 @@ Tables:
 
 
 [free account]: https://azure.microsoft.com/free/?WT.mc_id=A261C142F
-[sample receipt]: https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/contoso-allinone.jpg
+[sample form]: https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/curl/form-recognizer/sample_data.zip
