@@ -48,10 +48,21 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
-                await Sample_10_AnalyzeLayoutAsync(layoutClient);
+                var model = client.GetModelReferenceWithLabels<Invoice>("a61aba7f-98fd-49af-94f3-3e32695bb93f");
+                Console.WriteLine("Sending...");
+                var operation = model.StartAnalyze("657504d5-58df-4316-b182-262e1f4c54e1");
+                // = await model.StartAnalyzeAsync(File.OpenRead("/Users/chstone/Downloads/sample_data/Test/Invoice_6.pdf"));
+                Console.WriteLine($"Waiting for {operation.Id}...");
+                var response = await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(2));
+                var result = response.Value;
+                var invoice = result.Forms[0];
+                Console.WriteLine($"VatId: {invoice.Form.VatId}");
+                Console.WriteLine($"Charges: {invoice.Form.Charges}");
+                Console.WriteLine($"Number: {invoice.Form.Number}");
+                Console.WriteLine($"DueDate: {invoice.Form.DueDate}");
+                Console.WriteLine($"Date: {invoice.Form.Date}");
 
-                // Temp.Temp1();
-                // await Task.CompletedTask;
+                // await Sample_08_AnalyzeFileWithLabeledCustomModelAsync(client);
             }
             catch (Exception ex)
             {
@@ -126,7 +137,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             var modelId = "d2ab67d1-44a8-4268-90c4-cc31f6660d4d";
             var model = client.GetModelReference(modelId);
-            var stream = File.OpenRead("/Users/christopherstone/Downloads/sample_data/Test/Invoice_6.pdf");
+            var stream = File.OpenRead("/Users/chstone/Downloads/sample_data/Test/Invoice_6.pdf");
 
             // operation
             var operation = await model.StartAnalyzeAsync(stream);
@@ -228,7 +239,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             var modelId = "a61aba7f-98fd-49af-94f3-3e32695bb93f";
             var model = client.GetModelReferenceWithLabels(modelId);
-            var stream = File.OpenRead("/Users/christopherstone/Downloads/sample_data/Test/Invoice_6.pdf");
+            var stream = File.OpenRead("/Users/chstone/Downloads/sample_data/Test/Invoice_6.pdf");
 
             // operation
             var operation = await model.StartAnalyzeAsync(stream);
@@ -243,7 +254,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             // examine result fields
             Console.WriteLine("Fields:");
-            foreach (var extraction in result.Extractions)
+            foreach (var extraction in result.FormFields)
             {
                 Console.WriteLine($"- Type: '{extraction.DocumentType}'");
                 Console.WriteLine($"  FirstPage: {extraction.FirstPageNumber}");
@@ -269,7 +280,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task Sample_09_AnalyzeReceiptFileAsync(ReceiptClient client)
         {
-            var stream = File.OpenRead("/Users/christopherstone/Downloads/contoso-allinone.jpg");
+            var stream = File.OpenRead("/Users/chstone/Downloads/contoso-allinone.jpg");
 
             // operation
             var operation = await client.StartAnalyzeAsync(stream);
@@ -318,7 +329,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         private static async Task Sample_10_AnalyzeLayoutAsync(FormLayoutClient client)
         {
-            var stream = File.OpenRead("/Users/christopherstone/Downloads/sample_data/Test/Invoice_6.pdf");
+            var stream = File.OpenRead("/Users/chstone/Downloads/sample_data/Test/Invoice_6.pdf");
 
             // operation
             var operation = await client.StartAnalyzeAsync(stream);
@@ -703,4 +714,6 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
     }
+
+
 }

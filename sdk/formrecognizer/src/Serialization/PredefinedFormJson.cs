@@ -7,11 +7,11 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
-    internal class PredefinedFieldExtractionJson
+    internal class PredefinedFormJson
     {
-        public static PredefinedFieldExtractionInternal Read(JsonElement root)
+        public static PredefinedFormInternal Read(JsonElement root)
         {
-            var documentResult = PredefinedFieldExtractionInternal.Create();
+            var documentResult = PredefinedFormInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return documentResult;
         }
 
-        private static void ReadPropertyValue(ref PredefinedFieldExtractionInternal documentResult, JsonProperty property)
+        private static void ReadPropertyValue(ref PredefinedFormInternal documentResult, JsonProperty property)
         {
             if (property.NameEquals("docType"))
             {

@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Document-level information extracted from the input.
         /// </summary>
-        public PredefinedFieldExtractionInternal[] PredefinedFieldExtractions { get; internal set; }
+        public PredefinedFormInternal[] PredefinedFieldExtractions { get; internal set; }
 
         /// <summary>
         /// List of errors reported during the analyze operation.

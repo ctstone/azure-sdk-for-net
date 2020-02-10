@@ -50,15 +50,15 @@ namespace Azure.AI.FormRecognizer.Models
         public DataTable[] Tables { get; }
 
         /// <summary>
-        /// Get the predefined fields recognized in the current analysis.
+        /// Get the predefined form fields recognized in the current analysis.
         /// </summary>
         /// <value></value>
-        public PredefinedFieldExtraction[] Extractions { get; }
+        public PredefinedForm[] FormFields { get; }
 
         internal LabeledFormAnalysis(AnalysisInternal analysis)
         {
             var fieldExtractionPages = analysis.AnalyzeResult?.FieldExtractionPages ?? Array.Empty<FieldExtractionPageInternal>();
-            var predefinedFields = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFieldExtractionInternal>();
+            var predefinedFields = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFormInternal>();
             Status = analysis.Status;
             CreatedOn = analysis.CreatedOn;
             LastUpdatedOn = analysis.LastUpdatedOn;
@@ -68,8 +68,8 @@ namespace Azure.AI.FormRecognizer.Models
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
                 .Select((x) => new DataTable(x.page, x.table))
                 .ToArray();
-            Extractions = predefinedFields
-                .Select((x) => new PredefinedFieldExtraction(x))
+            FormFields = predefinedFields
+                .Select((x) => new PredefinedForm(x))
                 .ToArray();
         }
 

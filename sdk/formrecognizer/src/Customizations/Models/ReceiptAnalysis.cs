@@ -51,7 +51,7 @@ namespace Azure.AI.FormRecognizer.Models
 
         internal ReceiptAnalysis(AnalysisInternal analysis)
         {
-            var predefinedFieldExtractions = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFieldExtractionInternal>();
+            var predefinedFieldExtractions = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFormInternal>();
             Status = analysis.Status;
             CreatedOn = analysis.CreatedOn;
             LastUpdatedOn = analysis.LastUpdatedOn;

@@ -104,6 +104,16 @@ namespace Azure.AI.FormRecognizer
         public virtual LabeledFormModelReference GetModelReferenceWithLabels(string modelId) => new LabeledFormModelReference(modelId, _pipeline, _options.SerializationOptions);
 
         /// <summary>
+        /// Access a model that uses labels to perform analysis, retrieve metadata, or delete it.
+        /// </summary>
+        /// <param name="modelId">Model identifier</param>
+        public virtual LabeledFormModelReference<TForm> GetModelReferenceWithLabels<TForm>(string modelId)
+            where TForm : new()
+        {
+            return new LabeledFormModelReference<TForm>(modelId, _pipeline, _options.SerializationOptions);
+        }
+
+        /// <summary>
         /// Asynchronously create and train a custom model.
         ///
         /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training

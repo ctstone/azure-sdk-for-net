@@ -31,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (analysisResult.PredefinedFieldExtractions == default)
             {
-                analysisResult.PredefinedFieldExtractions = Array.Empty<PredefinedFieldExtractionInternal>();
+                analysisResult.PredefinedFieldExtractions = Array.Empty<PredefinedFormInternal>();
             }
             if (analysisResult.Errors == default)
             {
@@ -99,11 +99,11 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("documentResults"))
             {
-                analyzedForm.PredefinedFieldExtractions = new PredefinedFieldExtractionInternal[property.Value.GetArrayLength()];
+                analyzedForm.PredefinedFieldExtractions = new PredefinedFormInternal[property.Value.GetArrayLength()];
                 var i = 0;
                 foreach (var json in property.Value.EnumerateArray())
                 {
-                    analyzedForm.PredefinedFieldExtractions[i] = PredefinedFieldExtractionJson.Read(json);
+                    analyzedForm.PredefinedFieldExtractions[i] = PredefinedFormJson.Read(json);
                     i += 1;
                 }
             }

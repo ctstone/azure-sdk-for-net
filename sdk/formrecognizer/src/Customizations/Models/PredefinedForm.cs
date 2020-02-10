@@ -9,7 +9,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// A set of extracted fields corresponding to the input document.
     /// </summary>
-    public class PredefinedFieldExtraction
+    public class PredefinedForm
     {
         /// <summary>
         /// Document type.
@@ -32,12 +32,12 @@ namespace Azure.AI.FormRecognizer.Models
         public IDictionary<string, PredefinedField> Fields { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PredefinedFieldExtractionInternal"/> class.
+        /// Initializes a new instance of the <see cref="PredefinedFormInternal"/> class.
         /// </summary>
-        protected PredefinedFieldExtraction()
+        protected PredefinedForm()
         { }
 
-        internal PredefinedFieldExtraction(PredefinedFieldExtractionInternal field)
+        internal PredefinedForm(PredefinedFormInternal field)
         {
             DocumentType = field.DocumentType;
             FirstPageNumber = field.FirstPageNumber;
