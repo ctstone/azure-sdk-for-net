@@ -21,12 +21,17 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Information about the extracted key in a key-value pair.
         /// </summary>
-        public FieldExtractionElement Field { get; internal set; }
+        public FieldExtractionElement Field { get; }
 
         /// <summary>
         /// Information about the extracted value in a key-value pair.
         /// </summary>
-        public FieldExtractionElement Value { get; internal set; }
+        public FieldExtractionElement Value { get; }
+
+        /// <summary>
+        /// Confidence value.
+        /// </summary>
+        public float Confidence { get; }
 
         internal FieldExtraction(FieldExtractionPageInternal page, FieldExtractionInternal fieldExtraction)
         {
@@ -34,6 +39,7 @@ namespace Azure.AI.FormRecognizer.Models
             PageNumber = page.PageNumber;
             Field = fieldExtraction.Field;
             Value = fieldExtraction.Value;
+            Confidence = fieldExtraction.Confidence;
         }
 
         /// <summary>
