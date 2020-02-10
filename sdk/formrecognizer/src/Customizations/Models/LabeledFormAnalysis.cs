@@ -50,7 +50,7 @@ namespace Azure.AI.FormRecognizer.Models
         public DataTable[] Tables { get; }
 
         /// <summary>
-        /// Get the predefined form fields recognized in the current analysis.
+        /// Get the predefined form field groups recognized in the current analysis.
         /// </summary>
         /// <value></value>
         public PredefinedForm[] FormFields { get; }
