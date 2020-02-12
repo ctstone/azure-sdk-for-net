@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Azure.AI.FormRecognizer.Tests.Core
 {
-    public class FormLayoutClientTests
+    public class LayoutClientTests
     {
         [Fact]
         public void Class_Is_AnalyzeClient()
@@ -21,9 +21,9 @@ namespace Azure.AI.FormRecognizer.Tests.Core
             Assert.True(client is AnalyzeClient<LayoutAnalysis>);
         }
 
-        private FormLayoutClient GetClient(params MockResponse[] responses)
+        private LayoutClient GetClient(params MockResponse[] responses)
         {
-            return new FormLayoutClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"));
+            return new LayoutClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"));
         }
     }
 }

@@ -15,7 +15,7 @@ You can use your own form file or a [sample form].
 
 var endpoint = new Uri("{your_endpoint}");
 var credential = new CognitiveKeyCredential("{your_service_key}");
-var client = new FormLayoutClient(endpoint, credential);
+var client = new LayoutClient(endpoint, credential);
 ```
 
 > Copy your `endpoint` and `credential` from the Azure Portal after you create your resource.
@@ -44,7 +44,7 @@ Console.WriteLine($"Created request with id {operation.Id}");
 
 ## Wait for analysis completion
 
-The `FormLayoutClient` can poll for the latest analysis status, asynchronously blocking the current thread.
+The `LayoutClient` can poll for the latest analysis status, asynchronously blocking the current thread.
 
 ```csharp
 var response = await operation.WaitForCompletionAsync();

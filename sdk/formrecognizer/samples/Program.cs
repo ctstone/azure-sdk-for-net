@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 // var options = new FormClientOptions();
                 // // options.Diagnostics.IsLoggingEnabled = true;
                 var client = new CustomFormClient(endpoint, credential);
-                var layoutClient = new FormLayoutClient(endpoint, credential);
+                var layoutClient = new LayoutClient(endpoint, credential);
                 var receiptClient = new ReceiptClient(endpoint, credential);
 
                 // await (op switch
@@ -331,7 +331,7 @@ namespace Azure.AI.FormRecognizer.Samples
             PrintResponse(response);
         }
 
-        private static async Task Sample_10_AnalyzeLayoutAsync(FormLayoutClient client)
+        private static async Task Sample_10_AnalyzeLayoutAsync(LayoutClient client)
         {
             var stream = File.OpenRead("/Users/chstone/Downloads/sample_data/Test/Invoice_6.pdf");
 
@@ -354,7 +354,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task UseLayout(FormLayoutClient client, string[] args)
+        private static async Task UseLayout(LayoutClient client, string[] args)
         {
             var op = args[1];
             await (op switch
@@ -366,7 +366,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeLayoutAsync(FormLayoutClient client, string[] args)
+        private static async Task AnalyzeLayoutAsync(LayoutClient client, string[] args)
         {
             var type = args[2];
             await (type switch
@@ -377,7 +377,7 @@ namespace Azure.AI.FormRecognizer.Samples
             });
         }
 
-        private static async Task AnalyzeLayoutFileAsync(FormLayoutClient client, string[] args)
+        private static async Task AnalyzeLayoutFileAsync(LayoutClient client, string[] args)
         {
             var filePath = args[3];
             var stream = File.OpenRead(filePath);
@@ -395,7 +395,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task AnalyzeLayoutUrlAsync(FormLayoutClient client, string[] args)
+        private static async Task AnalyzeLayoutUrlAsync(LayoutClient client, string[] args)
         {
             var url = new Uri(args[3]);
             var op = await client.StartAnalyzeAsync(url);
@@ -412,7 +412,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static async Task GetLayoutAnalysisAsync(FormLayoutClient client, string[] args)
+        private static async Task GetLayoutAnalysisAsync(LayoutClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
@@ -421,7 +421,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
         }
 
-        private static async Task GetLayoutAnalysisResultAsync(FormLayoutClient client, string[] args)
+        private static async Task GetLayoutAnalysisResultAsync(LayoutClient client, string[] args)
         {
             var modelId = args[1];
             var resultId = args[2];
