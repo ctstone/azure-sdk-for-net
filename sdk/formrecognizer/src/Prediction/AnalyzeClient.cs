@@ -22,7 +22,6 @@ namespace Azure.AI.FormRecognizer.Prediction
         where TAnalysis : class
     {
         private readonly HttpPipeline _pipeline;
-        // private readonly FormRecognizerClientOptions _options;
         private readonly string _basePath;
         private readonly JsonSerializerOptions _options;
         private Func<AnalysisInternal, TAnalysis> _analysisFactory;
