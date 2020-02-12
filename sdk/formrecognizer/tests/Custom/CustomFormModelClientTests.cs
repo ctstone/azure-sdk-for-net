@@ -5,7 +5,6 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Custom;
-using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core;
 using Azure.Core.Pipeline;

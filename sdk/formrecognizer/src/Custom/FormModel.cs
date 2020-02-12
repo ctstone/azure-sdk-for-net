@@ -3,8 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Custom
 {
 
     /// <summary>
@@ -41,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Models
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LabeledFormModel"/> class.
+        /// Initializes a new instance of the <see cref="FormModel"/> class.
         /// </summary>
         protected FormModel()
         {

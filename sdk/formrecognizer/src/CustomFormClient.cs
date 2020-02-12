@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Custom;
 using Azure.AI.FormRecognizer.Extensions;
 using Azure.AI.FormRecognizer.Http;
+using Azure.AI.FormRecognizer.Custom.Labels;
 using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -25,8 +26,8 @@ namespace Azure.AI.FormRecognizer
         internal const string BasePath = "/custom/models";
         internal readonly HttpPipeline _pipeline;
         internal readonly FormClientOptions _options;
+        internal readonly Func<CustomFormModel, LabeledFormModel> _labeledModelFactory;
         private readonly Func<CustomFormModel, FormModel> _modelFactory;
-        private readonly Func<CustomFormModel, LabeledFormModel> _labeledModelFactory;
 
         #region Constructors
         /// <summary>
@@ -97,10 +98,6 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         /// <param name="modelId">Model identifier</param>
         public virtual FormModelReference GetModelReference(string modelId) => new FormModelReference(modelId, _pipeline, _options.SerializationOptions);
-
-
-
-
 
         /// <summary>
         /// Asynchronously create and train a custom model.
@@ -195,109 +192,9 @@ namespace Azure.AI.FormRecognizer
         /// Get a <see cref="TrainingOperation{TModel}" /> status reference to an existhing training request.
         /// </summary>
         /// <param name="operationId">The operation id from a previous training request.</param>
-        /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<FormModel> StartTrainingX(string operationId, CancellationToken cancellationToken = default)
+        public virtual TrainingOperation<FormModel> StartTrainingX(string operationId)
         {
             return new TrainingOperation<FormModel>(_pipeline, operationId, _options.SerializationOptions, _modelFactory);
-        }
-
-        /// <summary>
-        /// Asynchronously create and train a custom model.
-        ///
-        /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training
-        /// operation, including waiting for its completion.
-        ///
-        /// ```csharp
-        /// var op = await client.StartTrainAsync(new TrainingRequest { Source = "https://example.org/" });
-        /// var requestId = op.Id;
-        /// var model = await op.WaitForCompletionAsync();
-        /// ```
-        /// </summary>
-        /// <param name="source">
-        /// The request must include a `Source` parameter that is either an externally accessible Azure storage
-        /// blob container Uri (preferably using a Shared Access Signature) or a valid path to a data folder in a locally
-        /// mounted drive (local folders are only supported when accessing an endpoint that is a self-hosted container).
-        ///
-        /// All training data must be under the source folder or subfolders under it. Models are trained using documents
-        /// matching any of the following file extensions:
-        ///
-        /// - `.pdf`
-        /// - `.jpg` / `.jpeg`
-        /// - `.png`
-        /// - `.tiff` / `.tif`
-        ///
-        /// Any other files are ignored.
-        /// </param>
-        /// <param name="filter">Optional source filter.</param>
-        /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<TrainingOperation<LabeledFormModel>> StartTrainingWithLabelsAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
-        {
-            using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), _options.SerializationOptions))
-            using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
-            {
-                response.ExpectStatus(HttpStatusCode.Created, _options.SerializationOptions);
-                var id = TrainingOperation<LabeledFormModel>.GetTrainingOperationId(response);
-                return new TrainingOperation<LabeledFormModel>(_pipeline, id, _options.SerializationOptions, _labeledModelFactory);
-            }
-        }
-
-        /// <summary>
-        /// Create and train a custom model.
-        ///
-        /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training
-        /// operation, including waiting for its completion.
-        ///
-        /// ```csharp
-        /// // Wait for completion is only available as an `async` method.
-        /// var op = client.TrainAsync(new TrainingRequest { Source = "https://example.org/" });
-        /// var requestId = op.Id;
-        /// while (!op.HasCompleted)
-        /// {
-        ///     op.UpdateStatus()
-        ///     Thread.Sleep(1000);
-        /// }
-        /// if (op.HasValue)
-        /// {
-        ///     var model = op.Value
-        /// }
-        /// ```
-        /// </summary>
-        /// <param name="source">
-        /// The request must include a `Source` parameter that is either an externally accessible Azure storage
-        /// blob container Uri (preferably using a Shared Access Signature) or a valid path to a data folder in a locally
-        /// mounted drive (local folders are only supported when accessing an endpoint that is a self-hosted container).
-        ///
-        /// All training data must be under the source folder or subfolders under it. Models are trained using documents
-        /// matching any of the following file extensions:
-        ///
-        /// - `.pdf`
-        /// - `.jpg` / `.jpeg`
-        /// - `.png`
-        /// - `.tiff` / `.tif`
-        ///
-        /// Any other files are ignored.
-        /// </param>
-        /// <param name="filter">Optional source filter.</param>
-        /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<LabeledFormModel> StartTrainingWithLabels(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
-        {
-            using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), _options.SerializationOptions))
-            using (var response = _pipeline.SendRequest(request, cancellationToken))
-            {
-                response.ExpectStatus(HttpStatusCode.Created, _options.SerializationOptions);
-                var id = TrainingOperation<LabeledFormModel>.GetTrainingOperationId(response);
-                return new TrainingOperation<LabeledFormModel>(_pipeline, id, _options.SerializationOptions, _labeledModelFactory);
-            }
-        }
-
-        /// <summary>
-        /// Get a <see cref="TrainingOperation{TModel}" /> status reference to an existhing training request.
-        /// </summary>
-        /// <param name="operationId">The operation id from a previous training request.</param>
-        /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<LabeledFormModel> StartTrainingWithLabelsX(string operationId, CancellationToken cancellationToken = default)
-        {
-            return new TrainingOperation<LabeledFormModel>(_pipeline, operationId, _options.SerializationOptions, _labeledModelFactory);
         }
 
         /// <summary>

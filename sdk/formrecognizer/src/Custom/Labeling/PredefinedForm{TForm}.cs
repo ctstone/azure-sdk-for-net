@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Labeling.Models
+namespace Azure.AI.FormRecognizer.Custom.Labels
 {
     /// <inheritdoc />
     public class PredefinedForm<TForm> : PredefinedForm

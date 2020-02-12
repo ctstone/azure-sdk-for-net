@@ -5,12 +5,12 @@ using System;
 using System.Linq;
 using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Labeling.Models
+namespace Azure.AI.FormRecognizer.Custom
 {
     /// <summary>
     /// Form analysis
     /// </summary>
-    public class LabeledFormAnalysis
+    public class FormAnalysis
     {
         /// <summary>
         /// Status of the operation.
@@ -46,38 +46,38 @@ namespace Azure.AI.FormRecognizer.Labeling.Models
         public TextExtractionPage[] TextExtractionPages { get; }
 
         /// <summary>
-        /// Get all tables recognized in the current analysis.
-        /// </summary>
-        public DataTable[] Tables { get; }
-
-        /// <summary>
-        /// Get the predefined form field groups recognized in the current analysis.
+        /// Get all fields recognized in the current analysis.
         /// </summary>
         /// <value></value>
-        public PredefinedForm[] FormFields { get; }
+        public FieldExtraction[] Extractions { get; }
 
-        internal LabeledFormAnalysis(AnalysisInternal analysis)
+        /// <summary>
+        /// Get all tables recognized in the current analysis.
+        /// </summary>
+        public ClusteredDataTable[] Tables { get; }
+
+        internal FormAnalysis(AnalysisInternal analysis)
         {
             var fieldExtractionPages = analysis.AnalyzeResult?.FieldExtractionPages ?? Array.Empty<FieldExtractionPageInternal>();
-            var predefinedFields = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFormInternal>();
             Status = analysis.Status;
             CreatedOn = analysis.CreatedOn;
             LastUpdatedOn = analysis.LastUpdatedOn;
             Version = analysis.AnalyzeResult?.Version;
             TextExtractionPages = analysis.AnalyzeResult?.TextExtractionPages ?? Array.Empty<TextExtractionPage>();
+            Extractions = fieldExtractionPages
+                .SelectMany((page) => page.Fields.Select((field) => (page, field)))
+                .Select((x) => new FieldExtraction(x.page, x.field))
+                .ToArray();
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
-                .Select((x) => new DataTable(x.page, x.table))
-                .ToArray();
-            FormFields = predefinedFields
-                .Select((x) => new PredefinedForm(x))
-                .ToArray();
+                .Select((x) => new ClusteredDataTable(x.page, x.table))
+                .ToArray() ?? Array.Empty<ClusteredDataTable>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LabeledFormAnalysis"/> class.
+        /// Initializes a new instance of the <see cref="FormAnalysis"/> class.
         /// </summary>
-        protected LabeledFormAnalysis()
+        protected FormAnalysis()
         {
         }
     }

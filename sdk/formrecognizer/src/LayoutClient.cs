@@ -4,8 +4,8 @@
 using System;
 using Azure.AI.FormRecognizer.Http;
 using Azure.AI.FormRecognizer.Prediction;
-using Azure.AI.FormRecognizer.Models;
 using Azure.Core;
+using Azure.AI.FormRecognizer.Layout;
 
 #pragma warning disable AZC0007 // Client type should have public constructor with equivalent parameters not taking 'FormReceiptClientOptions' as last argument
 

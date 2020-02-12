@@ -3,13 +3,14 @@
 
 using System;
 using System.Linq;
+using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Layout
 {
     /// <summary>
     /// Form analysis
     /// </summary>
-    public class FormAnalysis
+    public class LayoutAnalysis
     {
         /// <summary>
         /// Status of the operation.
@@ -27,9 +28,8 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedOn { get; }
 
         /// <summary>
-        /// Get the time spent to analyze the request.
+        /// Get analysis processing time.
         /// </summary>
-        /// <value></value>
         public TimeSpan Duration => LastUpdatedOn - CreatedOn;
 
         /// <summary>
@@ -45,17 +45,11 @@ namespace Azure.AI.FormRecognizer.Models
         public TextExtractionPage[] TextExtractionPages { get; }
 
         /// <summary>
-        /// Get all fields recognized in the current analysis.
-        /// </summary>
-        /// <value></value>
-        public FieldExtraction[] Extractions { get; }
-
-        /// <summary>
         /// Get all tables recognized in the current analysis.
         /// </summary>
-        public ClusteredDataTable[] Tables { get; }
+        public DataTable[] Tables { get; }
 
-        internal FormAnalysis(AnalysisInternal analysis)
+        internal LayoutAnalysis(AnalysisInternal analysis)
         {
             var fieldExtractionPages = analysis.AnalyzeResult?.FieldExtractionPages ?? Array.Empty<FieldExtractionPageInternal>();
             Status = analysis.Status;
@@ -63,20 +57,16 @@ namespace Azure.AI.FormRecognizer.Models
             LastUpdatedOn = analysis.LastUpdatedOn;
             Version = analysis.AnalyzeResult?.Version;
             TextExtractionPages = analysis.AnalyzeResult?.TextExtractionPages ?? Array.Empty<TextExtractionPage>();
-            Extractions = fieldExtractionPages
-                .SelectMany((page) => page.Fields.Select((field) => (page, field)))
-                .Select((x) => new FieldExtraction(x.page, x.field))
-                .ToArray();
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
-                .Select((x) => new ClusteredDataTable(x.page, x.table))
-                .ToArray() ?? Array.Empty<ClusteredDataTable>();
+                .Select((x) => new DataTable(x.page, x.table))
+                .ToArray() ?? Array.Empty<DataTable>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormAnalysis"/> class.
+        /// Initializes a new instance of the <see cref="LayoutAnalysis"/> class.
         /// </summary>
-        protected FormAnalysis()
+        protected LayoutAnalysis()
         {
         }
     }

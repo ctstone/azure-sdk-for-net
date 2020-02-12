@@ -3,13 +3,14 @@
 
 using System;
 using System.Linq;
+using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Custom.Labels
 {
     /// <summary>
     /// Form analysis
     /// </summary>
-    public class LayoutAnalysis
+    public class LabeledFormAnalysis
     {
         /// <summary>
         /// Status of the operation.
@@ -27,8 +28,9 @@ namespace Azure.AI.FormRecognizer.Models
         public DateTimeOffset LastUpdatedOn { get; }
 
         /// <summary>
-        /// Get analysis processing time.
+        /// Get the time spent to analyze the request.
         /// </summary>
+        /// <value></value>
         public TimeSpan Duration => LastUpdatedOn - CreatedOn;
 
         /// <summary>
@@ -48,9 +50,16 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public DataTable[] Tables { get; }
 
-        internal LayoutAnalysis(AnalysisInternal analysis)
+        /// <summary>
+        /// Get the predefined form field groups recognized in the current analysis.
+        /// </summary>
+        /// <value></value>
+        public PredefinedForm[] FormFields { get; }
+
+        internal LabeledFormAnalysis(AnalysisInternal analysis)
         {
             var fieldExtractionPages = analysis.AnalyzeResult?.FieldExtractionPages ?? Array.Empty<FieldExtractionPageInternal>();
+            var predefinedFields = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFormInternal>();
             Status = analysis.Status;
             CreatedOn = analysis.CreatedOn;
             LastUpdatedOn = analysis.LastUpdatedOn;
@@ -59,13 +68,16 @@ namespace Azure.AI.FormRecognizer.Models
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
                 .Select((x) => new DataTable(x.page, x.table))
-                .ToArray() ?? Array.Empty<DataTable>();
+                .ToArray();
+            FormFields = predefinedFields
+                .Select((x) => new PredefinedForm(x))
+                .ToArray();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LayoutAnalysis"/> class.
+        /// Initializes a new instance of the <see cref="LabeledFormAnalysis"/> class.
         /// </summary>
-        protected LayoutAnalysis()
+        protected LabeledFormAnalysis()
         {
         }
     }

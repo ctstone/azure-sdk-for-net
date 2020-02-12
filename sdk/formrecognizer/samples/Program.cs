@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
-using Azure.AI.FormRecognizer.Labels;
+using Azure.AI.FormRecognizer.Custom.Labels;
 
 namespace Azure.AI.FormRecognizer.Samples
 {

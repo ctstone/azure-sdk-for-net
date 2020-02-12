@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Labeling.Models
+namespace Azure.AI.FormRecognizer.Custom.Labels
 {
     /// <summary>
     /// Form analysis

@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 
-// TODO: expose strong typing for Fields dictionary.
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>

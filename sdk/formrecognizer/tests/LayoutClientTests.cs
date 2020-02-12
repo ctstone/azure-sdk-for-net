@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
-using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Layout;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core.Testing;
 using Xunit;

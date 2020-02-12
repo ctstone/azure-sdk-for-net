@@ -9,20 +9,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Extensions;
-using Azure.AI.FormRecognizer.Labeling.Models;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Labels
+namespace Azure.AI.FormRecognizer.Custom.Labels
 {
     /// <summary>
     /// The custom form model provides syncronous and asynchronous methods to manage a custom form model. The client
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class LabeledFormModelReference<TForm> : AnalyzeClient<LabeledFormAnalysis<TForm>>
-        where TForm : new()
+    public class LabeledFormModelReference : AnalyzeClient<LabeledFormAnalysis>
     {
         private readonly string _modelId;
 
@@ -38,7 +36,7 @@ namespace Azure.AI.FormRecognizer.Labels
         { }
 
         internal LabeledFormModelReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
-            : base(pipeline, options, GetModelPath(modelId), (analysis) => new LabeledFormAnalysis<TForm>(analysis))
+            : base(pipeline, options, GetModelPath(modelId), (analysis) => new LabeledFormAnalysis(analysis))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
             Throw.IfMissing(pipeline, nameof(pipeline));
