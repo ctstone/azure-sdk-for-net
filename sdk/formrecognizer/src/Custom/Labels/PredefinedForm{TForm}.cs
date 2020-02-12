@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prebuilt;
 
 namespace Azure.AI.FormRecognizer.Custom.Labels
 {

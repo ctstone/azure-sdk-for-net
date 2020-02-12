@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Custom.Labels;
+using Azure.AI.FormRecognizer.Prebuilt;
 
 namespace Azure.AI.FormRecognizer.Samples
 {
@@ -255,7 +256,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             // examine result fields
             Console.WriteLine("Fields:");
-            foreach (var extraction in result.FormFields)
+            foreach (var extraction in result.FieldGroups)
             {
                 Console.WriteLine($"- Type: '{extraction.DocumentType}'");
                 Console.WriteLine($"  FirstPage: {extraction.FirstPageNumber}");

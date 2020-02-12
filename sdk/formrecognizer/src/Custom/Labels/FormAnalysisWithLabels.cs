@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer.Prebuilt;
 
 namespace Azure.AI.FormRecognizer.Custom.Labels
 {
@@ -54,7 +55,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// Get the predefined form field groups recognized in the current analysis.
         /// </summary>
         /// <value></value>
-        public PredefinedForm[] FormFields { get; }
+        public PredefinedForm[] FieldGroups { get; }
 
         internal FormAnalysisWithLabels(AnalysisInternal analysis)
         {
@@ -69,7 +70,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
                 .Select((x) => new DataTable(x.page, x.table))
                 .ToArray();
-            FormFields = predefinedFields
+            FieldGroups = predefinedFields
                 .Select((x) => new PredefinedForm(x))
                 .ToArray();
         }
