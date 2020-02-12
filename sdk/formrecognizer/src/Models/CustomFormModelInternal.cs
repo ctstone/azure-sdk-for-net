@@ -9,7 +9,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Custom Form Recognizer model.
     /// </summary>
-    internal class CustomFormModel
+    internal class CustomFormModelInternal
     {
         /// <summary>
         /// Basic custom model information.
@@ -27,11 +27,11 @@ namespace Azure.AI.FormRecognizer.Models
         public TrainingResult TrainResult { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomFormModel"/> class.
+        /// Initializes a new instance of the <see cref="CustomFormModelInternal"/> class.
         /// </summary>
-        protected CustomFormModel()
+        protected CustomFormModelInternal()
         { }
 
-        internal static CustomFormModel Create() => new CustomFormModel();
+        internal static CustomFormModelInternal Create() => new CustomFormModelInternal();
     }
 }

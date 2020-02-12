@@ -54,7 +54,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
             using (var response = await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
-                var model = await response.GetJsonContentAsync<CustomFormModel>(Options, cancellationToken).ConfigureAwait(false);
+                var model = await response.GetJsonContentAsync<CustomFormModelInternal>(Options, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(new LabeledFormModel(model), response);
             }
         }
@@ -69,7 +69,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
             using (var response = Pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
-                var model = response.GetJsonContent<CustomFormModel>(Options);
+                var model = response.GetJsonContent<CustomFormModelInternal>(Options);
                 return Response.FromValue(new FormModel(model), response);
             }
         }

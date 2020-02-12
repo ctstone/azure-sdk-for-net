@@ -38,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         public float AverageAccuracy { get; }
 
 
-        internal LabeledFormModel(CustomFormModel model)
+        internal LabeledFormModel(CustomFormModelInternal model)
         {
             Information = model.ModelInfo;
             Documents = model.TrainResult?.TrainingDocuments ?? Array.Empty<TrainingDocument>();

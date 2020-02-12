@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         public ErrorDetails[] Errors { get; }
 
-        internal FormModel(CustomFormModel model)
+        internal FormModel(CustomFormModelInternal model)
         {
             Information = model.ModelInfo;
             Documents = model.TrainResult?.TrainingDocuments ?? Array.Empty<TrainingDocument>();

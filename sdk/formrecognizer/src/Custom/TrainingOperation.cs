@@ -24,8 +24,8 @@ namespace Azure.AI.FormRecognizer.Custom
         private readonly string _id;
         private readonly HttpPipeline _pipeline;
         private readonly JsonSerializerOptions _options;
-        private readonly Func<CustomFormModel, TModel> _modelFactory;
-        private CustomFormModel _value;
+        private readonly Func<CustomFormModelInternal, TModel> _modelFactory;
+        private CustomFormModelInternal _value;
         private TModel _model;
         private Response _response;
 
@@ -49,7 +49,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         public override bool HasValue => _value?.IsModelSuccess() ?? false;
 
-        internal TrainingOperation(HttpPipeline pipeline, string operationId, JsonSerializerOptions options, Func<CustomFormModel, TModel> modelFactory)
+        internal TrainingOperation(HttpPipeline pipeline, string operationId, JsonSerializerOptions options, Func<CustomFormModelInternal, TModel> modelFactory)
         {
             Throw.IfMissing(pipeline, nameof(pipeline));
             Throw.IfMissing(operationId, nameof(operationId));
@@ -117,7 +117,7 @@ namespace Azure.AI.FormRecognizer.Custom
         {
             _response = response;
             response.ExpectStatus(HttpStatusCode.OK, _options);
-            var model = response.GetJsonContent<CustomFormModel>(_options);
+            var model = response.GetJsonContent<CustomFormModelInternal>(_options);
             if (model.IsModelComplete())
             {
                 _value = model;
