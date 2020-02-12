@@ -259,7 +259,7 @@ namespace Azure.AI.FormRecognizer
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options.SerializationOptions);
-                var listing = await response.GetJsonContentAsync<ModelListing>(_options.SerializationOptions, cancellationToken).ConfigureAwait(false);
+                var listing = await response.GetJsonContentAsync<ModelListingInternal>(_options.SerializationOptions, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(listing.Summary, response);
             }
         }
@@ -274,7 +274,7 @@ namespace Azure.AI.FormRecognizer
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options.SerializationOptions);
-                var listing = response.GetJsonContent<ModelListing>(_options.SerializationOptions);
+                var listing = response.GetJsonContent<ModelListingInternal>(_options.SerializationOptions);
                 return Response.FromValue(listing.Summary, response);
             }
         }

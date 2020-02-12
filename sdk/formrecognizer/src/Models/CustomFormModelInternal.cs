@@ -19,12 +19,12 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// Keys extracted by the custom model.
         /// </summary>
-        public KeysResult Keys { get; internal set; }
+        public KeysResultInternal Keys { get; internal set; }
 
         /// <summary>
         /// Custom model training result.
         /// </summary>
-        public TrainingResult TrainResult { get; internal set; }
+        public TrainingResultInternal TrainResult { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomFormModelInternal"/> class.

@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Model listing.
     /// </summary>
-    public class ModelListing
+    internal class ModelListingInternal
     {
         /// <summary>
         /// Summary of models.
@@ -26,11 +26,11 @@ namespace Azure.AI.FormRecognizer.Models
         public string NextLink { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelListing"/> struct.
+        /// Initializes a new instance of the <see cref="ModelListingInternal"/> struct.
         /// </summary>
-        protected ModelListing()
+        protected ModelListingInternal()
         { }
 
-        internal static ModelListing Create() => new ModelListing();
+        internal static ModelListingInternal Create() => new ModelListingInternal();
     }
 }

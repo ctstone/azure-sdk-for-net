@@ -56,7 +56,7 @@ namespace Azure.AI.FormRecognizer.Custom
             using (var response = _pipeline.SendRequest(request, CancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, _options);
-                var listing = response.GetJsonContent<ModelListing>(_options);
+                var listing = response.GetJsonContent<ModelListingInternal>(_options);
                 return Page<ModelInfo>.FromValues(listing.ModelList.ToList(), listing.NextLink, response);
             }
         }
@@ -71,7 +71,7 @@ namespace Azure.AI.FormRecognizer.Custom
                 using (var response = _pipeline.SendRequest(request, CancellationToken))
                 {
                     response.ExpectStatus(HttpStatusCode.OK, _options);
-                    var listing = response.GetJsonContent<ModelListing>(_options);
+                    var listing = response.GetJsonContent<ModelListingInternal>(_options);
                     nextLink = listing.NextLink;
                     foreach (var model in listing.ModelList)
                     {

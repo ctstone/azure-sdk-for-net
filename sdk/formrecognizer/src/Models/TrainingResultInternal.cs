@@ -6,7 +6,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Custom model training result.
     /// </summary>
-    public class TrainingResult
+    internal class TrainingResultInternal
     {
         /// <summary>
         /// List of the documents used to train the model and any errors reported in each document.
@@ -29,10 +29,10 @@ namespace Azure.AI.FormRecognizer.Models
         public ErrorDetails[] Errors { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrainingResult"/> class.
+        /// Initializes a new instance of the <see cref="TrainingResultInternal"/> class.
         /// </summary>
-        protected TrainingResult() { }
+        protected TrainingResultInternal() { }
 
-        internal static TrainingResult Create() => new TrainingResult();
+        internal static TrainingResultInternal Create() => new TrainingResultInternal();
     }
 }

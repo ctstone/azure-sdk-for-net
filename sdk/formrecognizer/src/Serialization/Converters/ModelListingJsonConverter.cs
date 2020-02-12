@@ -8,9 +8,9 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization.Converters
 {
-    internal class ModelListingJsonConverter : JsonConverter<ModelListing>
+    internal class ModelListingJsonConverter : JsonConverter<ModelListingInternal>
     {
-        public override ModelListing Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override ModelListingInternal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             using JsonDocument json = JsonDocument.ParseValue(ref reader);
             JsonElement root = json.RootElement;
@@ -18,14 +18,14 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
             return Read(root);
         }
 
-        public override void Write(Utf8JsonWriter writer, ModelListing value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, ModelListingInternal value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }
 
-        public static ModelListing Read(JsonElement root)
+        public static ModelListingInternal Read(JsonElement root)
         {
-            var modelListing = ModelListing.Create();
+            var modelListing = ModelListingInternal.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -36,7 +36,7 @@ namespace Azure.AI.FormRecognizer.Serialization.Converters
             return modelListing;
         }
 
-        private static void ReadPropertyValue(ref ModelListing modelListing, JsonProperty property)
+        private static void ReadPropertyValue(ref ModelListingInternal modelListing, JsonProperty property)
         {
             if (property.NameEquals("summary"))
             {
