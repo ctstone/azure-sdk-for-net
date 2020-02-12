@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
     /// <summary>
     /// A custom, labeled form model.
     /// </summary>
-    public class LabeledFormModel
+    public class FormModelWithLabels
     {
         /// <summary>
         /// Get information about the current model.
@@ -38,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         public float AverageAccuracy { get; }
 
 
-        internal LabeledFormModel(CustomFormModelInternal model)
+        internal FormModelWithLabels(CustomFormModelInternal model)
         {
             Information = model.ModelInfo;
             Documents = model.TrainResult?.TrainingDocuments ?? Array.Empty<TrainingDocument>();
@@ -48,9 +48,9 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LabeledFormModel"/> class.
+        /// Initializes a new instance of the <see cref="FormModelWithLabels"/> class.
         /// </summary>
-        protected LabeledFormModel()
+        protected FormModelWithLabels()
         {
         }
     }

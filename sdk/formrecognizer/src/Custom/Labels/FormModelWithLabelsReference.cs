@@ -20,8 +20,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
     /// supports retrieving and deleting models. The client also supports analyzing new forms from both
     /// <see cref="Stream" /> and <see cref="Uri" /> objects.
     /// </summary>
-    public class LabeledFormModelReference<TForm> : AnalyzeClient<LabeledFormAnalysis<TForm>>
-        where TForm : new()
+    public class FormModelWithLabelsReference : AnalyzeClient<FormAnalysisWithLabels>
     {
         private readonly string _modelId;
 
@@ -31,13 +30,13 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         public string ModelId => _modelId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LabeledFormModelReference"/> class for mocking.
+        /// Initializes a new instance of the <see cref="FormModelWithLabelsReference"/> class for mocking.
         /// </summary>
-        protected LabeledFormModelReference()
+        protected FormModelWithLabelsReference()
         { }
 
-        internal LabeledFormModelReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
-            : base(pipeline, options, GetModelPath(modelId), (analysis) => new LabeledFormAnalysis<TForm>(analysis))
+        internal FormModelWithLabelsReference(string modelId, HttpPipeline pipeline, JsonSerializerOptions options)
+            : base(pipeline, options, GetModelPath(modelId), (analysis) => new FormAnalysisWithLabels(analysis))
         {
             Throw.IfNullOrEmpty(modelId, nameof(modelId));
             Throw.IfMissing(pipeline, nameof(pipeline));
@@ -49,14 +48,14 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// Asynchronously get detailed information about a custom model.
         /// </summary>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<LabeledFormModel>> GetAsync(CancellationToken cancellationToken = default)
+        public async virtual Task<Response<FormModelWithLabels>> GetAsync(CancellationToken cancellationToken = default)
         {
             using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys: null))
             using (var response = await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
                 var model = await response.GetJsonContentAsync<CustomFormModelInternal>(Options, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(new LabeledFormModel(model), response);
+                return Response.FromValue(new FormModelWithLabels(model), response);
             }
         }
 

@@ -19,9 +19,9 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </summary>
         /// <param name="client">Custom form client.</param>
         /// <param name="modelId">Model identifier.</param>
-        public static LabeledFormModelReference GetModelReferenceWithLabels(this CustomFormClient client, string modelId)
+        public static FormModelWithLabelsReference GetModelReferenceWithLabels(this CustomFormClient client, string modelId)
         {
-            return new LabeledFormModelReference(modelId, client._pipeline, client._options.SerializationOptions);
+            return new FormModelWithLabelsReference(modelId, client._pipeline, client._options.SerializationOptions);
         }
 
         /// <summary>
@@ -29,10 +29,10 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </summary>
         /// <param name="client">Custom form client.</param>
         /// <param name="modelId">Model identifier.</param>
-        public static LabeledFormModelReference<TForm> GetModelReferenceWithLabels<TForm>(this CustomFormClient client, string modelId)
+        public static FormModelWithLabelsReference<TForm> GetModelReferenceWithLabels<TForm>(this CustomFormClient client, string modelId)
             where TForm : new()
         {
-            return new LabeledFormModelReference<TForm>(modelId, client._pipeline, client._options.SerializationOptions);
+            return new FormModelWithLabelsReference<TForm>(modelId, client._pipeline, client._options.SerializationOptions);
         }
 
         /// <summary>
@@ -65,14 +65,14 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public static async Task<TrainingOperation<LabeledFormModel>> StartTrainingWithLabelsAsync(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public static async Task<TrainingOperation<FormModelWithLabels>> StartTrainingWithLabelsAsync(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = client._pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), client._options.SerializationOptions))
             using (var response = await client._pipeline.SendRequestAsync(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.Created, client._options.SerializationOptions);
-                var id = TrainingOperation<LabeledFormModel>.GetTrainingOperationId(response);
-                return new TrainingOperation<LabeledFormModel>(client._pipeline, id, client._options.SerializationOptions, client._labeledModelFactory);
+                var id = TrainingOperation<FormModelWithLabels>.GetTrainingOperationId(response);
+                return new TrainingOperation<FormModelWithLabels>(client._pipeline, id, client._options.SerializationOptions, client._labeledModelFactory);
             }
         }
 
@@ -115,14 +115,14 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public static TrainingOperation<LabeledFormModel> StartTrainingWithLabels(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public static TrainingOperation<FormModelWithLabels> StartTrainingWithLabels(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = client._pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), client._options.SerializationOptions))
             using (var response = client._pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.Created, client._options.SerializationOptions);
-                var id = TrainingOperation<LabeledFormModel>.GetTrainingOperationId(response);
-                return new TrainingOperation<LabeledFormModel>(client._pipeline, id, client._options.SerializationOptions, client._labeledModelFactory);
+                var id = TrainingOperation<FormModelWithLabels>.GetTrainingOperationId(response);
+                return new TrainingOperation<FormModelWithLabels>(client._pipeline, id, client._options.SerializationOptions, client._labeledModelFactory);
             }
         }
 
@@ -131,9 +131,9 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </summary>
         /// <param name="client"></param>
         /// <param name="operationId">The operation id from a previous training request.</param>
-        public static TrainingOperation<LabeledFormModel> StartTrainingWithLabelsX(this CustomFormClient client, string operationId)
+        public static TrainingOperation<FormModelWithLabels> StartTrainingWithLabelsX(this CustomFormClient client, string operationId)
         {
-            return new TrainingOperation<LabeledFormModel>(client._pipeline, operationId, client._options.SerializationOptions, client._labeledModelFactory);
+            return new TrainingOperation<FormModelWithLabels>(client._pipeline, operationId, client._options.SerializationOptions, client._labeledModelFactory);
         }
     }
 }

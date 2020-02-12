@@ -10,7 +10,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
     /// <summary>
     /// Form analysis
     /// </summary>
-    public class LabeledFormAnalysis
+    public class FormAnalysisWithLabels
     {
         /// <summary>
         /// Status of the operation.
@@ -56,7 +56,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// <value></value>
         public PredefinedForm[] FormFields { get; }
 
-        internal LabeledFormAnalysis(AnalysisInternal analysis)
+        internal FormAnalysisWithLabels(AnalysisInternal analysis)
         {
             var fieldExtractionPages = analysis.AnalyzeResult?.FieldExtractionPages ?? Array.Empty<FieldExtractionPageInternal>();
             var predefinedFields = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFormInternal>();
@@ -75,9 +75,9 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LabeledFormAnalysis"/> class.
+        /// Initializes a new instance of the <see cref="FormAnalysisWithLabels"/> class.
         /// </summary>
-        protected LabeledFormAnalysis()
+        protected FormAnalysisWithLabels()
         {
         }
     }

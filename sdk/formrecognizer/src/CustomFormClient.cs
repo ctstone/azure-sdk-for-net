@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer
         internal const string BasePath = "/custom/models";
         internal readonly HttpPipeline _pipeline;
         internal readonly FormClientOptions _options;
-        internal readonly Func<CustomFormModelInternal, LabeledFormModel> _labeledModelFactory;
+        internal readonly Func<CustomFormModelInternal, FormModelWithLabels> _labeledModelFactory;
         private readonly Func<CustomFormModelInternal, FormModel> _modelFactory;
 
         #region Constructors
@@ -82,7 +82,7 @@ namespace Azure.AI.FormRecognizer
             _pipeline = pipeline;
             _options = options;
             _modelFactory = (model) => new FormModel(model);
-            _labeledModelFactory = (model) => new LabeledFormModel(model);
+            _labeledModelFactory = (model) => new FormModelWithLabels(model);
         }
 
         /// <summary>
