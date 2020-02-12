@@ -102,7 +102,7 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Asynchronously create and train a custom model.
         ///
-        /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training
+        /// This method returns a <see cref="Operation{TModel}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -128,7 +128,7 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<TrainingOperation<FormModel>> StartTrainingAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public async virtual Task<Operation<FormModel>> StartTrainingAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter), _options.SerializationOptions))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
@@ -142,7 +142,7 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Create and train a custom model.
         ///
-        /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training
+        /// This method returns a <see cref="Operation{TModel}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -177,7 +177,7 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<FormModel> StartTraining(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public virtual Operation<FormModel> StartTraining(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter), _options.SerializationOptions))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
@@ -189,10 +189,10 @@ namespace Azure.AI.FormRecognizer
         }
 
         /// <summary>
-        /// Get a <see cref="TrainingOperation{TModel}" /> status reference to an existhing training request.
+        /// Get a <see cref="Operation{TModel}" /> status reference to an existhing training request.
         /// </summary>
         /// <param name="operationId">The operation id from a previous training request.</param>
-        public virtual TrainingOperation<FormModel> StartTrainingX(string operationId)
+        public virtual Operation<FormModel> GetTrainingOperation(string operationId)
         {
             return new TrainingOperation<FormModel>(_pipeline, operationId, _options.SerializationOptions, _modelFactory);
         }

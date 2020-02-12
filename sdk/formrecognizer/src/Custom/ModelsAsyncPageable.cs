@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// A collection of custom form models that may take multiple service requests to asynchronously iterate over.
     /// </summary>
-    public class ModelsAsyncPageable : AsyncPageable<ModelInfo>
+    internal class ModelsAsyncPageable : AsyncPageable<ModelInfo>
     {
         private HttpPipeline _pipeline;
         private JsonSerializerOptions _options;

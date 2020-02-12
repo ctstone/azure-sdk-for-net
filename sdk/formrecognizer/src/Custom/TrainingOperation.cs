@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// Represents a long-running training operation.
     /// </summary>
-    public class TrainingOperation<TModel> : Operation<TModel>
+    internal class TrainingOperation<TModel> : Operation<TModel>
         where TModel : class
     {
         private const string LocationHeader = "Location";

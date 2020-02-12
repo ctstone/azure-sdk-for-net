@@ -642,7 +642,7 @@ namespace Azure.AI.FormRecognizer.Samples
             var op = await client.StartTrainingWithLabelsAsync(source, new SourceFilter(prefix));
 
             Console.WriteLine("Waiting for completion...");
-            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(10));
+            await op.WaitForCompletionAsync(TimeSpan.FromSeconds(10), default);
             if (op.HasValue)
             {
                 Console.WriteLine($"Status: {op.Value.Information.Status}");

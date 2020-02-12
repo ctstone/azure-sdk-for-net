@@ -65,7 +65,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public static async Task<TrainingOperation<FormModelWithLabels>> StartTrainingWithLabelsAsync(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public static async Task<Operation<FormModelWithLabels>> StartTrainingWithLabelsAsync(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = client._pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), client._options.SerializationOptions))
             using (var response = await client._pipeline.SendRequestAsync(request, cancellationToken))
@@ -115,7 +115,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public static TrainingOperation<FormModelWithLabels> StartTrainingWithLabels(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public static Operation<FormModelWithLabels> StartTrainingWithLabels(this CustomFormClient client, string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = client._pipeline.CreateTrainRequest(new TrainingRequest(source, filter, useLabelFile: true), client._options.SerializationOptions))
             using (var response = client._pipeline.SendRequest(request, cancellationToken))
@@ -131,7 +131,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// </summary>
         /// <param name="client"></param>
         /// <param name="operationId">The operation id from a previous training request.</param>
-        public static TrainingOperation<FormModelWithLabels> StartTrainingWithLabelsX(this CustomFormClient client, string operationId)
+        public static Operation<FormModelWithLabels> GetTrainingOperationWithLabels(this CustomFormClient client, string operationId)
         {
             return new TrainingOperation<FormModelWithLabels>(client._pipeline, operationId, client._options.SerializationOptions, client._labeledModelFactory);
         }
