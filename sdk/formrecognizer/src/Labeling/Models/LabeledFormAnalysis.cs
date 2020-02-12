@@ -3,8 +3,9 @@
 
 using System;
 using System.Linq;
+using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Labeling.Models
 {
     /// <summary>
     /// Form analysis

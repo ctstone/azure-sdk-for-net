@@ -5,12 +5,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Models;
-using Azure.AI.FormRecognizer.Serialization.Converters;
-using Azure.Core;
-using Azure.Core.Diagnostics;
+using Azure.AI.FormRecognizer.Labels;
 
 namespace Azure.AI.FormRecognizer.Samples
 {

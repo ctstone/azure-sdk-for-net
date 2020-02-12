@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.ComponentModel;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,8 +23,8 @@ namespace Azure.AI.FormRecognizer
     public class CustomFormClient
     {
         internal const string BasePath = "/custom/models";
-        private readonly HttpPipeline _pipeline;
-        private readonly FormClientOptions _options;
+        internal readonly HttpPipeline _pipeline;
+        internal readonly FormClientOptions _options;
         private readonly Func<CustomFormModel, FormModel> _modelFactory;
         private readonly Func<CustomFormModel, LabeledFormModel> _labeledModelFactory;
 
@@ -97,21 +98,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="modelId">Model identifier</param>
         public virtual FormModelReference GetModelReference(string modelId) => new FormModelReference(modelId, _pipeline, _options.SerializationOptions);
 
-        /// <summary>
-        /// Access a model that uses labels to perform analysis, retrieve metadata, or delete it.
-        /// </summary>
-        /// <param name="modelId">Model identifier</param>
-        public virtual LabeledFormModelReference GetModelReferenceWithLabels(string modelId) => new LabeledFormModelReference(modelId, _pipeline, _options.SerializationOptions);
 
-        /// <summary>
-        /// Access a model that uses labels to perform analysis, retrieve metadata, or delete it.
-        /// </summary>
-        /// <param name="modelId">Model identifier</param>
-        public virtual LabeledFormModelReference<TForm> GetModelReferenceWithLabels<TForm>(string modelId)
-            where TForm : new()
-        {
-            return new LabeledFormModelReference<TForm>(modelId, _pipeline, _options.SerializationOptions);
-        }
+
+
 
         /// <summary>
         /// Asynchronously create and train a custom model.
@@ -392,5 +381,17 @@ namespace Azure.AI.FormRecognizer
                 return Response.FromValue(listing.Summary, response);
             }
         }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => base.Equals(obj);
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => base.GetHashCode();
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString() => base.ToString();
     }
 }

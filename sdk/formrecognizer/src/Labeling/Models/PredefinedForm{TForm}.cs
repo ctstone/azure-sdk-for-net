@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Azure.AI.FormRecognizer.Models;
 
-namespace Azure.AI.FormRecognizer.Models
+namespace Azure.AI.FormRecognizer.Labeling.Models
 {
     /// <inheritdoc />
     public class PredefinedForm<TForm> : PredefinedForm

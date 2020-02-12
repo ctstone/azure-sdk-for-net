@@ -9,11 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.Arguments;
 using Azure.AI.FormRecognizer.Extensions;
+using Azure.AI.FormRecognizer.Labeling.Models;
 using Azure.AI.FormRecognizer.Models;
 using Azure.AI.FormRecognizer.Prediction;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.FormRecognizer.Custom
+namespace Azure.AI.FormRecognizer.Labels
 {
     /// <summary>
     /// The custom form model provides syncronous and asynchronous methods to manage a custom form model. The client
