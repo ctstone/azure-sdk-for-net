@@ -49,14 +49,14 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<Response<FormModel>> GetAsync(bool? includeKeys = default, CancellationToken cancellationToken = default)
+        public async virtual Task<Response<CustomFormModel>> GetAsync(bool? includeKeys = default, CancellationToken cancellationToken = default)
         {
             using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
             using (var response = await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
                 var model = await response.GetJsonContentAsync<CustomFormModelInternal>(Options, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(new FormModel(model), response);
+                return Response.FromValue(new CustomFormModel(model), response);
             }
         }
 
@@ -65,14 +65,14 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         /// /// <param name="includeKeys">Include list of extracted keys in model information.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<FormModel> Get(bool? includeKeys = default, CancellationToken cancellationToken = default)
+        public virtual Response<CustomFormModel> Get(bool? includeKeys = default, CancellationToken cancellationToken = default)
         {
             using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys))
             using (var response = Pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
                 var model = response.GetJsonContent<CustomFormModelInternal>(Options);
-                return Response.FromValue(new FormModel(model), response);
+                return Response.FromValue(new CustomFormModel(model), response);
             }
         }
 

@@ -64,14 +64,14 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// Get detailed information about a custom model.
         /// </summary>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual Response<FormModel> Get(CancellationToken cancellationToken = default)
+        public virtual Response<CustomFormModel> Get(CancellationToken cancellationToken = default)
         {
             using (var request = Pipeline.CreateGetModelRequest(_modelId, includeKeys: null))
             using (var response = Pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.OK, Options);
                 var model = response.GetJsonContent<CustomFormModelInternal>(Options);
-                return Response.FromValue(new FormModel(model), response);
+                return Response.FromValue(new CustomFormModel(model), response);
             }
         }
 

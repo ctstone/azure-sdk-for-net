@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// A custom form model.
     /// </summary>
-    public class FormModel
+    public class CustomFormModel
     {
         /// <summary>
         /// Get information about the current model.
@@ -24,7 +24,7 @@ namespace Azure.AI.FormRecognizer.Custom
         public TrainingDocument[] Documents { get; }
 
         /// <summary>
-        /// Get a mapping of recognized documents and their respective keys.
+        /// Get a mapping of recognized document clusters and their respective keys.
         /// </summary>
         public IDictionary<string, string[]> DocumentKeyClusters { get; }
 
@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         public ErrorDetails[] Errors { get; }
 
-        internal FormModel(CustomFormModelInternal model)
+        internal CustomFormModel(CustomFormModelInternal model)
         {
             Information = model.ModelInfo;
             Documents = model.TrainResult?.TrainingDocuments ?? Array.Empty<TrainingDocument>();
@@ -42,9 +42,9 @@ namespace Azure.AI.FormRecognizer.Custom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormModel"/> class.
+        /// Initializes a new instance of the <see cref="CustomFormModel"/> class.
         /// </summary>
-        protected FormModel()
+        protected CustomFormModel()
         {
         }
 
