@@ -99,5 +99,17 @@ Console.WriteLine($"DueDate: {invoice.Form.DueDate}");
 Console.WriteLine($"Date: {invoice.Form.Date}");
 ```
 
+### Retieve field metadata
+
+Only the form _values_ are mapped to your custom type. In order to access the field's original text, bounding box, and confidence, use the `Fields` dictionary:
+
+```csharp
+var dateField = invoice.Fields["InvoiceDate"];
+Console.WriteLine($"Date Original Text: {dateField.Text}");
+Console.WriteLine($"Date Bounding Box: {string.join(',', dateField.BoundingBox)}");
+Console.WriteLine($"Date Confidence: {dateField.Confidence}");
+```
+
+
 [Analyze File with Labels]: ./08-Analyze-File-With-Labeled-Custom-Model
 [list your models]: ./05-List-Custom-Models.md

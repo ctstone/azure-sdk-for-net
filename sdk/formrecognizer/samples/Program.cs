@@ -62,6 +62,10 @@ namespace Azure.AI.FormRecognizer.Samples
                 Console.WriteLine($"DueDate: {invoice.Form.DueDate}");
                 Console.WriteLine($"Date: {invoice.Form.Date}");
 
+                var invoiceText = invoice.Fields["InvoiceVatId"].Text;
+                var invoiceBoundingBox = string.Join(',', invoice.Fields["InvoiceVatId"].BoundingBox);
+                var confidence = invoice.Fields["InvoiceVatId"].Confidence;
+
                 // await Sample_08_AnalyzeFileWithLabeledCustomModelAsync(client);
             }
             catch (Exception ex)
