@@ -44,7 +44,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// Get raw text extractions by page.
         /// </summary>
         /// <value></value>
-        public TextExtractionPage[] TextExtractionPages { get; }
+        internal TextExtractionPage[] TextExtractionPages { get; }
 
         /// <summary>
         /// Get all tables recognized in the current analysis.

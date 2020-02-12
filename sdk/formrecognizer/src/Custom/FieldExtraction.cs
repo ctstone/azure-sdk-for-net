@@ -13,7 +13,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// Get the cluster identifier associated with the current field extraction.
         /// </summary>
-        public int ClusterId { get; }
+        public int DocumentClusterId { get; }
 
         /// <summary>
         /// Get the page number where the current field was extracted.
@@ -23,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// Information about the extracted key in a key-value pair.
         /// </summary>
-        public FieldExtractionElement Field { get; }
+        public FieldExtractionElement Name { get; }
 
         /// <summary>
         /// Information about the extracted value in a key-value pair.
@@ -37,9 +37,9 @@ namespace Azure.AI.FormRecognizer.Custom
 
         internal FieldExtraction(FieldExtractionPageInternal page, FieldExtractionInternal fieldExtraction)
         {
-            ClusterId = page.ClusterId.Value;
+            DocumentClusterId = page.DocumentClusterId.Value;
             PageNumber = page.PageNumber;
-            Field = fieldExtraction.Field;
+            Name = fieldExtraction.Name;
             Value = fieldExtraction.Value;
             Confidence = fieldExtraction.Confidence;
         }

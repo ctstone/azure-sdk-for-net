@@ -43,13 +43,13 @@ namespace Azure.AI.FormRecognizer.Custom
         /// Get raw text extractions by page.
         /// </summary>
         /// <value></value>
-        public TextExtractionPage[] TextExtractionPages { get; }
+        internal TextExtractionPage[] TextExtractionPages { get; }
 
         /// <summary>
         /// Get all fields recognized in the current analysis.
         /// </summary>
         /// <value></value>
-        public FieldExtraction[] Extractions { get; }
+        public FieldExtraction[] Fields { get; }
 
         /// <summary>
         /// Get all tables recognized in the current analysis.
@@ -64,7 +64,7 @@ namespace Azure.AI.FormRecognizer.Custom
             LastUpdatedOn = analysis.LastUpdatedOn;
             Version = analysis.AnalyzeResult?.Version;
             TextExtractionPages = analysis.AnalyzeResult?.TextExtractionPages ?? Array.Empty<TextExtractionPage>();
-            Extractions = fieldExtractionPages
+            Fields = fieldExtractionPages
                 .SelectMany((page) => page.Fields.Select((field) => (page, field)))
                 .Select((x) => new FieldExtraction(x.page, x.field))
                 .ToArray();

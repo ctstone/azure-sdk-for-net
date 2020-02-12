@@ -42,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Prebuilt
         /// Get raw text extractions by page.
         /// </summary>
         /// <value></value>
-        public TextExtractionPage[] TextExtractionPages { get; }
+        internal TextExtractionPage[] TextExtractionPages { get; }
 
         /// <summary>
         /// Get all recognized receipts from the current analysis.

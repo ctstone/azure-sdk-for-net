@@ -38,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("clusterId"))
             {
-                fieldExtractionPage.ClusterId = property.Value.GetInt32();
+                fieldExtractionPage.DocumentClusterId = property.Value.GetInt32();
             }
             else if (property.NameEquals("keyValuePairs"))
             {

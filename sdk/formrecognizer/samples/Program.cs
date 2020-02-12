@@ -46,6 +46,7 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
+
                 var model = client.GetModelReferenceWithLabels<Invoice>("a61aba7f-98fd-49af-94f3-3e32695bb93f");
                 Console.WriteLine("Sending...");
                 var operation = model.StartAnalyze("657504d5-58df-4316-b182-262e1f4c54e1");
@@ -154,11 +155,11 @@ namespace Azure.AI.FormRecognizer.Samples
 
             // examine result fields
             Console.WriteLine("Fields:");
-            foreach (var extraction in result.Extractions)
+            foreach (var extraction in result.Fields)
             {
-                Console.WriteLine($"- Field: '{extraction.Field.Text}'");
+                Console.WriteLine($"- Field: '{extraction.Name.Text}'");
                 Console.WriteLine($"  Value: '{extraction.Value.Text}'");
-                Console.WriteLine($"  ClusterId: {extraction.ClusterId}");
+                Console.WriteLine($"  ClusterId: {extraction.DocumentClusterId}");
                 Console.WriteLine($"  Page: {extraction.PageNumber}");
             }
 
@@ -544,9 +545,9 @@ namespace Azure.AI.FormRecognizer.Samples
             if (op.HasValue)
             {
                 WriteTables(Console.Out, op.Value.Tables);
-                foreach (var field in op.Value.Extractions)
+                foreach (var field in op.Value.Fields)
                 {
-                    Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
+                    Console.WriteLine($"{field.Name.Text}: {field.Value.Text}");
                 }
             }
             else
@@ -562,9 +563,9 @@ namespace Azure.AI.FormRecognizer.Samples
             var result = await client.GetModelReference(modelId).GetAnalysisResultAsync(resultId);
 
             WriteTables(Console.Out, result.Value.Tables);
-            foreach (var field in result.Value.Extractions)
+            foreach (var field in result.Value.Fields)
             {
-                Console.WriteLine($"{field.Field.Text}: {field.Value.Text}");
+                Console.WriteLine($"{field.Name.Text}: {field.Value.Text}");
             }
         }
 

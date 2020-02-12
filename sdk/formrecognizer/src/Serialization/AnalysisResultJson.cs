@@ -41,9 +41,9 @@ namespace Azure.AI.FormRecognizer.Serialization
             {
                 foreach (var keyValuePair in page.Fields)
                 {
-                    if (keyValuePair.Field != default)
+                    if (keyValuePair.Name != default)
                     {
-                        keyValuePair.Field.ResolveTextReferences(analysisResult.TextExtractionPages);
+                        keyValuePair.Name.ResolveTextReferences(analysisResult.TextExtractionPages);
                     }
                     if (keyValuePair.Value != default)
                     {
