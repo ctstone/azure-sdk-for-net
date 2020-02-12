@@ -103,12 +103,12 @@ namespace Azure.AI.FormRecognizer.Tests.Custom
             Assert.Equal(expectStatus, response.Value.Information.Status);
         }
 
-        private TrainingOperation<CustomFormModel> GetOperation(params MockResponse[] responses)
+        private TrainingOperation<FormModel> GetOperation(params MockResponse[] responses)
         {
             var mockTransport = new MockTransport(responses);
             var pipeline = new HttpPipeline(mockTransport);
             var options = new FormClientOptions();
-            return new TrainingOperation<CustomFormModel>(pipeline, FakeOperationId, options.SerializationOptions, (model) => new CustomFormModel(model));
+            return new TrainingOperation<FormModel>(pipeline, FakeOperationId, options.SerializationOptions, (model) => new FormModel(model));
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Azure.AI.FormRecognizer
         internal readonly HttpPipeline _pipeline;
         internal readonly FormClientOptions _options;
         internal readonly Func<CustomFormModelInternal, LabeledFormModel> _labeledModelFactory;
-        private readonly Func<CustomFormModelInternal, CustomFormModel> _modelFactory;
+        private readonly Func<CustomFormModelInternal, FormModel> _modelFactory;
 
         #region Constructors
         /// <summary>
@@ -81,7 +81,7 @@ namespace Azure.AI.FormRecognizer
         {
             _pipeline = pipeline;
             _options = options;
-            _modelFactory = (model) => new CustomFormModel(model);
+            _modelFactory = (model) => new FormModel(model);
             _labeledModelFactory = (model) => new LabeledFormModel(model);
         }
 
@@ -128,14 +128,14 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public async virtual Task<TrainingOperation<CustomFormModel>> StartTrainingAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public async virtual Task<TrainingOperation<FormModel>> StartTrainingAsync(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter), _options.SerializationOptions))
             using (var response = await _pipeline.SendRequestAsync(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.Created, _options.SerializationOptions);
-                var id = TrainingOperation<CustomFormModel>.GetTrainingOperationId(response);
-                return new TrainingOperation<CustomFormModel>(_pipeline, id, _options.SerializationOptions, _modelFactory);
+                var id = TrainingOperation<FormModel>.GetTrainingOperationId(response);
+                return new TrainingOperation<FormModel>(_pipeline, id, _options.SerializationOptions, _modelFactory);
             }
         }
 
@@ -177,14 +177,14 @@ namespace Azure.AI.FormRecognizer
         /// </param>
         /// <param name="filter">Optional source filter.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
-        public virtual TrainingOperation<CustomFormModel> StartTraining(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
+        public virtual TrainingOperation<FormModel> StartTraining(string source, SourceFilter filter = default, CancellationToken cancellationToken = default)
         {
             using (var request = _pipeline.CreateTrainRequest(new TrainingRequest(source, filter), _options.SerializationOptions))
             using (var response = _pipeline.SendRequest(request, cancellationToken))
             {
                 response.ExpectStatus(HttpStatusCode.Created, _options.SerializationOptions);
-                var id = TrainingOperation<CustomFormModel>.GetTrainingOperationId(response);
-                return new TrainingOperation<CustomFormModel>(_pipeline, id, _options.SerializationOptions, _modelFactory);
+                var id = TrainingOperation<FormModel>.GetTrainingOperationId(response);
+                return new TrainingOperation<FormModel>(_pipeline, id, _options.SerializationOptions, _modelFactory);
             }
         }
 
@@ -192,9 +192,9 @@ namespace Azure.AI.FormRecognizer
         /// Get a <see cref="TrainingOperation{TModel}" /> status reference to an existhing training request.
         /// </summary>
         /// <param name="operationId">The operation id from a previous training request.</param>
-        public virtual TrainingOperation<CustomFormModel> StartTrainingX(string operationId)
+        public virtual TrainingOperation<FormModel> StartTrainingX(string operationId)
         {
-            return new TrainingOperation<CustomFormModel>(_pipeline, operationId, _options.SerializationOptions, _modelFactory);
+            return new TrainingOperation<FormModel>(_pipeline, operationId, _options.SerializationOptions, _modelFactory);
         }
 
         /// <summary>

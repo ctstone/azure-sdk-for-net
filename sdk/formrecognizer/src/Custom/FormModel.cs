@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// A custom form model.
     /// </summary>
-    public class CustomFormModel
+    public class FormModel
     {
         /// <summary>
         /// Get information about the current model.
@@ -33,7 +33,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// </summary>
         public ErrorDetails[] Errors { get; }
 
-        internal CustomFormModel(CustomFormModelInternal model)
+        internal FormModel(CustomFormModelInternal model)
         {
             Information = model.ModelInfo;
             Documents = model.TrainResult?.TrainingDocuments ?? Array.Empty<TrainingDocument>();
@@ -42,9 +42,9 @@ namespace Azure.AI.FormRecognizer.Custom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomFormModel"/> class.
+        /// Initializes a new instance of the <see cref="FormModel"/> class.
         /// </summary>
-        protected CustomFormModel()
+        protected FormModel()
         {
         }
 
