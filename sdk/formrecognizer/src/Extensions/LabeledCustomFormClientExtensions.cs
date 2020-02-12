@@ -38,7 +38,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// <summary>
         /// Asynchronously create and train a custom model.
         ///
-        /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training
+        /// This method returns a <see cref="Operation{TModel}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -79,7 +79,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// <summary>
         /// Create and train a custom model.
         ///
-        /// This method returns a <see cref="TrainingOperation{TModel}" /> that can be used to track the status of the training
+        /// This method returns a <see cref="Operation{TModel}" /> that can be used to track the status of the training
         /// operation, including waiting for its completion.
         ///
         /// ```csharp
@@ -127,7 +127,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         }
 
         /// <summary>
-        /// Get a <see cref="TrainingOperation{TModel}" /> status reference to an existhing training request.
+        /// Get a <see cref="Operation{TModel}" /> status reference to an existhing training request.
         /// </summary>
         /// <param name="client"></param>
         /// <param name="operationId">The operation id from a previous training request.</param>

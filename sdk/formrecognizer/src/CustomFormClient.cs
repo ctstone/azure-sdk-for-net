@@ -226,7 +226,7 @@ namespace Azure.AI.FormRecognizer
         /// <summary>
         /// Get information about all custom models.
         ///
-        /// This method returns a <see cref="ModelsPageable" /> that can be used to snchronously enumerate
+        /// This method returns a <see cref="Pageable&lt;ModelInfo&gt;" /> that can be used to snchronously enumerate
         /// all models or list them page-by-page.
         ///
         /// ```csharp
