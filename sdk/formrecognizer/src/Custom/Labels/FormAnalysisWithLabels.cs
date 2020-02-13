@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
         /// <summary>
         /// Get all tables recognized in the current analysis.
         /// </summary>
-        public DataTable[] Tables { get; }
+        public TableExtraction[] Tables { get; }
 
         /// <summary>
         /// Get the predefined form field groups recognized in the current analysis.
@@ -31,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Custom.Labels
             var predefinedFields = analysis.AnalyzeResult?.PredefinedFieldExtractions ?? Array.Empty<PredefinedFormInternal>();
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
-                .Select((x) => new DataTable(x.page, x.table))
+                .Select((x) => new TableExtraction(x.page, x.table))
                 .ToArray();
             FieldGroups = predefinedFields
                 .Select((x) => new PredefinedForm(x))

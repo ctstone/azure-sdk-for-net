@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted table contained in a page.
     /// </summary>
-    internal class DataTableInternal
+    internal class TableExtractionInternal
     {
         /// <summary>
         /// Number of rows.
@@ -26,14 +26,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of cells contained in the table.
         /// </summary>
-        public DataTableCell[] Cells { get; internal set; }
+        public TableCellExtraction[] Cells { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataTableInternal"/> class.
+        /// Initializes a new instance of the <see cref="TableExtractionInternal"/> class.
         /// </summary>
-        protected DataTableInternal()
+        protected TableExtractionInternal()
         { }
 
-        internal static DataTableInternal Create() => new DataTableInternal();
+        internal static TableExtractionInternal Create() => new TableExtractionInternal();
     }
 }

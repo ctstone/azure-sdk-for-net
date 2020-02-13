@@ -15,7 +15,7 @@ namespace Azure.AI.FormRecognizer.Layout
         /// <summary>
         /// Get all tables recognized in the current analysis.
         /// </summary>
-        public DataTable[] Tables { get; }
+        public TableExtraction[] Tables { get; }
 
         internal LayoutAnalysis(AnalysisInternal analysis)
             : base(analysis)
@@ -23,8 +23,8 @@ namespace Azure.AI.FormRecognizer.Layout
             var fieldExtractionPages = analysis.AnalyzeResult?.FieldExtractionPages ?? Array.Empty<FieldExtractionPageInternal>();
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
-                .Select((x) => new DataTable(x.page, x.table))
-                .ToArray() ?? Array.Empty<DataTable>();
+                .Select((x) => new TableExtraction(x.page, x.table))
+                .ToArray() ?? Array.Empty<TableExtraction>();
         }
 
         /// <summary>

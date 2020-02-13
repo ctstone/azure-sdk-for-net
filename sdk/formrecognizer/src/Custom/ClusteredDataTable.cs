@@ -8,14 +8,14 @@ namespace Azure.AI.FormRecognizer.Custom
     /// <summary>
     /// Data table.
     /// </summary>
-    public class ClusteredDataTable : DataTable
+    public class ClusteredDataTable : TableExtraction
     {
         /// <summary>
         /// Get the cluster identifier associated with the current field extraction.
         /// </summary>
         public int ClusterId { get; }
 
-        internal ClusteredDataTable(FieldExtractionPageInternal page, DataTableInternal dataTable)
+        internal ClusteredDataTable(FieldExtractionPageInternal page, TableExtractionInternal dataTable)
             : base(page, dataTable)
         {
             ClusterId = page.DocumentClusterId.Value;

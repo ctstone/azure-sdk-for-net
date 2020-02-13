@@ -6,11 +6,11 @@ using Azure.AI.FormRecognizer.Models;
 
 namespace Azure.AI.FormRecognizer.Serialization
 {
-    internal class DataTableCellJson
+    internal class TableCellExtractionJson
     {
-        public static DataTableCell Read(JsonElement root)
+        public static TableCellExtraction Read(JsonElement root)
         {
-            var dataTableCell = DataTableCell.Create();
+            var dataTableCell = TableCellExtraction.Create();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
@@ -29,7 +29,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             return dataTableCell;
         }
 
-        private static void ReadPropertyValue(ref DataTableCell cell, JsonProperty property)
+        private static void ReadPropertyValue(ref TableCellExtraction cell, JsonProperty property)
         {
             if (property.NameEquals("rowIndex"))
             {

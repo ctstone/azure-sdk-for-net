@@ -708,7 +708,7 @@ namespace Azure.AI.FormRecognizer.Samples
             }
         }
 
-        private static void WriteTables(TextWriter writer, DataTable[] tables)
+        private static void WriteTables(TextWriter writer, TableExtraction[] tables)
         {
             foreach (var table in tables)
             {

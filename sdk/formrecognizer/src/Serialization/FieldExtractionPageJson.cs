@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             if (pageResult.Tables == default)
             {
-                pageResult.Tables = Array.Empty<DataTableInternal>();
+                pageResult.Tables = Array.Empty<TableExtractionInternal>();
             }
             return pageResult;
         }
@@ -46,7 +46,7 @@ namespace Azure.AI.FormRecognizer.Serialization
             }
             else if (property.NameEquals("tables"))
             {
-                fieldExtractionPage.Tables = ArrayJson.Read(property.Value, DataTableJson.Read);
+                fieldExtractionPage.Tables = ArrayJson.Read(property.Value, TableExtractionJson.Read);
             }
         }
     }

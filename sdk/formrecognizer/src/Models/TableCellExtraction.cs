@@ -8,7 +8,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Information about the extracted cell in a table.
     /// </summary>
-    public class DataTableCell : ReferencingTextElement
+    public class TableCellExtraction : ReferencingTextElement
     {
         /// <summary>
         /// Row index of the cell.
@@ -45,14 +45,14 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         public float Confidence { get; internal set; }
 
-        internal DataTableInternal DataTable { get; set; }
+        internal TableExtractionInternal DataTable { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataTableCell"/> class.
+        /// Initializes a new instance of the <see cref="TableCellExtraction"/> class.
         /// </summary>
-        protected DataTableCell()
+        protected TableCellExtraction()
         { }
 
-        internal static DataTableCell Create() => new DataTableCell();
+        internal static TableCellExtraction Create() => new TableCellExtraction();
     }
 }

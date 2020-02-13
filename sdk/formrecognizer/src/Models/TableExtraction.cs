@@ -11,7 +11,7 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary>
     /// Data table.
     /// </summary>
-    public class DataTable
+    public class TableExtraction
     {
         /// <summary>
         /// Get the page number where the current field was extracted.
@@ -31,9 +31,9 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of cells contained in the table.
         /// </summary>
-        public DataTableCell[] Cells { get; internal set; }
+        public TableCellExtraction[] Cells { get; internal set; }
 
-        internal DataTable(FieldExtractionPageInternal page, DataTableInternal dataTable)
+        internal TableExtraction(FieldExtractionPageInternal page, TableExtractionInternal dataTable)
         {
             PageNumber = page.PageNumber;
             Rows = dataTable.Rows;
@@ -42,9 +42,9 @@ namespace Azure.AI.FormRecognizer.Models
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataTable"/> class.
+        /// Initializes a new instance of the <see cref="TableExtraction"/> class.
         /// </summary>
-        protected DataTable()
+        protected TableExtraction()
         {
         }
 
@@ -100,9 +100,9 @@ namespace Azure.AI.FormRecognizer.Models
                 {
                     var firstCol = colIndex == 0;
                     var lastCol = colIndex == Columns - 1;
-                    if (index.TryGetValue(rowIndex, out IDictionary<int, DataTableCell> row))
+                    if (index.TryGetValue(rowIndex, out IDictionary<int, TableCellExtraction> row))
                     {
-                        if (row.TryGetValue(colIndex, out DataTableCell cell))
+                        if (row.TryGetValue(colIndex, out TableCellExtraction cell))
                         {
                             var colSpan = cell.ColumnSpan.Value;
                             var maxWidth = cellWidth * colSpan; // TODO
@@ -176,7 +176,7 @@ namespace Azure.AI.FormRecognizer.Models
             writer.WriteLine($"<table class=\"{className}\">");
             for (var rowIndex = 0; rowIndex < Rows; rowIndex += 1)
             {
-                if (index.TryGetValue(rowIndex, out IDictionary<int, DataTableCell> row))
+                if (index.TryGetValue(rowIndex, out IDictionary<int, TableCellExtraction> row))
                 {
                     var isRowHeader = row.Values.Any((x) => x.IsHeader ?? false);
                     var isRowFooter = row.Values.Any((x) => x.IsFooter ?? false);
@@ -197,7 +197,7 @@ namespace Azure.AI.FormRecognizer.Models
                     // write cells
                     for (var colIndex = 0; colIndex < Columns; colIndex += 1)
                     {
-                        if (row.TryGetValue(colIndex, out DataTableCell cell))
+                        if (row.TryGetValue(colIndex, out TableCellExtraction cell))
                         {
                             var tag = cell.IsHeader ?? false ? "th" : "td";
                             var cellFormat = @"<{0} colspan=""{2}"" rowspan=""{3}"">{1}</{0}>";
@@ -234,12 +234,12 @@ namespace Azure.AI.FormRecognizer.Models
             var header = '-';
             for (var rowIndex = 0; rowIndex < Rows; rowIndex += 1)
             {
-                if (index.TryGetValue(rowIndex, out IDictionary<int, DataTableCell> row))
+                if (index.TryGetValue(rowIndex, out IDictionary<int, TableCellExtraction> row))
                 {
                     var isRowHeader = row.Values.Any((x) => x.IsHeader ?? false);
                     for (var colIndex = 0; colIndex < Columns; colIndex += 1)
                     {
-                        if (row.TryGetValue(colIndex, out DataTableCell cell))
+                        if (row.TryGetValue(colIndex, out TableCellExtraction cell))
                         {
                             var columnWidth = columnWidths[colIndex];
                             writer.Write($"{boundary} {{0, {columnWidth}}} ", cell.Text);
@@ -295,18 +295,18 @@ namespace Azure.AI.FormRecognizer.Models
         }
 
 
-        private Dictionary<int, IDictionary<int, DataTableCell>> IndexCells()
+        private Dictionary<int, IDictionary<int, TableCellExtraction>> IndexCells()
         {
-            var index = new Dictionary<int, IDictionary<int, DataTableCell>>();
+            var index = new Dictionary<int, IDictionary<int, TableCellExtraction>>();
             foreach (var cell in Cells)
             {
                 var rowSpan = cell.RowSpan ?? 1;
                 var colSpan = cell.ColumnSpan ?? 1;
                 for (var rowIndex = cell.RowIndex; rowIndex < cell.RowIndex + rowSpan; rowIndex += 1)
                 {
-                    if (!index.TryGetValue(rowIndex, out IDictionary<int, DataTableCell> row))
+                    if (!index.TryGetValue(rowIndex, out IDictionary<int, TableCellExtraction> row))
                     {
-                        index[rowIndex] = row = new Dictionary<int, DataTableCell>();
+                        index[rowIndex] = row = new Dictionary<int, TableCellExtraction>();
                     }
                     for (var i = cell.ColumnIndex; i < cell.ColumnIndex + colSpan; i += 1)
                     {

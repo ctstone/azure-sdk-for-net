@@ -26,7 +26,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <summary>
         /// List of data tables extracted from the page.
         /// </summary>
-        public DataTableInternal[] Tables { get; internal set; }
+        public TableExtractionInternal[] Tables { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldExtractionPageInternal"/> class.
