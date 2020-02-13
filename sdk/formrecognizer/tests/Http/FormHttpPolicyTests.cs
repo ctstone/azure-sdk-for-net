@@ -27,7 +27,7 @@ namespace Azure.AI.FormRecognizer.Tests.Http
             _endpoint = new Uri(EndpointText);
             _options = new FormClientOptions();
             var transport = new MockTransport(new MockResponse(200));
-            var credential = new CognitiveKeyCredential(ApiKey);
+            var credential = new CognitiveApiKeyCredential(ApiKey);
             var policy = new FormHttpPolicy(_endpoint, _options.Version);
             _pipeline = new HttpPipeline(transport, new[] { policy });
         }

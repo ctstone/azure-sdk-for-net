@@ -24,7 +24,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
                 // var op = args.Length > 0 ? args[0] : String.Empty;
                 var endpoint = new Uri(Environment.GetEnvironmentVariable("FR_ENDPOINT"));
-                var credential = new CognitiveKeyCredential(Environment.GetEnvironmentVariable("FR_KEY"));
+                var credential = new CognitiveApiKeyCredential(Environment.GetEnvironmentVariable("FR_KEY"));
                 // var options = new FormClientOptions();
                 // // options.Diagnostics.IsLoggingEnabled = true;
                 var client = new CustomFormClient(endpoint, credential);

@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Tests
             var key2 = "fake-key-2";
             var pipeline = new HttpPipeline(new MockTransport());
             var request = pipeline.CreateRequest();
-            var credential = new CognitiveKeyCredential(key1);
+            var credential = new CognitiveApiKeyCredential(key1);
 
             // Act
             credential.UpdateCredential(key2);
@@ -36,7 +36,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             // Arrange
             var key = "fake-key";
-            var credential = new CognitiveKeyCredential(key);
+            var credential = new CognitiveApiKeyCredential(key);
             var pipeline = new HttpPipeline(new MockTransport());
             var request = pipeline.CreateRequest();
 
@@ -52,7 +52,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             // Arrange
             var key = "fake-key";
-            var credential = new CognitiveKeyCredential(key);
+            var credential = new CognitiveApiKeyCredential(key);
             var pipeline = new HttpPipeline(new MockTransport());
             var request = pipeline.CreateRequest();
 

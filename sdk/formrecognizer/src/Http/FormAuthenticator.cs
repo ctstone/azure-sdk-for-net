@@ -12,10 +12,10 @@ namespace Azure.AI.FormRecognizer.Http
     internal class FormAuthenticator : HttpPipelinePolicy
     {
         private const string DefaultCognitiveScope = "https://cognitiveservices.azure.com/.default";
-        private readonly CognitiveKeyCredential _keyCredential;
+        private readonly CognitiveApiKeyCredential _keyCredential;
         private readonly BearerTokenAuthenticationPolicy _bearerPolicy;
 
-        public FormAuthenticator(CognitiveKeyCredential keyCredential)
+        public FormAuthenticator(CognitiveApiKeyCredential keyCredential)
         {
             Throw.IfMissing(keyCredential, nameof(keyCredential));
             _keyCredential = keyCredential;

@@ -7,19 +7,19 @@ using Azure.Core;
 namespace Azure.AI.FormRecognizer
 {
     /// <summary>
-    /// A <see cref="CognitiveKeyCredential"/> is a subscription key used to authenticate the Form Recognizer service.
+    /// A <see cref="CognitiveApiKeyCredential"/> is a subscription key used to authenticate the Form Recognizer service.
     /// It provides the ability to update the subscription key without creating a new client.
     /// </summary>
-    public class CognitiveKeyCredential
+    public class CognitiveApiKeyCredential
     {
         private const string ApimKeyHeader = "Ocp-Apim-Subscription-Key";
         private volatile string _subscriptionKey;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CognitiveKeyCredential"/> class.
+        /// Initializes a new instance of the <see cref="CognitiveApiKeyCredential"/> class.
         /// </summary>
         /// <param name="subscriptionKey">Subscription key to use to authenticate with the service.</param>
-        public CognitiveKeyCredential(string subscriptionKey) => UpdateCredential(subscriptionKey);
+        public CognitiveApiKeyCredential(string subscriptionKey) => UpdateCredential(subscriptionKey);
 
         /// <summary>
         /// Updates the Cognitive Service subscription key.

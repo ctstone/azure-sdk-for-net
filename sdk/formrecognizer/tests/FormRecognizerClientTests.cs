@@ -16,8 +16,8 @@ namespace Azure.AI.FormRecognizer.Tests
         public void KeyConstructor_Throws_OnInvalidParams()
         {
             // Act / assert
-            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveKeyCredential)null));
-            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveKeyCredential)null, null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveApiKeyCredential)null));
+            Assert.Throws<ArgumentNullException>(() => new CustomFormClient(null, (CognitiveApiKeyCredential)null, null));
         }
 
         [Fact]

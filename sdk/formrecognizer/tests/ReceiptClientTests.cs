@@ -23,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 
         private ReceiptClient GetClient(params MockResponse[] responses)
         {
-            return new ReceiptClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"));
+            return new ReceiptClient(new Uri("http://localhost"), new CognitiveApiKeyCredential("fake-key"));
         }
     }
 }

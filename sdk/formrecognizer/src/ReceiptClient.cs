@@ -25,7 +25,7 @@ namespace Azure.AI.FormRecognizer
         /// </summary>
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
-        public ReceiptClient(Uri endpoint, CognitiveKeyCredential credential)
+        public ReceiptClient(Uri endpoint, CognitiveApiKeyCredential credential)
             : this(endpoint, credential, new FormClientOptions())
         {
         }
@@ -36,7 +36,7 @@ namespace Azure.AI.FormRecognizer
         /// <param name="endpoint">Endpoint.</param>
         /// <param name="credential">Your assigned subscription key, copied from https://portal.azure.com/</param>
         /// <param name="options">Optional service parameters.</param>
-        public ReceiptClient(Uri endpoint, CognitiveKeyCredential credential, FormClientOptions options)
+        public ReceiptClient(Uri endpoint, CognitiveApiKeyCredential credential, FormClientOptions options)
             : this(endpoint, new FormAuthenticator(credential), options)
         {
         }

@@ -23,7 +23,7 @@ namespace Azure.AI.FormRecognizer.Tests.Core
 
         private LayoutClient GetClient(params MockResponse[] responses)
         {
-            return new LayoutClient(new Uri("http://localhost"), new CognitiveKeyCredential("fake-key"));
+            return new LayoutClient(new Uri("http://localhost"), new CognitiveApiKeyCredential("fake-key"));
         }
     }
 }
