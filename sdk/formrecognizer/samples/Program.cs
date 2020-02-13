@@ -46,26 +46,25 @@ namespace Azure.AI.FormRecognizer.Samples
                 //     _ => throw new NotSupportedException(),
                 // });
 
+                // var table1 = "https://chstoneforms.blob.core.windows.net/table1?st=2020-02-13T22%3A11%3A57Z&se=2022-02-14T22%3A11%3A00Z&sp=rl&sv=2018-03-28&sr=c&sig=LHkopzfD3zm76VfGeWARqdG039AOPU9iAfUc6Ar5cJk%3D";
+                // var op = await client.StartTrainingAsync(table1);
+                // Console.WriteLine($"Waiting for {op.Id}");
+                // var resp = await op.WaitForCompletionAsync();
+                // Console.WriteLine(resp.Value.Information.Status);
 
-                var model = client.GetModelReferenceWithLabels<Invoice>("a61aba7f-98fd-49af-94f3-3e32695bb93f");
-                Console.WriteLine("Sending...");
-                var operation = model.StartAnalyze("657504d5-58df-4316-b182-262e1f4c54e1");
-                // = await model.StartAnalyzeAsync(File.OpenRead("/Users/chstone/Downloads/sample_data/Test/Invoice_6.pdf"));
-                Console.WriteLine($"Waiting for {operation.Id}...");
-                var response = await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(2));
-                var result = response.Value;
-                var invoice = result.Forms[0];
-                Console.WriteLine($"VatId: {invoice.Form.VatId}");
-                Console.WriteLine($"Charges: {invoice.Form.Charges}");
-                Console.WriteLine($"Number: {invoice.Form.Number}");
-                Console.WriteLine($"DueDate: {invoice.Form.DueDate}");
-                Console.WriteLine($"Date: {invoice.Form.Date}");
+                using (var stream = File.OpenRead("/Users/chstone/Downloads/drilling.pdf"))
+                using (var write = File.OpenWrite("/Users/chstone/Downloads/temp.json"))
+                {
+                    var op = await client
+                        .GetModelReference("5830a914-d999-48f5-8480-1a3be1661eb6")
+                        .StartAnalyzeAsync(stream);
+                    Console.WriteLine($"Waiting for {op.Id}");
+                    var resp = await op.WaitForCompletionAsync();
+                    await resp.GetRawResponse().ContentStream.CopyToAsync(write);
+                    Console.WriteLine("Done");
+                }
 
-                var invoiceText = invoice.Fields["InvoiceVatId"].Text;
-                var invoiceBoundingBox = string.Join(',', invoice.Fields["InvoiceVatId"].BoundingBox);
-                var confidence = invoice.Fields["InvoiceVatId"].Confidence;
-
-                // await Sample_08_AnalyzeFileWithLabeledCustomModelAsync(client);
+                // daeacefd-1a8d-4935-adfc-3958e2494af7
             }
             catch (Exception ex)
             {
