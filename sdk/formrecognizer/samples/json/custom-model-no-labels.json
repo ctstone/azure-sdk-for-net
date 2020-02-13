@@ -1,0 +1,51 @@
+{
+    "modelInfo": {
+        "status": "ready",
+        "createdDateTime": "2019-10-08T10:20:31.957784",
+        "lastUpdatedDateTime": "2019-10-08T14:20:41+00:00",
+        "modelId": "1cfb372bab404ba3aa59481ab2c63da5"
+    },
+    "trainResult": {
+        "trainingDocuments": [
+            {
+                "documentName": "invoices\\Invoice_1.pdf",
+                "pages": 1,
+                "errors": [],
+                "status": "succeeded"
+            },
+            {
+                "documentName": "invoices\\Invoice_2.pdf",
+                "pages": 1,
+                "errors": [],
+                "status": "succeeded"
+            },
+            {
+                "documentName": "invoices\\Invoice_3.pdf",
+                "pages": 1,
+                "errors": [],
+                "status": "succeeded"
+            },
+            {
+                "documentName": "invoices\\Invoice_4.pdf",
+                "pages": 1,
+                "errors": [],
+                "status": "succeeded"
+            },
+            {
+                "documentName": "invoices\\Invoice_5.pdf",
+                "pages": 1,
+                "errors": [],
+                "status": "succeeded"
+            }
+        ],
+        "errors": []
+    },
+    "keys": {
+        "0": [
+            "Address:",
+            "Invoice For:",
+            "Microsoft",
+            "Page"
+        ]
+    }
+}

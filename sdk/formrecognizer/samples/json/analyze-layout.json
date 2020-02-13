@@ -1,0 +1,142 @@
+{
+    "status": "succeeded",
+    "createdDateTime": "2019-11-12T19:55:36Z",
+    "lastUpdatedDateTime": "2019-11-12T19:55:43Z",
+    "analyzeResult": {
+        "version": "2.0.0",
+        "readResults": [
+            {
+                "page": 1,
+                "language": "en",
+                "angle": 0,
+                "width": 8.5,
+                "height": 11,
+                "unit": "inch",
+                "lines": [
+                    {
+                        "language": "en",
+                        "boundingBox": [
+                            0.5384,
+                            1.1583,
+                            1.4466,
+                            1.1583,
+                            1.4466,
+                            1.3534,
+                            0.5384,
+                            1.3534
+                        ],
+                        "text": "Contoso",
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    0.5384,
+                                    1.1583,
+                                    1.4466,
+                                    1.1583,
+                                    1.4466,
+                                    1.3534,
+                                    0.5384,
+                                    1.3534
+                                ],
+                                "text": "Contoso",
+                                "confidence": 1
+                            }
+                        ]
+                    },
+                    {
+                        "language": "en",
+                        "boundingBox": [
+                            0.7994,
+                            1.5143,
+                            1.3836,
+                            1.5143,
+                            1.3836,
+                            1.6154,
+                            0.7994,
+                            1.6154
+                        ],
+                        "text": "Address:",
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    0.7994,
+                                    1.5143,
+                                    1.3836,
+                                    1.5143,
+                                    1.3836,
+                                    1.6154,
+                                    0.7994,
+                                    1.6154
+                                ],
+                                "text": "Address:",
+                                "confidence": 1
+                            }
+                        ]
+                    },
+                    {
+                        "language": "en",
+                        "boundingBox": [
+                            6.2285,
+                            3.4114,
+                            6.3919,
+                            3.4114,
+                            6.3919,
+                            3.5119,
+                            6.2285,
+                            3.5119
+                        ],
+                        "text": "PT",
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    6.2285,
+                                    3.4114,
+                                    6.3919,
+                                    3.4114,
+                                    6.3919,
+                                    3.5119,
+                                    6.2285,
+                                    3.5119
+                                ],
+                                "text": "PT",
+                                "confidence": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "pageResults": [
+            {
+                "page": 1,
+                "tables": [
+                    {
+                        "rows": 2,
+                        "columns": 6,
+                        "cells": [
+                            {
+                                "rowIndex": 0,
+                                "columnIndex": 0,
+                                "text": "Invoice Number",
+                                "boundingBox": [
+                                    0.5075,
+                                    2.8088,
+                                    1.9061,
+                                    2.8088,
+                                    1.9061,
+                                    3.3219,
+                                    0.5075,
+                                    3.3219
+                                ],
+                                "elements": [
+                                    "#/readResults/0/lines/8/words/0",
+                                    "#/readResults/0/lines/8/words/1"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

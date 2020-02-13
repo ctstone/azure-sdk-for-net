@@ -1,0 +1,61 @@
+{
+    "modelInfo": {
+        "modelId": "1f860ec5-2c5a-4d52-9229-e4f4287413ad",
+        "status": "ready",
+        "createdDateTime": "2020-02-08T21:51:04Z",
+        "lastUpdatedDateTime": "2020-02-08T21:51:07Z"
+    },
+    "trainResult": {
+        "averageModelAccuracy": 0.92,
+        "trainingDocuments": [
+            {
+                "documentName": "Invoice_1.pdf",
+                "pages": 1,
+                "status": "succeeded"
+            },
+            {
+                "documentName": "Invoice_2.pdf",
+                "pages": 1,
+                "status": "succeeded"
+            },
+            {
+                "documentName": "Invoice_3.pdf",
+                "pages": 1,
+                "status": "succeeded"
+            },
+            {
+                "documentName": "Invoice_4.pdf",
+                "pages": 1,
+                "status": "succeeded"
+            },
+            {
+                "documentName": "Invoice_5.pdf",
+                "pages": 1,
+                "status": "succeeded"
+            }
+        ],
+        "fields": [
+            {
+                "fieldName": "InvoiceCharges",
+                "accuracy": 1
+            },
+            {
+                "fieldName": "InvoiceDate",
+                "accuracy": 0.8
+            },
+            {
+                "fieldName": "InvoiceDueDate",
+                "accuracy": 0.8
+            },
+            {
+                "fieldName": "InvoiceNumber",
+                "accuracy": 1
+            },
+            {
+                "fieldName": "InvoiceVatId",
+                "accuracy": 1
+            }
+        ],
+        "errors": []
+    }
+}
