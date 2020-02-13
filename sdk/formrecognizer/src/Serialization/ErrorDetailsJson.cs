@@ -10,15 +10,15 @@ namespace Azure.AI.FormRecognizer.Serialization
     {
         public static ErrorDetails Read(JsonElement root)
         {
-            var dataTable = new ErrorDetails();
+            var errorDetails = new ErrorDetails();
             if (root.ValueKind == JsonValueKind.Object)
             {
                 foreach (JsonProperty property in root.EnumerateObject())
                 {
-                    ReadPropertyValue(ref dataTable, property);
+                    ReadPropertyValue(ref errorDetails, property);
                 }
             }
-            return dataTable;
+            return errorDetails;
         }
 
         private static void ReadPropertyValue(ref ErrorDetails errorDetails, JsonProperty property)

@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Custom
         /// <summary>
         /// Get all tables recognized in the current analysis.
         /// </summary>
-        public ClusteredDataTable[] Tables { get; }
+        public TableExtractionClustered[] Tables { get; }
 
         internal FormAnalysis(AnalysisInternal analysis)
             : base(analysis)
@@ -34,8 +34,8 @@ namespace Azure.AI.FormRecognizer.Custom
                 .ToArray();
             Tables = fieldExtractionPages
                 .SelectMany((page) => page.Tables.Select((table) => (page, table)))
-                .Select((x) => new ClusteredDataTable(x.page, x.table))
-                .ToArray() ?? Array.Empty<ClusteredDataTable>();
+                .Select((x) => new TableExtractionClustered(x.page, x.table))
+                .ToArray() ?? Array.Empty<TableExtractionClustered>();
         }
 
         /// <summary>
